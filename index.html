@@ -384,6 +384,7 @@ function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
    ========================================================= */
 let pendingName = null;
 let isAdminUser = false;
+let currentAreaId = 'field';
 
 // 저장된 세이브 데이터 조회 (localStorage 우선, window.storage 보조)
 async function getStoredSave(name){
@@ -945,6 +946,7 @@ function renderAreaSelect(){
 }
 
 function exploreArea(areaId){
+  currentAreaId = areaId || 'field';
   const area = AREAS.find(a=>a.id===areaId);
   const msg = maybeUnfairEvent('explore');
   if(msg) log(msg);
@@ -1130,11 +1132,19 @@ function onEnemyDefeated(){
   checkQuestAuto();
   refreshSidebar();
   saveGame();
-  const area = $('content-area');
-  area.innerHTML = `<div class="btn-grid cols1">
-    <button class="primary" onclick="renderAreaSelect()">사냥터 계속 탐색</button>
-    <button onclick="renderTown()">마을로 귀환</button>
-  </div>`;
+
+  if(player.hp <= 1){
+    log('체력이 너무 위험하다. 마을로 안전하게 귀환합니다.');
+    renderTown();
+    return;
+  }
+
+  log(`🔍 숨을 고를 새도 없이 다음 몬스터가 나타난다!`);
+  setTimeout(()=>{
+    const area = AREAS.find(a=>a.id===currentAreaId) || AREAS[0];
+    const monsterId = area.monsters[rand(0,area.monsters.length-1)];
+    startBattle(monsterId);
+  }, 700);
 }
 
 function checkLevelUp(){
@@ -1415,6 +1425,28 @@ async function joinParty(partyId){
 /* =========================================================
    직업 및 전직소 시스템
    ========================================================= */
+function changeJob(jobName, master){
+  if(!player) return;
+  const hiddenJobs = ['엄마', '과자자', '환상자', '환장자'];
+  if(hiddenJobs.includes(jobName) && player.level < 40){
+    toast(`[${master}] "${jobName}"(은)는 레벨 40 이상만 전직할 수 있습니다! (현재 Lv.${player.level})`);
+    log(`🎓 ${master}의 가르침을 받으려 했으나, 레벨이 부족하여 거절당했다. (필요 레벨: 40)`);
+    return;
+  }
+  player.job = jobName;
+  if(jobName === '전사' || jobName === '검사') player.baseAtk += 5;
+  if(jobName === '마법사' || jobName === '흑마법사') player.maxMp += 20;
+  if(hiddenJobs.includes(jobName)){
+    player.baseAtk += 15;
+    player.maxHp += 50;
+  }
+  toast(`성공적으로 "${jobName}"(으)로 전직했습니다!`);
+  log(`🎓 <b>${master}</b>의 가르침을 받아 <b>${jobName}</b>(으)로 전직했다!`);
+  refreshSidebar();
+  saveGame();
+  renderJobAcademy();
+}
+
 function renderJobAcademy(){
   const area = $('content-area');
   area.innerHTML = `
