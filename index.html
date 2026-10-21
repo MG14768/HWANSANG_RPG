@@ -23,15 +23,155 @@
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
+  /* ========================================================
+     [테마 스타일 정의]
+     - 기본 배경(theme-default) / 할로윈 테마(theme-halloween)
+     - 사용자가 "기본배경으로 바꿔줘"라고 요청하면 언제든지
+       기본 배경으로 전환/복원할 수 있도록 분리 설계되었습니다.
+     ======================================================== */
+  /* 테마 시스템 적용 */
   body{
-    background:
-      radial-gradient(circle at 20% 10%, rgba(122,95,199,0.12), transparent 40%),
-      radial-gradient(circle at 85% 80%, rgba(139,42,58,0.14), transparent 45%),
-      var(--bg-deep);
     color:var(--parchment);
     font-family:'Noto Serif KR', serif;
     min-height:100vh;
     padding:24px 12px;
+    transition:background .3s ease;
+  }
+
+  /* 1. 기본 배경 테마 (Original) */
+  body.theme-default {
+    background:
+      radial-gradient(circle at 20% 10%, rgba(122,95,199,0.12), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(139,42,58,0.14), transparent 45%),
+      var(--bg-deep) !important;
+  }
+  body.theme-default .halloween-decor {
+    display: none !important;
+  }
+
+  /* 2. 할로윈 테마 배경 (Halloween Theme - 현재 기본 활성화됨) */
+  body.theme-halloween {
+    background-color: #0c0613 !important;
+    background-image:
+      radial-gradient(circle at 82% 12%, rgba(255, 170, 51, 0.22) 0%, rgba(255, 117, 24, 0.08) 30%, transparent 60%),
+      radial-gradient(circle at 18% 22%, rgba(147, 51, 234, 0.18) 0%, transparent 45%),
+      radial-gradient(circle at 50% 95%, rgba(234, 88, 12, 0.16) 0%, transparent 50%),
+      radial-gradient(circle at 8% 85%, rgba(126, 34, 206, 0.14) 0%, transparent 45%),
+      linear-gradient(180deg, #11061c 0%, #07030c 100%) !important;
+    background-attachment: fixed !important;
+  }
+  body.theme-halloween .frame {
+    box-shadow: 0 0 0 1px rgba(255, 140, 0, 0.25), 0 0 30px rgba(234, 88, 12, 0.16), 0 18px 40px rgba(0,0,0,0.65);
+    border-color: #552b70;
+  }
+  body.theme-halloween .frame::before,
+  body.theme-halloween .frame::after {
+    border-color: #ff9800;
+  }
+  body.theme-halloween .title-row h1 {
+    color: #ffaa33;
+    text-shadow: 0 0 20px rgba(255, 120, 0, 0.65), 0 0 35px rgba(200, 50, 0, 0.4);
+  }
+  body.theme-halloween .title-row .sub {
+    color: #d8b4fe;
+  }
+
+  /* 할로윈 배경 장식 효과 (보름달, 거미줄, 박쥐, 유령, 호박 등) */
+  .halloween-decor {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    user-select: none;
+  }
+  .decor-moon {
+    top: 20px;
+    right: 32px;
+    font-size: 56px;
+    opacity: 0.75;
+    filter: drop-shadow(0 0 20px rgba(255, 180, 50, 0.75));
+    animation: moon-glow 4s ease-in-out infinite alternate;
+  }
+  .decor-web-tl { top: 0; left: 0; font-size: 60px; opacity: 0.35; line-height: 1; }
+  .decor-web-tr { top: 0; right: 0; font-size: 60px; opacity: 0.35; line-height: 1; transform: scaleX(-1); }
+  .decor-bat-1 {
+    top: 110px;
+    right: 17%;
+    font-size: 26px;
+    opacity: 0.55;
+    animation: bat-fly 6s ease-in-out infinite;
+  }
+  .decor-bat-2 {
+    top: 170px;
+    left: 10%;
+    font-size: 22px;
+    opacity: 0.45;
+    animation: bat-fly 8s ease-in-out infinite reverse;
+  }
+  .decor-ghost {
+    bottom: 80px;
+    left: 4%;
+    font-size: 38px;
+    opacity: 0.45;
+    animation: ghost-float 5s ease-in-out infinite alternate;
+  }
+  .decor-pumpkin {
+    bottom: 25px;
+    right: 4%;
+    font-size: 42px;
+    opacity: 0.65;
+    filter: drop-shadow(0 0 14px rgba(255, 117, 24, 0.6));
+    animation: pumpkin-bob 4s ease-in-out infinite alternate;
+  }
+
+  @keyframes moon-glow {
+    0% { filter: drop-shadow(0 0 12px rgba(255, 180, 50, 0.4)); opacity: 0.6; }
+    100% { filter: drop-shadow(0 0 26px rgba(255, 120, 20, 0.85)); opacity: 0.9; }
+  }
+  @keyframes ghost-float {
+    0% { transform: translateY(0) rotate(-4deg); }
+    100% { transform: translateY(-24px) rotate(4deg); }
+  }
+  @keyframes bat-fly {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-32px, -18px) scale(1.1); }
+    100% { transform: translate(0, 0) scale(1); }
+  }
+  @keyframes pumpkin-bob {
+    0% { transform: translateY(0) scale(1); }
+    100% { transform: translateY(-9px) scale(1.06); }
+  }
+
+  /* 상단 테마 전환 바 */
+  .theme-switch-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 10;
+  }
+  .theme-toggle-btn {
+    background: rgba(24, 20, 37, 0.85);
+    border: 1px solid var(--line);
+    color: var(--dim);
+    font-size: 12.5px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: all .2s ease;
+    backdrop-filter: blur(5px);
+  }
+  .theme-toggle-btn:hover {
+    border-color: var(--gold);
+    color: var(--parchment);
+    transform: translateY(-1px);
+  }
+  body.theme-halloween .theme-toggle-btn {
+    border-color: rgba(255, 140, 0, 0.5);
+    color: #ffb74d;
+    background: rgba(28, 12, 42, 0.85);
   }
   h1,h2,h3,.display{
     font-family:'Black Han Sans', sans-serif;
@@ -188,10 +328,306 @@
     animation:fadein .2s ease-out;
   }
   @keyframes fadein{ from{opacity:0; transform:translate(-50%,-8px);} to{opacity:1; transform:translate(-50%,0);} }
+
+  /* ========================================================
+     [할로윈 5일 한정 이벤트 실시간 타이머 UI]
+     ======================================================== */
+  .halloween-timer-banner {
+    background: linear-gradient(90deg, rgba(46, 16, 61, 0.95), rgba(64, 22, 22, 0.95));
+    border: 1px solid #ff7518;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 0 14px rgba(255, 117, 24, 0.28);
+    position: relative;
+    z-index: 5;
+    transition: all .3s ease;
+  }
+  .halloween-timer-banner.expired {
+    background: rgba(26, 21, 34, 0.9);
+    border-color: #554466;
+    box-shadow: none;
+    opacity: 0.85;
+  }
+  .timer-left-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .timer-badge-icon {
+    font-size: 26px;
+    animation: pumpkin-bob 3s ease-in-out infinite alternate;
+  }
+  .timer-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #ffaa33;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .timer-title .status-tag {
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: #ff5722;
+    color: #fff;
+    font-weight: normal;
+  }
+  .halloween-timer-banner.expired .timer-title .status-tag {
+    background: #555;
+    color: #ccc;
+  }
+  .timer-desc {
+    font-size: 11.5px;
+    color: #d1b8eb;
+    margin-top: 2px;
+  }
+  .timer-clock-box {
+    text-align: right;
+  }
+  .timer-clock-label {
+    font-size: 10.5px;
+    color: #ffa726;
+    letter-spacing: 1px;
+  }
+  .timer-clock-display {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 8px rgba(255, 152, 0, 0.6);
+  }
+  .halloween-timer-banner.expired .timer-clock-display {
+    color: #888;
+    text-shadow: none;
+  }
+
+
+  /* 전직소 직업 카드 스타일 (할 수 있는 것 / 할 수 없는 것) */
+  .job-card {
+    background: rgba(20, 16, 32, 0.75);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    transition: all .2s ease;
+  }
+  .job-card:hover {
+    border-color: var(--gold);
+    background: rgba(28, 22, 45, 0.9);
+  }
+  .job-card.current {
+    border-color: var(--gold-bright);
+    background: rgba(42, 32, 65, 0.9);
+    box-shadow: 0 0 12px rgba(230, 195, 74, 0.25);
+  }
+  .job-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .job-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--parchment);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .job-can, .job-cannot {
+    font-size: 12px;
+    line-height: 1.45;
+    margin-top: 5px;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .job-can {
+    color: #bef264;
+  }
+  .job-cannot {
+    color: #fca5a5;
+  }
+  .job-badge-can {
+    background: rgba(163, 230, 53, 0.18);
+    border: 1px solid rgba(163, 230, 53, 0.4);
+    color: #a3e635;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 10.5px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .job-badge-cannot {
+    background: rgba(248, 113, 113, 0.18);
+    border: 1px solid rgba(248, 113, 113, 0.4);
+    color: #f87171;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 10.5px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+
+  /* 문어의 대장간 스타일 */
+  .blacksmith-box {
+    background: rgba(22, 16, 36, 0.85);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .blacksmith-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 10px;
+  }
+  .blacksmith-tab {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    color: var(--dim);
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13.5px;
+    transition: all .2s ease;
+  }
+  .blacksmith-tab:hover {
+    border-color: var(--gold);
+    color: var(--parchment);
+  }
+  .blacksmith-tab.active {
+    background: linear-gradient(180deg, #4d2375, #2c1245);
+    border-color: var(--gold-bright);
+    color: var(--gold-bright);
+    font-weight: 700;
+  }
+  .enhance-board {
+    background: rgba(14, 10, 24, 0.9);
+    border: 1px solid #733c9e;
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .enhance-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold-bright);
+    margin-bottom: 6px;
+  }
+  .enhance-rate-box {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 12px 0;
+    font-size: 13.5px;
+  }
+  .rate-success { color: #a3e635; font-weight: 700; }
+  .rate-fail { color: #facc15; }
+  .rate-break { color: #f87171; font-weight: 700; }
+  .fuse-card {
+    background: rgba(24, 18, 38, 0.8);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+  .fuse-card:hover {
+    border-color: var(--gold);
+  }
+  .fuse-mat-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 8px 0;
+  }
+  .mat-badge {
+    font-size: 11.5px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--line);
+  }
+  .mat-badge.ok {
+    border-color: #5c9a6b;
+    color: #a3e635;
+  }
+  .mat-badge.no {
+    border-color: #8b2a3a;
+    color: #fca5a5;
+  }
+
 </style>
+  <!-- Firebase 실시간 멀티플레이어 라이브러리 (v9 compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
-<body>
+<body class="theme-halloween">
+  <!-- 할로윈 배경 장식 (기본 배경 전환 시 자동으로 숨겨집니다) -->
+  <div class="halloween-decor decor-moon" title="할로윈 보름달">🌕</div>
+  <div class="halloween-decor decor-web-tl">🕸️</div>
+  <div class="halloween-decor decor-web-tr">🕸️</div>
+  <div class="halloween-decor decor-bat-1">🦇</div>
+  <div class="halloween-decor decor-bat-2">🦇</div>
+  <div class="halloween-decor decor-ghost">👻</div>
+  <div class="halloween-decor decor-pumpkin">🎃</div>
 <div id="app">
+  <!-- 배경 테마 전환 토글 버튼 -->
+  <div class="theme-switch-bar">
+    <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="기본 배경 / 할로윈 배경 전환">
+      <span id="theme-icon">🎃</span> <span id="theme-text">할로윈 테마 (클릭 시 기본배경)</span>
+    </button>
+  </div>
+    <!-- 할로윈 5일 한정 몬스터 출현 이벤트 실시간 카운트다운 배너 -->
+  <div id="halloween-timer-banner" class="halloween-timer-banner">
+    <div class="timer-left-wrap">
+      <div class="timer-badge-icon">🎃</div>
+      <div>
+        <div class="timer-title">
+          할로윈 몬스터 출현 이벤트
+          <span class="status-tag" id="halloween-status-tag">진행 중</span>
+        </div>
+        <div class="timer-desc" id="halloween-status-desc">5일간 특별 몬스터가 출현합니다! 타임 오버 시 출현이 종료됩니다.</div>
+      </div>
+    </div>
+    <div class="timer-clock-box">
+      <div class="timer-clock-label">남은 시간 (실시간 감소)</div>
+      <div class="timer-clock-display" id="halloween-countdown-text">--일 --시간 --분 --초</div>
+      <script>
+        (function(){
+          try {
+            var end = localStorage.getItem('halloween_event_end_time');
+            if(!end) {
+              end = (Date.now() + 5*24*60*60*1000).toString();
+              localStorage.setItem('halloween_event_end_time', end);
+            }
+            var totalSec = Math.max(0, Math.floor((parseInt(end,10) - Date.now()) / 1000));
+            var el = document.getElementById('halloween-countdown-text');
+            if(el) {
+              if(totalSec <= 0) {
+                el.textContent = '0일 00시간 00분 00초 (타임 오버)';
+              } else {
+                var d = Math.floor(totalSec / 86400);
+                var h = String(Math.floor((totalSec % 86400) / 3600)).padStart(2, '0');
+                var m = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');
+                var s = String(totalSec % 60).padStart(2, '0');
+                el.textContent = d + '일 ' + h + '시간 ' + m + '분 ' + s + '초';
+              }
+            }
+          } catch(e){}
+        })();
+      </script>
+    </div>
+  </div>
   <div class="title-row">
     <h1>환상RPG</h1>
     <div class="sub">Fantasy Realm · Lv.1 ~ Lv.50</div>
@@ -268,19 +704,207 @@
 </div>
 
 <script>
+
+/* =========================================================
+   🔥 Firebase 실시간 멀티플레이어 설정 (Realtime Database 연동)
+   ========================================================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyBk_egPnVEM_YrShYkIEFXXKv868aiLMOc",
+  authDomain: "fantsy-base.firebaseapp.com",
+  databaseURL: "https://fantsy-base-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "fantsy-base",
+  storageBucket: "fantsy-base.firebasestorage.app",
+  messagingSenderId: "96405742539",
+  appId: "1:96405742539:web:4a648487068fd24066cc4e",
+  measurementId: "G-TJ47JEVCE1"
+};
+
+let firebaseApp = null;
+let firebaseDb = null;
+try {
+  if (typeof firebase !== 'undefined') {
+    firebaseApp = firebase.initializeApp(firebaseConfig);
+    firebaseDb = firebase.database();
+    console.log('🔥 [Firebase] 환상RPG 실시간 멀티플레이 데이터베이스 연결 완료!');
+  }
+} catch (e) {
+  console.warn('Firebase 초기화 알림:', e);
+}
+
+function toFirebaseKey(key) {
+  return key.replace(/:/g, '/').replace(/[.#$\[\]]/g, '_');
+}
+
+function syncPlayerOnlineToFirebase() {
+  if (!firebaseDb || !player || !player.nickname) return;
+  try {
+    const safeNick = player.nickname.replace(/[.#$\[\]]/g, '_');
+    const pRef = firebaseDb.ref('online_players/' + safeNick);
+    pRef.set({
+      nickname: player.nickname,
+      level: player.level,
+      job: player.job || '초보자',
+      gold: player.gold,
+      hp: player.hp,
+      maxHp: player.maxHp,
+      lastSeen: Date.now()
+    });
+    // 브라우저 닫거나 연결 끊어지면 자동 퇴장
+    pRef.onDisconnect().remove();
+
+    // 명예의 전당(랭킹)도 Firebase 실시간 동기화
+    firebaseDb.ref('leaderboard/' + safeNick).set({
+      nickname: player.nickname,
+      level: player.level,
+      gold: player.gold,
+      job: player.job || '초보자',
+      updated: Date.now()
+    });
+  } catch (e) {
+    console.warn('Firebase 온라인 동기화 오류:', e);
+  }
+}
+
+/* =========================================================
+   [테마 제어] 할로윈 테마 & 기본 테마 전환 시스템
+   - 사용자가 "기본배경으로 바꿔줘"라고 요청하면 기본 테마로 즉각 변경됩니다.
+   - 화면 상단 버튼 클릭으로도 자유롭게 전환 가능합니다.
+   ========================================================= */
+function setTheme(theme) {
+  const isHalloween = (theme === 'halloween');
+  document.body.classList.toggle('theme-halloween', isHalloween);
+  document.body.classList.toggle('theme-default', !isHalloween);
+  localStorage.setItem('fantasy_rpg_theme', theme);
+
+  const icon = document.getElementById('theme-icon');
+  const text = document.getElementById('theme-text');
+  if (icon && text) {
+    icon.textContent = isHalloween ? '🎃' : '🌙';
+    text.textContent = isHalloween ? '할로윈 테마 (클릭 시 기본배경)' : '기본 테마 (클릭 시 할로윈배경)';
+  }
+}
+
+function toggleTheme() {
+  const current = document.body.classList.contains('theme-halloween') ? 'halloween' : 'default';
+  setTheme(current === 'halloween' ? 'default' : 'halloween');
+}
+
+// 초기 로드시 할로윈 테마 적용 (localStorage 설정이 있으면 존중)
+(function initTheme() {
+  const savedTheme = localStorage.getItem('fantasy_rpg_theme') || 'halloween';
+  setTheme(savedTheme);
+})();
+
+/* =========================================================
+   [할로윈 5일 한정 몬스터 스폰 & 실시간 카운트다운 타이머]
+   - 5일간 매초 초가 떨어지며 실시간 카운트다운 진행
+   - 타임 오버(0초)가 되면 할로윈 몬스터가 더 이상 출현하지 않음
+   ========================================================= */
+const HALLOWEEN_DURATION_MS = 5 * 24 * 60 * 60 * 1000; // 5일 (432,000,000 밀리초)
+
+function getHalloweenEndTime() {
+  let end = localStorage.getItem('halloween_event_end_time');
+  if (!end) {
+    end = (Date.now() + HALLOWEEN_DURATION_MS).toString();
+    localStorage.setItem('halloween_event_end_time', end);
+  }
+  return parseInt(end, 10);
+}
+
+function getHalloweenRemainingSeconds() {
+  const end = getHalloweenEndTime();
+  return Math.max(0, Math.floor((end - Date.now()) / 1000));
+}
+
+function isHalloweenEventActive() {
+  return getHalloweenRemainingSeconds() > 0;
+}
+
+function formatHalloweenTime(totalSec) {
+  if (totalSec <= 0) return '0일 00시간 00분 00초 (타임 오버)';
+  const days = Math.floor(totalSec / 86400);
+  const hours = Math.floor((totalSec % 86400) / 3600);
+  const mins = Math.floor((totalSec % 3600) / 60);
+  const secs = totalSec % 60;
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${days}일 ${pad(hours)}시간 ${pad(mins)}분 ${pad(secs)}초`;
+}
+
+function updateHalloweenCountdown() {
+  const sec = getHalloweenRemainingSeconds();
+  const banner = document.getElementById('halloween-timer-banner');
+  const countText = document.getElementById('halloween-countdown-text');
+  const statusTag = document.getElementById('halloween-status-tag');
+  const statusDesc = document.getElementById('halloween-status-desc');
+
+  if (countText) {
+    countText.textContent = formatHalloweenTime(sec);
+  }
+
+  if (sec > 0) {
+    if (banner) banner.classList.remove('expired');
+    if (statusTag) {
+      statusTag.textContent = '진행 중';
+      statusTag.style.background = '#ff5722';
+    }
+    if (statusDesc) {
+      statusDesc.textContent = '5일간 특별 몬스터가 출현합니다! 타임 오버 시 출현이 종료됩니다.';
+    }
+  } else {
+    if (banner) banner.classList.add('expired');
+    if (statusTag) {
+      statusTag.textContent = '타임 오버 (종료)';
+      statusTag.style.background = '#555';
+    }
+    if (statusDesc) {
+      statusDesc.textContent = '이벤트 기간이 종료되어 할로윈 몬스터들이 더 이상 출현하지 않습니다.';
+    }
+  }
+}
+
+// 1초마다 실시간으로 초가 떨어지며 갱신
+setInterval(updateHalloweenCountdown, 300); updateHalloweenCountdown();
+setTimeout(updateHalloweenCountdown, 50);
+
+// 개발/테스트 편의 함수
+window.resetHalloweenTimer = function(days = 5) {
+  const newEnd = Date.now() + (days * 86400 * 1000);
+  localStorage.setItem('halloween_event_end_time', newEnd.toString());
+  updateHalloweenCountdown();
+  console.log(`[할로윈 이벤트] 남은 시간을 ${days}일로 재설정했습니다.`);
+};
+window.setHalloweenTimerSeconds = function(seconds = 10) {
+  const newEnd = Date.now() + (seconds * 1000);
+  localStorage.setItem('halloween_event_end_time', newEnd.toString());
+  updateHalloweenCountdown();
+  console.log(`[할로윈 이벤트] 남은 시간을 ${seconds}초로 설정했습니다. (테스트용)`);
+};
+
 /* =========================================================
    환상RPG — 데이터 정의
    ========================================================= */
 const OPERATOR_NAME = "환상의 관리자"; // 게임 내 세계관 상 운영자 지칭
 
 const WEAPONS = [
-  { id:'wood',   name:'낡은 나무검',     atk:5,   price:0,    reqLevel:1  },
-  { id:'steel',  name:'강철검',          atk:16,  price:120,  reqLevel:1  },
-  { id:'silver', name:'은빛 장검',       atk:32,  price:380,  reqLevel:5  },
-  { id:'staff',  name:'마법사의 지팡이', atk:52,  price:850,  reqLevel:10 },
-  { id:'black',  name:'흑염의 대검',     atk:92,  price:2100, reqLevel:20 },
-  { id:'dragon', name:'용살자의 검',     atk:155, price:6200, reqLevel:35 },
-  { id:'moune',  name:'어둠모운(망치)',  atk:250, price:18000,reqLevel:45 },
+  // === 문어의 대장간 합성 전용 무기 ===
+  { id:'fused_alloy',        name:'단단한 합금 대검',   atk:34,  price:350,   reqLevel:4,  desc:'나무검과 단검을 융합해 단련한 묵직한 대검.' },
+  { id:'fused_wave_scythe',  name:'호박빛 파도 낫',   atk:68,  price:950,   reqLevel:9,  desc:'호수의 수기와 할로윈의 마력이 깃든 회전 낫.' },
+  { id:'fused_magic_blade',  name:'백은 마도검',       atk:92,  price:1700,  reqLevel:15, desc:'은빛 검신에 지팡이의 마도핵을 박아넣은 마도검.' },
+  { id:'fused_moon_flame',   name:'달빛 흑염도',       atk:165, price:5400,  reqLevel:30, desc:'타오르는 흑염과 차가운 월광이 교차하는 이중 속성도.' },
+  { id:'fused_dragon_abyss', name:'용린 심연도',      atk:260, price:16000, reqLevel:42, desc:'투명드래곤의 비늘과 심연의 카타나를 융합한 진·용살검.' },
+  { id:'fused_chaos_moune',  name:'진·어둠모운(신화)', atk:380, price:38000, reqLevel:48, desc:'세상의 모든 어둠과 혼돈을 으스러뜨리는 궁극의 신화 망치.' },
+  { id:'wood',           name:'낡은 나무검',       atk:5,   price:0,     reqLevel:1  },
+  { id:'iron_dagger',    name:'사냥꾼의 단검',     atk:12,  price:65,    reqLevel:2  },
+  { id:'steel',          name:'강철검',            atk:18,  price:130,   reqLevel:3  },
+  { id:'lake_trident',   name:'호수의 삼지창',     atk:26,  price:260,   reqLevel:4  },
+  { id:'silver',         name:'은빛 장검',         atk:36,  price:420,   reqLevel:5  },
+  { id:'pumpkin_scythe', name:'할로윈 호박 낫',   atk:48,  price:750,   reqLevel:8  },
+  { id:'staff',          name:'마법사의 지팡이',   atk:62,  price:1100,  reqLevel:12 },
+  { id:'black',          name:'흑염의 대검',       atk:98,  price:2400,  reqLevel:20 },
+  { id:'moonlight_blade',name:'월광의 마검',       atk:135, price:4500,  reqLevel:28 },
+  { id:'dragon',         name:'용살자의 검',       atk:175, price:7500,  reqLevel:35 },
+  { id:'abyss_katana',   name:'심연의 카타나',     atk:220, price:12500, reqLevel:42 },
+  { id:'moune',          name:'어둠모운(망치)',    atk:280, price:20000, reqLevel:48 },
 ];
 
 const ITEMS_SHOP = [
@@ -291,17 +915,36 @@ const ITEMS_SHOP = [
 ];
 
 const AREAS = [
-  { id:'field',   name:'초원',   reqLevel:1,  monsters:['slime','raccoon'] },
-  { id:'cave',    name:'동굴',   reqLevel:5,  monsters:['goblin','skeleton'] },
-  { id:'swamp',   name:'늪지',   reqLevel:8,  monsters:['snake','spider'] },
-  { id:'mount',   name:'산맥',   reqLevel:15, monsters:['bear','skeleton'] },
-  { id:'volcano', name:'화산 지대', reqLevel:18, monsters:['fire_element','magma_golem'] },
-  { id:'abyss',   name:'심연',   reqLevel:25, monsters:['dragon','sarian'] },
-  { id:'castle',  name:'암흑성', reqLevel:30, monsters:['dark_knight','vampire'] },
-  { id:'heaven',  name:'천상계', reqLevel:40, monsters:['seraph','dragon'] },
+  { id:'field',            name:'초원',           reqLevel:1,  monsters:['slime','raccoon'] },
+  { id:'lake',             name:'호수',           reqLevel:3,  monsters:['frog','water_spirit','mud_turtle'] },
+  { id:'cave',             name:'동굴',           reqLevel:5,  monsters:['goblin','skeleton'] },
+  { id:'swamp',            name:'늪지',           reqLevel:8,  monsters:['snake','spider'] },
+  { id:'halloween_forest', name:'할로윈 유령 숲', reqLevel:1,  monsters:['pumpkin_jack','spooky_ghost','vampire_bat','witch_cat','candy_mimic'], isHalloween:true },
+  { id:'halloween_castle', name:'할로윈 악령 고성',reqLevel:10, monsters:['haunted_armor','candy_mimic','witch_cat','pumpkin_king','reaper_phantom'], isHalloween:true },
+  { id:'mount',            name:'산맥',           reqLevel:15, monsters:['bear','skeleton'] },
+  { id:'volcano',          name:'화산 지대',       reqLevel:18, monsters:['fire_element','magma_golem'] },
+  { id:'abyss',            name:'심연',           reqLevel:25, monsters:['dragon','sarian'] },
+  { id:'castle',           name:'암흑성',         reqLevel:30, monsters:['dark_knight','vampire'] },
+  { id:'heaven',           name:'천상계',         reqLevel:40, monsters:['seraph','dragon'] },
 ];
 
 const MONSTERS = {
+  // === [호수 바이옴 몬스터 (저레벨 Lv.3)] ===
+  frog:         { name:'독개구리',       emoji:'🐸', tier:0.55, atier:0.48, dropName:'개구리 뒷다리',   dropVal:16 },
+  water_spirit: { name:'물방울 정령',     emoji:'💧', tier:0.65, atier:0.55, dropName:'청아한 이슬',     dropVal:22 },
+  mud_turtle:   { name:'진흙 거북이',     emoji:'🐢', tier:0.80, atier:0.50, dropName:'단단한 등껍질',   dropVal:28 },
+
+  // === [할로윈 한정 이벤트 몬스터 (신규 추가 포함)] ===
+  pumpkin_jack:   { name:'호박귀신 잭',     emoji:'🎃', tier:0.75, atier:0.7,  dropName:'할로윈 호박 사탕', dropVal:35, isHalloween:true },
+  witch_cat:      { name:'마녀의 검은 고양이', emoji:'🐈‍⬛', tier:0.88, atier:0.78, dropName:'저주받은 은방울', dropVal:42, dodge:0.25, isHalloween:true },
+  spooky_ghost:   { name:'장난꾸러기 유령', emoji:'👻', tier:1.05, atier:0.95, dropName:'원혼의 천조각',   dropVal:55, dodge:0.25, isHalloween:true },
+  candy_mimic:    { name:'사탕 상자 미믹', emoji:'🍬📦', tier:1.25, atier:1.15, dropName:'할로윈 무지개 사탕', dropVal:65, thief:true, isHalloween:true },
+  vampire_bat:    { name:'흡혈 박쥐떼',     emoji:'🦇', tier:1.35, atier:1.25, dropName:'박쥐 날개',       dropVal:85, thief:true, isHalloween:true },
+  haunted_armor:  { name:'빙의된 할로윈 갑옷', emoji:'🛡️', tier:1.55, atier:1.35, dropName:'원혼의 투구 파편', dropVal:95, isHalloween:true },
+  reaper_phantom: { name:'할로윈 사신',     emoji:'🧙‍♂️', tier:2.8,  atier:2.3,  dropName:'사신의 호박 랜턴', dropVal:450, boss:true, isHalloween:true },
+  pumpkin_king:   { name:'잭 오랜턴 킹',   emoji:'👑🎃', tier:3.2,  atier:2.4,  dropName:'호박 대왕의 왕관', dropVal:650, boss:true, isHalloween:true },
+
+  // === [일반 필드 몬스터] ===
   slime:        { name:'슬라임',       emoji:'🟢', tier:0.4,  atier:0.32, dropName:'슬라임 젤리',   dropVal:8  },
   goblin:       { name:'고블린',       emoji:'👺', tier:0.65, atier:0.55, dropName:'고블린 이빨',   dropVal:14 },
   raccoon:      { name:'너구리',       emoji:'🦝', tier:0.55, atier:0.6,  dropName:'너구리 꼬리',   dropVal:12, thief:true },
@@ -318,6 +961,108 @@ const MONSTERS = {
   sarian:       { name:'운영자 서리안', emoji:'🔨', tier:3.2, atier:2.1, dropName:'어둠모운의 파편', dropVal:1000, dodge:0.3, boss:true },
 };
 
+/* =========================================================
+   [전직소] 직업별 상세 능력 (할 수 있는 것 / 할 수 없는 것)
+   ========================================================= */
+const JOB_DETAILS = {
+  // 1. 고멍멍이쿠션의 가르침
+  '검사': {
+    master: '고멍멍이쿠션',
+    icon: '⚔️',
+    can: '치명타 일격(30% 확률로 2.2배 데미지), 빠른 [연속 베기] 스킬, 기본 공격력 +5 보너스',
+    cannot: '체력 회복 마법 사용 불가, 마나 소모 효율 보너스 없음 (오직 검술 승부)',
+    category: '🐾 1. 고멍멍이쿠션의 가르침 (전투 & 기사도)'
+  },
+  '마검사': {
+    master: '고멍멍이쿠션',
+    icon: '✨⚔️',
+    can: '공격 시 추가 마법 피해(30%) 및 MP +5 자동 충전, 마력과 검기의 조화 [마력참] 시전',
+    cannot: '순수 물리 폭딜이나 순수 마법 폭딜에 비해 한방 계수가 낮음, 방어력 보너스 부재',
+    category: '🐾 1. 고멍멍이쿠션의 가르침 (전투 & 기사도)'
+  },
+  '전사': {
+    master: '고멍멍이쿠션',
+    icon: '🛡️',
+    can: '높은 체력 유지력, 기본 공격력 +5 증가, 적을 무겁게 내리찍는 [강철 강타] 타격',
+    cannot: '마나통이 작고 마법 기술 사용 불가, 도주 확률 보너스가 없어 정면 승부 강제',
+    category: '🐾 1. 고멍멍이쿠션의 가르침 (전투 & 기사도)'
+  },
+  '천사': {
+    master: '고멍멍이쿠션',
+    icon: '👼',
+    can: '성스러운 빛으로 공격과 동시에 [HP +60 자가 치유], 보스전과 장기전에서의 불사급 생존력',
+    cannot: '폭발적인 순간 한방 공격력(크리티컬 등) 부족, 전투 템포가 다소 길어짐',
+    category: '🐾 1. 고멍멍이쿠션의 가르침 (전투 & 기사도)'
+  },
+  '사냥꾼': {
+    master: '고멍멍이쿠션',
+    icon: '🏹',
+    can: '절대적인 [명중률 +15% 보정](회피 몬스터/유령도 명중), 치명적인 [헤드샷](계수 2.0배)',
+    cannot: '근접 방어력 보너스가 없고 자체 회복기 없음, 체력 관리에 주의 필요',
+    category: '🐾 1. 고멍멍이쿠션의 가르침 (전투 & 기사도)'
+  },
+
+  // 2. 고새끼멍멍이쿠션의 가르침
+  '흑마법사': {
+    master: '고새끼멍멍이쿠션',
+    icon: '🧛',
+    can: '공격 데미지의 35%를 체력으로 즉각 [흡혈], 최대 MP +20 증가, [어둠의 화살] 기술',
+    cannot: '기본 물리 방어력이 매우 취약하여 강력한 한방 일격을 맞으면 급사 위험',
+    category: '🐾 2. 고새끼멍멍이쿠션의 가르침 (마법 & 기술)'
+  },
+  '마법사': {
+    master: '고새끼멍멍이쿠션',
+    icon: '🔥',
+    can: '초저마나 고화력 [파이어볼](계수 2.2배, MP 6소모), 최대 MP +20 증가, 압도적 마법 화력',
+    cannot: '일반 평타 공격력이 최하위 수준, 마나가 고갈되면 전투 무력화',
+    category: '🐾 2. 고새끼멍멍이쿠션의 가르침 (마법 & 기술)'
+  },
+  '도적': {
+    master: '고새끼멍멍이쿠션',
+    icon: '🗡️',
+    can: '위기 시 100% 안전 도주, 적의 공격 15% 추가 회피, 은신 기습 [그림자 기습] 타격',
+    cannot: '체력과 깡 공격력이 낮아 보스와의 맞다이 장기전에서 버티기 힘듦',
+    category: '🐾 2. 고새끼멍멍이쿠션의 가르침 (마법 & 기술)'
+  },
+  '요리사': {
+    master: '고새끼멍멍이쿠션',
+    icon: '🍳',
+    can: '물약/야생 꿀/사탕 섭취 시 [회복 효과 2.5배 극대화], [특제 전골 일격], 꿀동산 채집 보너스',
+    cannot: '전용 무기 무력, 소모품(물약/요리 재료)이 없으면 전투 효율이 급감',
+    category: '🐾 2. 고새끼멍멍이쿠션의 가르침 (마법 & 기술)'
+  },
+
+  // 3. 백헌멍멍이쿠션의 비전 (히든 직업: Lv.40+)
+  '엄마': {
+    master: '백헌멍멍이쿠션',
+    icon: '🧹',
+    can: '무자비한 궁극기 [등짝 스매싱](계수 2.5배), 기본 공격력 +15, 최대 HP +50 압도적 스탯',
+    cannot: '레벨 40 이상 필요, 자식(몬스터) 앞에서는 절대 물러서지 않아 도주 불가',
+    category: '🐾 3. 백헌멍멍이쿠션의 비전 (히든 직업 - Lv.40+ 필요)'
+  },
+  '과자자': {
+    master: '백헌멍멍이쿠션',
+    icon: '🍪',
+    can: '달콤한 [과자 폭탄] 투척, 사탕/젤리류 전리품 가치 및 회복 효과 증폭, 공/체력 보너스',
+    cannot: '레벨 40 이상 필요, 달콤한 냄새 때문에 도둑 몬스터의 어그로를 더 자주 끔',
+    category: '🐾 3. 백헌멍멍이쿠션의 비전 (히든 직업 - Lv.40+ 필요)'
+  },
+  '환상자': {
+    master: '백헌멍멍이쿠션',
+    icon: '🌫️',
+    can: '실체 없는 환영검으로 [적의 공격 20% 확률 완전 무효화], [환상 환영검], 공/체력 보너스',
+    cannot: '레벨 40 이상 필요, 환상에 너무 깊이 취하면 가끔 본인의 공격도 헛스윙',
+    category: '🐾 3. 백헌멍멍이쿠션의 비전 (히든 직업 - Lv.40+ 필요)'
+  },
+  '환장자': {
+    master: '백헌멍멍이쿠션',
+    icon: '狂',
+    can: '모든 공격이 [2연타(더블 어택)], 체력 30% 이하 시 [공격력 최대 3.4배 폭증(버서커)]',
+    cannot: '레벨 40 이상 필요, 체력 관리가 극도로 아슬아슬하여 언제든 사망 위험',
+    category: '🐾 3. 백헌멍멍이쿠션의 비전 (히든 직업 - Lv.40+ 필요)'
+  }
+};
+
 const QUESTS = [
   { id:'q1', name:'첫 사냥',       desc:'슬라임을 3마리 처치한다.',       type:'kill', monster:'slime',    goal:3,  rewardExp:40,  rewardGold:30  },
   { id:'q2', name:'고블린 소탕',   desc:'고블린을 5마리 처치한다.',       type:'kill', monster:'goblin',   goal:5,  rewardExp:120, rewardGold:90  },
@@ -327,6 +1072,8 @@ const QUESTS = [
   { id:'q6', name:'수련자의 증표', desc:'레벨 10에 도달한다.',            type:'level', goal:10, rewardExp:0,   rewardGold:150 },
   { id:'q7', name:'심연의 문',     desc:'레벨 25에 도달한다.',            type:'level', goal:25, rewardExp:0,   rewardGold:500 },
   { id:'q8', name:'전설의 종막',   desc:'투명드래곤을 1마리 처치한다.',   type:'kill', monster:'dragon',   goal:1,  rewardExp:3000, rewardGold:2500 },
+  { id:'q9', name:'달콤한 유혹',   desc:'야생 꿀을 3개 채집한다.',        type:'item', item:'야생 꿀', goal:3, rewardExp:150, rewardGold:200 },
+  { id:'q10', name:'황금 꿀단지',  desc:'로열 젤리를 1개 획득한다.',      type:'item', item:'로열 젤리', goal:1, rewardExp:600, rewardGold:1000 },
 ];
 
 /* =========================================================
@@ -349,7 +1096,8 @@ function freshPlayer(nickname){
     questClaimed:{}, // questId -> true
     shopPenalty:0, // 억까: 다음 구매 가격 배율 -1이면 없음
     partyId:null, // 파티 ID
-    job: '초보자', // 직업
+    job: '초보자',
+    weaponEnhance: 0, // 직업
   };
 }
 
@@ -375,7 +1123,13 @@ function toast(msg){
   setTimeout(()=>t.remove(), 2200);
 }
 function weaponOf(player){ return WEAPONS.find(w=>w.id===player.weapon); }
-function totalAtk(){ return player.baseAtk + weaponOf(player).atk; }
+function weaponOf(player){ return WEAPONS.find(w=>w.id===player.weapon) || WEAPONS[0]; }
+function totalAtk(){
+  const w = weaponOf(player);
+  const enh = player.weaponEnhance || 0;
+  const enhBonus = Math.round(w.atk * (enh * 0.18));
+  return player.baseAtk + w.atk + enhBonus;
+}
 function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
 function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
 
@@ -386,91 +1140,141 @@ let pendingName = null;
 let isAdminUser = false;
 let currentAreaId = 'field';
 
-// 저장된 세이브 데이터 조회 (localStorage 우선, window.storage 보조)
-async function getStoredSave(name){
-  if(!name) return null;
-  // 1. localStorage 탐색
-  try {
-    const local = localStorage.getItem('save:' + name);
-    if(local) {
-      return JSON.parse(local);
-    }
-  } catch(e){}
+/* =========================================================
+   [이어하기 & 세이브 시스템 - 로컬 + Firebase 클라우드 통합]
+   ========================================================= */
 
-  // 2. window.storage 탐색
-  if(window.storage && typeof window.storage.get === 'function'){
-    try {
-      const res = await window.storage.get('save:' + name, false);
-      if(res && res.value){
-        return JSON.parse(res.value);
+// 저장된 모든 캐릭터 닉네임 목록 가져오기
+function getAllSavedNicknames() {
+  const nicks = new Set();
+  try {
+    const last = localStorage.getItem('fantasy_rpg_last_player');
+    if (last) nicks.add(last);
+    const nickList = JSON.parse(localStorage.getItem('fantasy_rpg_nicknames') || '[]');
+    nickList.forEach(n => nicks.add(n));
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('save:')) {
+        nicks.add(k.replace('save:', '').trim());
       }
-    } catch(e){}
+    }
+  } catch(e) {}
+  return Array.from(nicks).filter(Boolean);
+}
+
+// 저장된 세이브 데이터 조회 (로컬스토리지 + Firebase 클라우드)
+async function getStoredSave(name) {
+  if (!name) return null;
+  const cleanName = name.trim();
+  const lowerName = cleanName.toLowerCase();
+
+  // 1. localStorage 정확 일치 확인
+  try {
+    const local = localStorage.getItem('save:' + cleanName);
+    if (local) {
+      const parsed = JSON.parse(local);
+      if (parsed) return parsed;
+    }
+  } catch(e) {}
+
+  // 2. localStorage 대소문자/공백 무시 확인
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('save:')) {
+        const candidate = k.replace('save:', '').trim();
+        if (candidate.toLowerCase() === lowerName) {
+          const val = localStorage.getItem(k);
+          if (val) return JSON.parse(val);
+        }
+      }
+    }
+  } catch(e) {}
+
+  // 3. Firebase 클라우드 실시간 DB에서 복원 시도
+  if (firebaseDb) {
+    try {
+      const safeNick = cleanName.replace(/[.#$\[\]]/g, '_');
+      const snap = await firebaseDb.ref('saves/' + safeNick).once('value');
+      const cloudVal = snap.val();
+      if (cloudVal) {
+        console.log('☁️ [Firebase] 클라우드 세이브 데이터 복원 성공:', cleanName);
+        // 로컬에도 자동 캐싱
+        try { localStorage.setItem('save:' + cleanName, JSON.stringify(cloudVal)); } catch(e){}
+        return cloudVal;
+      }
+    } catch(e) {
+      console.warn('Firebase 세이브 로드 실패:', e);
+    }
   }
+
+  // 4. window.storage (샌드박스 환경 보조)
+  if (window.storage && typeof window.storage.get === 'function') {
+    try {
+      const res = await window.storage.get('save:' + cleanName, false);
+      if (res && res.value) return JSON.parse(res.value);
+    } catch(e) {}
+  }
+
   return null;
 }
 
-// 세이브 데이터 기록 (localStorage + window.storage 이중 저장)
-async function setStoredSave(name, dataObj){
-  if(!name || !dataObj) return;
+// 세이브 데이터 기록 (로컬스토리지 + Firebase 클라우드 자동 백업)
+async function setStoredSave(name, dataObj) {
+  if (!name || !dataObj) return;
+  const cleanName = name.trim();
   const jsonStr = JSON.stringify(dataObj);
-  // 1. localStorage 저장 및 등록 닉네임 리스트 갱신
+
+  // 1. localStorage 저장
   try {
-    localStorage.setItem('save:' + name, jsonStr);
+    localStorage.setItem('save:' + cleanName, jsonStr);
+    localStorage.setItem('fantasy_rpg_last_player', cleanName);
+
     let nickList = [];
-    try {
-      nickList = JSON.parse(localStorage.getItem('fantasy_rpg_nicknames') || '[]');
-    } catch(e){ nickList = []; }
-    if(!nickList.some(n => n.toLowerCase() === name.toLowerCase())){
-      nickList.push(name);
+    try { nickList = JSON.parse(localStorage.getItem('fantasy_rpg_nicknames') || '[]'); } catch(e) {}
+    if (!nickList.some(n => n.toLowerCase() === cleanName.toLowerCase())) {
+      nickList.push(cleanName);
       localStorage.setItem('fantasy_rpg_nicknames', JSON.stringify(nickList));
     }
-  } catch(e){}
+  } catch(e) {}
 
-  // 2. window.storage 저장
-  if(window.storage && typeof window.storage.set === 'function'){
+  // 2. Firebase 클라우드 세이브 백업
+  if (firebaseDb) {
     try {
-      await window.storage.set('save:' + name, jsonStr, false);
-    } catch(e){}
+      const safeNick = cleanName.replace(/[.#$\[\]]/g, '_');
+      firebaseDb.ref('saves/' + safeNick).set(dataObj).catch(e => console.warn('Firebase 세이브 백업 실패:', e));
+    } catch(e) {}
+  }
+
+  // 3. window.storage 저장
+  if (window.storage && typeof window.storage.set === 'function') {
+    try { await window.storage.set('save:' + cleanName, jsonStr, false); } catch(e) {}
   }
 }
 
-// 닉네임 중복 여부 확인 (대소문자 무관)
-async function isNicknameRegistered(name){
-  if(!name) return false;
-  const lowerName = name.toLowerCase();
+// 닉네임 중복 여부 확인
+async function isNicknameRegistered(name) {
+  if (!name) return false;
+  const cleanName = name.trim();
+  const lowerName = cleanName.toLowerCase();
 
-  // 1. localStorage 확인
   try {
-    if(localStorage.getItem('save:' + name)) return true;
-    const nickList = JSON.parse(localStorage.getItem('fantasy_rpg_nicknames') || '[]');
-    if(nickList.some(n => n.toLowerCase() === lowerName)) return true;
-    for(let i = 0; i < localStorage.length; i++){
+    if (localStorage.getItem('save:' + cleanName)) return true;
+    for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i);
-      if(k && k.startsWith('save:')){
-        const savedName = k.replace('save:', '');
-        if(savedName.toLowerCase() === lowerName) return true;
+      if (k && k.startsWith('save:')) {
+        const savedName = k.replace('save:', '').trim();
+        if (savedName.toLowerCase() === lowerName) return true;
       }
     }
-  } catch(e){}
+  } catch(e) {}
 
-  // 2. window.storage 저장 확인
-  if(window.storage && typeof window.storage.get === 'function'){
+  if (firebaseDb) {
     try {
-      const res = await window.storage.get('save:' + name, false);
-      if(res && res.value) return true;
-    } catch(e){}
-  }
-
-  // 3. 랭킹 기록 확인
-  if(window.storage && typeof window.storage.list === 'function'){
-    try {
-      const listRes = await window.storage.list('leaderboard:', true);
-      const keys = (listRes && listRes.keys) || [];
-      for(const k of keys){
-        const targetName = k.replace('leaderboard:', '');
-        if(targetName.toLowerCase() === lowerName) return true;
-      }
-    } catch(e){}
+      const safeNick = cleanName.replace(/[.#$\[\]]/g, '_');
+      const snap = await firebaseDb.ref('saves/' + safeNick).once('value');
+      if (snap.exists()) return true;
+    } catch(e) {}
   }
 
   return false;
@@ -526,16 +1330,30 @@ async function onEnterClicked(){
 }
 
 // [이어하기 버튼 (시작 화면)] - 저장된 캐릭터 즉시 불러오기
-async function onDirectContinueClicked(){
-  const name = $('nickname-input').value.trim();
+async function onDirectContinueClicked() {
+  let name = $('nickname-input').value.trim();
   const pass = $('admin-pass-input').value.trim();
-  const pinInput = $('char-pin-input').value.trim();
+  let pinInput = $('char-pin-input').value.trim();
 
-  if(!name){ toast('이어할 캐릭터의 닉네임을 입력하세요.'); return; }
-  
-  if(pass === '1499'){
+  // 닉네임이 비어있다면 가장 최근 플레이어 또는 저장된 캐릭터 자동 탐색
+  if (!name) {
+    const lastPlayer = localStorage.getItem('fantasy_rpg_last_player');
+    const allNicks = getAllSavedNicknames();
+    if (lastPlayer) {
+      name = lastPlayer;
+      $('nickname-input').value = lastPlayer;
+    } else if (allNicks.length > 0) {
+      name = allNicks[0];
+      $('nickname-input').value = name;
+    } else {
+      toast('저장된 캐릭터가 없습니다. 닉네임을 입력하고 [관문 통과하기]로 캐릭터를 만들어주세요.');
+      return;
+    }
+  }
+
+  if (pass === '1499') {
     isAdminUser = true;
-  } else if(pass !== ''){
+  } else if (pass !== '') {
     toast('관리자 비밀번호가 틀렸습니다.');
     return;
   } else {
@@ -543,51 +1361,87 @@ async function onDirectContinueClicked(){
   }
 
   pendingName = name;
+  toast('캐릭터 기록을 확인하는 중입니다...');
 
   const savedData = await getStoredSave(name);
-  if(savedData){
-    try{
+  if (savedData) {
+    try {
       const charData = savedData.player ? savedData.player : savedData;
-      const savedPin = savedData.pin !== undefined ? savedData.pin : (charData.pin || '');
+      let savedPin = savedData.pin !== undefined ? savedData.pin : (charData.pin || '');
 
-      if(savedPin && savedPin !== pinInput && !isAdminUser){
-        toast('캐릭터 비밀번호(잠금)가 일치하지 않습니다.');
-        return;
+      // 비밀번호 잠금이 있는 경우 처리
+      if (savedPin && savedPin !== '' && savedPin !== pinInput && !isAdminUser) {
+        const userPromptPin = prompt(`[보안 잠금] "${name}" 캐릭터의 비밀번호를 입력해주세요:`, '');
+        if (userPromptPin === null) return;
+        if (userPromptPin.trim() !== savedPin) {
+          toast('캐릭터 비밀번호가 일치하지 않습니다.');
+          return;
+        }
+        pinInput = userPromptPin.trim();
+        $('char-pin-input').value = pinInput;
       }
 
-      player = charData;
-      toast(`"${name}"님의 모험 기록을 성공적으로 불러왔습니다!`);
+      // 안전한 캐릭터 데이터 복원 (누락 필드 보완)
+      player = {
+        ...freshPlayer(name),
+        ...charData,
+        inventory: charData.inventory || {},
+        kills: charData.kills || {},
+        questClaimed: charData.questClaimed || {}
+      };
+
+      localStorage.setItem('fantasy_rpg_last_player', name);
+      toast(`"${name}"님의 모험 기록을 성공적으로 이어합니다!`);
       enterTown(true);
       return;
-    }catch(e){
-      toast('저장된 데이터가 손상되었습니다.');
+    } catch(e) {
+      console.error('이어하기 오류:', e);
+      toast('데이터를 불러오는 중 오류가 발생했습니다.');
       return;
     }
   }
 
-  toast(`"${name}"(으)로 저장된 캐릭터 기록이 없습니다. 먼저 관문 통과하기로 캐릭터를 생성해주세요.`);
+  const allNicks = getAllSavedNicknames();
+  if (allNicks.length > 0) {
+    toast(`"${name}" 기록이 없습니다. 저장된 캐릭터: ${allNicks.join(', ')}`);
+  } else {
+    toast(`"${name}"(으)로 저장된 캐릭터 기록이 없습니다. 먼저 [관문 통과하기]로 생성해주세요.`);
+  }
 }
 
 // [이어하기 모달 확인 버튼]
-async function loadSavedGame(){
+async function loadSavedGame() {
   const savedData = await getStoredSave(pendingName);
-  if(!savedData){
+  if (!savedData) {
     toast('기록을 불러오지 못했습니다. 관문으로 돌아갑니다.');
     showScreen('screen-start');
     return;
   }
 
-  const pinInput = $('char-pin-input').value.trim();
+  let pinInput = $('char-pin-input').value.trim();
   const charData = savedData.player ? savedData.player : savedData;
   const savedPin = savedData.pin !== undefined ? savedData.pin : (charData.pin || '');
 
-  if(savedPin && savedPin !== pinInput && !isAdminUser){
-    toast('캐릭터 비밀번호(잠금)가 일치하지 않습니다. 관문에서 비밀번호를 입력해주세요.');
-    showScreen('screen-start');
-    return;
+  if (savedPin && savedPin !== '' && savedPin !== pinInput && !isAdminUser) {
+    const userPromptPin = prompt(`[보안 잠금] "${pendingName}" 캐릭터의 비밀번호를 입력해주세요:`, '');
+    if (userPromptPin === null || userPromptPin.trim() !== savedPin) {
+      toast('캐릭터 비밀번호가 일치하지 않습니다.');
+      showScreen('screen-start');
+      return;
+    }
+    pinInput = userPromptPin.trim();
+    $('char-pin-input').value = pinInput;
   }
 
-  player = charData;
+  player = {
+    ...freshPlayer(pendingName),
+    ...charData,
+    inventory: charData.inventory || {},
+    kills: charData.kills || {},
+    questClaimed: charData.questClaimed || {}
+  };
+
+  localStorage.setItem('fantasy_rpg_last_player', pendingName);
   toast(`"${pendingName}"님의 모험 기록을 불러왔습니다.`);
   enterTown(true);
 }
@@ -647,6 +1501,7 @@ function closeEvent(){
    ========================================================= */
 async function saveGame(){
   if(!player || !player.nickname) return;
+  syncPlayerOnlineToFirebase();
   try{
     const saveObj = {
       player,
@@ -677,7 +1532,9 @@ function refreshSidebar(){
   $('s-hp-bar').style.width = (player.hp/player.maxHp*100)+'%';
   $('s-mp-num').textContent = `${player.mp}/${player.maxMp}`;
   $('s-mp-bar').style.width = (player.mp/player.maxMp*100)+'%';
-  $('s-weapon').textContent = weaponOf(player).name;
+  const curW = weaponOf(player);
+  const curEnh = player.weaponEnhance || 0;
+  $('s-weapon').textContent = curW.name + (curEnh > 0 ? ' +' + curEnh : '');
   $('s-atk').textContent = totalAtk();
   $('s-gold').textContent = player.gold;
 }
@@ -708,13 +1565,370 @@ function restAtInn(){
   saveGame();
 }
 
+/* =========================================================
+   🐙 문어의 신비한 대장간 (무기 강화 · 무기 합성 · 잡화 합성)
+   ========================================================= */
+
+const WEAPON_FUSION_RECIPES = [
+  {
+    id: 'fused_alloy',
+    name: '단단한 합금 대검',
+    atk: 34,
+    reqLevel: 4,
+    materials: [{ id: 'wood', name: '낡은 나무검', count: 1 }, { id: 'iron_dagger', name: '사냥꾼의 단검', count: 1 }],
+    goldCost: 120,
+    desc: '낡은 나무검과 사냥꾼의 단검을 벼려 만든 강인한 합금 대검 (공격력 +34)'
+  },
+  {
+    id: 'fused_wave_scythe',
+    name: '호박빛 파도 낫',
+    atk: 68,
+    reqLevel: 9,
+    materials: [{ id: 'lake_trident', name: '호수의 삼지창', count: 1 }, { id: 'pumpkin_scythe', name: '할로윈 호박 낫', count: 1 }],
+    goldCost: 450,
+    desc: '호수의 삼지창과 할로윈 호박 낫이 융합된 마력의 파도 낫 (공격력 +68)'
+  },
+  {
+    id: 'fused_magic_blade',
+    name: '백은 마도검',
+    atk: 92,
+    reqLevel: 15,
+    materials: [{ id: 'silver', name: '은빛 장검', count: 1 }, { id: 'staff', name: '마법사의 지팡이', count: 1 }],
+    goldCost: 800,
+    desc: '은빛 장검에 마법사의 지팡이 마도핵을 결합한 하이브리드 검 (공격력 +92)'
+  },
+  {
+    id: 'fused_moon_flame',
+    name: '달빛 흑염도',
+    atk: 165,
+    reqLevel: 30,
+    materials: [{ id: 'black', name: '흑염의 대검', count: 1 }, { id: 'moonlight_blade', name: '월광의 마검', count: 1 }],
+    goldCost: 2800,
+    desc: '흑염의 대검과 월광의 마검이 합쳐져 뿜어내는 이중 속성 검 (공격력 +165)'
+  },
+  {
+    id: 'fused_dragon_abyss',
+    name: '용린 심연도',
+    atk: 260,
+    reqLevel: 42,
+    materials: [{ id: 'dragon', name: '용살자의 검', count: 1 }, { id: 'abyss_katana', name: '심연의 카타나', count: 1 }],
+    goldCost: 6500,
+    desc: '용살자의 검과 심연의 카타나가 만난 궁극의 용살 명검 (공격력 +260)'
+  },
+  {
+    id: 'fused_chaos_moune',
+    name: '진·어둠모운(신화)',
+    atk: 380,
+    reqLevel: 48,
+    materials: [{ id: 'moune', name: '어둠모운(망치)', count: 1 }, { id: 'abyss_katana', name: '심연의 카타나', count: 1 }, { id: 'pumpkin_scythe', name: '할로윈 호박 낫', count: 1 }],
+    goldCost: 16000,
+    desc: '어둠모운과 심연의 카타나, 호박 낫이 결합한 환상의 신화 무기 (공격력 +380)'
+  }
+];
+
+const ITEM_FUSION_RECIPES = [
+  {
+    id: '특제 대형 만병통치약',
+    name: '특제 대형 만병통치약',
+    desc: 'HP 250 및 MP 80 즉시 회복',
+    materials: [{ name: '소형 체력 물약', count: 2 }, { name: '마나 물약', count: 1 }, { name: '슬라임 젤리', count: 2 }],
+    goldCost: 35
+  },
+  {
+    id: '호수 정령의 생명수',
+    name: '호수 정령의 생명수',
+    desc: 'HP 380 및 MP 50 즉각 치유',
+    materials: [{ name: '중형 체력 물약', count: 1 }, { name: '청아한 이슬', count: 3 }, { name: '개구리 뒷다리', count: 2 }],
+    goldCost: 80
+  },
+  {
+    id: '할로윈 마녀의 불사 영약',
+    name: '할로윈 마녀의 불사 영약',
+    desc: 'HP 100% 완전 회복 + MP 100% 완전 회복',
+    materials: [{ name: '할로윈 호박 사탕', count: 2 }, { name: '저주받은 은방울', count: 1 }, { name: '원혼의 천조각', count: 1 }],
+    goldCost: 150
+  },
+  {
+    id: '맹독 폭발 연막탄',
+    name: '맹독 폭발 연막탄',
+    desc: '전투에서 100% 안전 도주 및 적에게 독 피해 120 부여',
+    materials: [{ name: '도주용 연막탄', count: 2 }, { name: '거미 독주머니', count: 2 }, { name: '독니', count: 2 }],
+    goldCost: 50
+  },
+  {
+    id: '문어의 황금빛 행운 부적',
+    name: '문어의 황금빛 행운 부적',
+    desc: '신비한 부적 (백디몬에게 800골드에 고가 매각 가능)',
+    materials: [{ name: '너구리 꼬리', count: 3 }, { name: '단단한 등껍질', count: 2 }, { name: '곰 발톱', count: 2 }],
+    goldCost: 120
+  }
+];
+
+let currentBlacksmithTab = 'enhance';
+
+function renderBlacksmith(tab){
+  currentBlacksmithTab = tab || currentBlacksmithTab || 'enhance';
+  const area = $('content-area');
+  const w = weaponOf(player);
+  const enh = player.weaponEnhance || 0;
+
+  let html = `
+    <h3 style="margin-top:0;color:var(--gold-bright);">🐙 문어의 신비한 대장간</h3>
+    <p class="flavor">"뽀글뽀글... 여덟 개의 다리로 두드리지 못할 쇠는 없다네! 무기 강화든, 무기 합성이든, 온갖 잡화 조합이든 내게 맡기게나!"</p>
+
+    <div class="blacksmith-tabs">
+      <button class="blacksmith-tab ${currentBlacksmithTab==='enhance'?'active':''}" onclick="renderBlacksmith('enhance')">🔨 무기 강화</button>
+      <button class="blacksmith-tab ${currentBlacksmithTab==='weapon_fuse'?'active':''}" onclick="renderBlacksmith('weapon_fuse')">⚔️ 무기 합성</button>
+      <button class="blacksmith-tab ${currentBlacksmithTab==='item_fuse'?'active':''}" onclick="renderBlacksmith('item_fuse')">🧪 잡화 합성</button>
+    </div>
+  `;
+
+  // === 1. 무기 강화 탭 ===
+  if(currentBlacksmithTab === 'enhance'){
+    const successRates = [95, 85, 75, 65, 55, 45, 38, 30, 24, 18, 14, 10, 7, 5, 3];
+    const rate = successRates[enh] !== undefined ? successRates[enh] : 3;
+    const breakRate = (enh >= 3) ? 10 : 0; // 강화 성공할수록 낮아지고 깨질 확률 10%
+    const cost = Math.round((w.price * 0.15) + (enh * 60) + 40);
+    const bonusAtk = Math.round(w.atk * (enh * 0.18));
+    const nextBonusAtk = Math.round(w.atk * ((enh + 1) * 0.18));
+
+    html += `
+      <div class="enhance-board">
+        <div style="font-size:13px;color:var(--dim);margin-bottom:4px;">현재 장착 무기</div>
+        <div class="enhance-title">${w.name} ${enh > 0 ? `<span style="color:#f59e0b;">+${enh}</span>` : ''}</div>
+        <div style="color:var(--parchment);font-size:14px;margin-bottom:10px;">
+          기본 공격력: <b>+${w.atk}</b> | 강화 보너스: <b style="color:#a3e635;">+${bonusAtk}</b> (총합: <b>+${w.atk + bonusAtk}</b>)
+        </div>
+        ${enh < 15 ? `
+          <div style="font-size:13px;color:var(--dim);margin-top:6px;">강화 성공 시: <b style="color:#a3e635;">+${enh + 1}강 (총합 공격력 +${w.atk + nextBonusAtk})</b></div>
+        ` : `<div style="color:#a3e635;font-weight:bold;">★ 이미 최고 강화 단계(+15)에 도달했습니다!</div>`}
+
+        <div class="enhance-rate-box">
+          <div>성공 확률: <span class="rate-success">${enh < 15 ? rate + '%' : '-'}</span></div>
+          <div>실패 시: <span class="rate-fail">${enh < 3 ? '수치 유지' : '수치 하락'}</span></div>
+          <div>깨질 확률: <span class="rate-break">${enh < 15 ? breakRate + '%' : '-'}</span></div>
+        </div>
+
+        <div style="margin-top:14px;">
+          <button class="primary wide" ${enh >= 15 ? 'disabled' : ''} onclick="enhanceWeapon()" style="padding:14px;font-size:15px;background:linear-gradient(180deg,#8626c3,#51157c);border-color:#ff9800;">
+            🔨 무기 강화 시도 (비용: ${cost} 골드)
+          </button>
+        </div>
+        <p class="flavor" style="margin-top:10px;font-size:11.5px;color:#fca5a5;">
+          ※ +3강 이상부터는 강화 실패 시 <b>10% 확률로 무기가 산산조각 깨져 파괴</b>될 수 있으니 주의하세요!
+        </p>
+      </div>
+    `;
+  }
+
+  // === 2. 무기 합성 탭 ===
+  else if(currentBlacksmithTab === 'weapon_fuse'){
+    html += `
+      <p class="flavor" style="margin-bottom:12px;">보유한 무기들을 조합하여 일반 상점에서는 구할 수 없는 강력한 상위 합성 무기를 제작합니다.</p>
+    `;
+
+    WEAPON_FUSION_RECIPES.forEach(r => {
+      // 재료 보유 여부 확인 (장착 무기 또는 인벤토리 무기)
+      let canCraft = player.gold >= r.goldCost && player.level >= r.reqLevel;
+      const matHtml = r.materials.map(m => {
+        const has = (player.weapon === m.id);
+        if(!has) canCraft = false;
+        return `<span class="mat-badge ${has ? 'ok' : 'no'}">${m.name} (${has ? '보유/장착중' : '미보유'})</span>`;
+      }).join(' ');
+
+      const isCurrentWeapon = player.weapon === r.id;
+
+      html += `
+        <div class="fuse-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <b style="color:var(--gold-bright);font-size:15px;">${r.name}</b>
+              <span class="tag">공격력 +${r.atk}</span>
+              <span class="tag">Lv.${r.reqLevel}+</span>
+            </div>
+            <div>
+              ${isCurrentWeapon ? '<span class="tag" style="background:#555;">이미 보유중</span>' : `
+                <button class="primary" ${canCraft ? '' : 'disabled'} onclick="fuseWeapon('${r.id}')">
+                  합성하기 (${r.goldCost}G)
+                </button>
+              `}
+            </div>
+          </div>
+          <div class="fuse-mat-list">${matHtml}</div>
+          <div style="font-size:12px;color:var(--dim);">${r.desc}</div>
+        </div>
+      `;
+    });
+  }
+
+  // === 3. 잡화 합성 탭 ===
+  else if(currentBlacksmithTab === 'item_fuse'){
+    html += `
+      <p class="flavor" style="margin-bottom:12px;">사냥 전리품과 물약을 조합하여 강력한 특수 영약과 보물을 합성합니다.</p>
+    `;
+
+    ITEM_FUSION_RECIPES.forEach(r => {
+      let canCraft = player.gold >= r.goldCost;
+      const matHtml = r.materials.map(m => {
+        const ownedCount = player.inventory[m.name] || 0;
+        const has = ownedCount >= m.count;
+        if(!has) canCraft = false;
+        return `<span class="mat-badge ${has ? 'ok' : 'no'}">${m.name} (${ownedCount}/${m.count})</span>`;
+      }).join(' ');
+
+      html += `
+        <div class="fuse-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <b style="color:var(--gold-bright);font-size:15px;">${r.name}</b>
+              <span class="tag" style="color:#d8b4fe;">${r.desc}</span>
+            </div>
+            <div>
+              <button class="primary" ${canCraft ? '' : 'disabled'} onclick="fuseItems('${r.id}')">
+                합성하기 (${r.goldCost}G)
+              </button>
+            </div>
+          </div>
+          <div class="fuse-mat-list">${matHtml}</div>
+        </div>
+      `;
+    });
+  }
+
+  html += `<div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>`;
+  area.innerHTML = html;
+}
+
+// 🔨 무기 강화 실행
+function enhanceWeapon(){
+  const w = weaponOf(player);
+  const enh = player.weaponEnhance || 0;
+  if(enh >= 15){ toast('이미 최대 강화 수치(+15)에 도달했습니다!'); return; }
+
+  const cost = Math.round((w.price * 0.15) + (enh * 60) + 40);
+  if(player.gold < cost){ toast(`골드가 부족합니다! (필요: ${cost}G)`); return; }
+
+  player.gold -= cost;
+
+  // 성공 확률: 강화 성공할수록 점차 감소
+  const successRates = [95, 85, 75, 65, 55, 45, 38, 30, 24, 18, 14, 10, 7, 5, 3];
+  const rate = successRates[enh] !== undefined ? successRates[enh] : 3;
+
+  const roll = rand(1, 100);
+
+  if(roll <= rate){
+    // 강화 성공
+    player.weaponEnhance = enh + 1;
+    toast(`🎉 [강화 대성공!] ${w.name}이(가) +${player.weaponEnhance}강이 되었습니다!`);
+    log(`✨ <b>[문어의 대장간]</b> 콰앙! 찰진 망치질로 <b>${w.name} +${player.weaponEnhance}</b> 강화에 성공했다! (공격력 대폭 상승)`);
+  } else {
+    // 강화 실패 -> 깨질 확률 10%
+    const isBreak = (enh >= 3) && (rand(1, 100) <= 10);
+    if(isBreak){
+      const brokenName = `${w.name} +${enh}`;
+      player.weapon = 'wood';
+      player.weaponEnhance = 0;
+      toast(`💥 [무기 파괴!] ${brokenName}이(가) 산산조각 났습니다...`);
+      log(`💥 <b>[문어의 대장간 억까!]</b> 콰아앙!! 문어의 여덟 다리가 꼬이며 <b>${brokenName}이(가) 산산조각 깨져 파괴되었습니다!</b> (기본 나무검으로 교체)`);
+    } else {
+      if(enh >= 5){
+        player.weaponEnhance = Math.max(0, enh - 1);
+        toast(`⚠️ [강화 실패] 강화 수치가 1단계 하락했습니다. (+${player.weaponEnhance})`);
+        log(`💨 <b>[문어의 대장간]</b> 치익... 연기만 피어오르며 강화에 실패하여 수치가 하락했다.`);
+      } else {
+        toast(`⚠️ [강화 실패] 다행히 무기는 무사합니다. (+${enh} 유지)`);
+        log(`💨 <b>[문어의 대장간]</b> 강화에 실패했지만 무기는 파괴되지 않고 유지되었다.`);
+      }
+    }
+  }
+
+  refreshSidebar();
+  saveGame();
+  renderBlacksmith('enhance');
+}
+
+// ⚔️ 무기 합성 실행
+function fuseWeapon(recipeId){
+  const recipe = WEAPON_FUSION_RECIPES.find(r => r.id === recipeId);
+  if(!recipe) return;
+
+  if(player.level < recipe.reqLevel){
+    toast(`레벨 ${recipe.reqLevel} 이상만 합성할 수 있습니다.`);
+    return;
+  }
+  if(player.gold < recipe.goldCost){
+    toast(`골드가 부족합니다! (필요: ${recipe.goldCost}G)`);
+    return;
+  }
+
+  // 재료 확인
+  for(const m of recipe.materials){
+    if(player.weapon !== m.id){
+      toast(`필요한 재료 무기 [${m.name}]을 장착하고 있어야 합성할 수 있습니다!`);
+      return;
+    }
+  }
+
+  player.gold -= recipe.goldCost;
+  player.weapon = recipe.id;
+  player.weaponEnhance = 0; // 새 합성 무기는 0강부터 시작
+
+  toast(`✨ [무기 합성 성공!] "${recipe.name}"을(를) 획득하여 장착했습니다!`);
+  log(`⚔️ <b>[문어의 대장간]</b> 문어가 여덟 다리로 재료 무기들을 하나로 벼려내어 <b>[${recipe.name}]</b>(을)를 탄생시켰다!`);
+
+  refreshSidebar();
+  saveGame();
+  renderBlacksmith('weapon_fuse');
+}
+
+// 🧪 잡화 합성 실행
+function fuseItems(recipeId){
+  const recipe = ITEM_FUSION_RECIPES.find(r => r.id === recipeId);
+  if(!recipe) return;
+
+  if(player.gold < recipe.goldCost){
+    toast(`골드가 부족합니다! (필요: ${recipe.goldCost}G)`);
+    return;
+  }
+
+  // 재료 개수 확인
+  for(const m of recipe.materials){
+    const count = player.inventory[m.name] || 0;
+    if(count < m.count){
+      toast(`재료 [${m.name}]이(가) 부족합니다! (${count}/${m.count})`);
+      return;
+    }
+  }
+
+  // 재료 소모
+  player.gold -= recipe.goldCost;
+  recipe.materials.forEach(m => {
+    player.inventory[m.name] -= m.count;
+  });
+
+  // 결과물 지급
+  player.inventory[recipe.name] = (player.inventory[recipe.name] || 0) + 1;
+
+  toast(`🧪 [잡화 합성 성공!] "${recipe.name}" 1개를 제작했습니다!`);
+  log(`🧪 <b>[문어의 대장간]</b> 보글보글 끓는 가마솥에서 <b>[${recipe.name}]</b> 합성에 성공했다!`);
+
+  refreshSidebar();
+  saveGame();
+  renderBlacksmith('item_fuse');
+}
+
+
 function renderTown(){
   const area = $('content-area');
   let html = `
     <h3 style="margin-top:0;color:var(--gold-bright);">마을 광장 <span class="tag">직업: ${player.job||'초보자'}</span></h3>
     <div class="btn-grid">
-      <button class="wide primary" onclick="renderAreaSelect()">⚔️ 사냥터로 이동</button>
-      <button class="wide" onclick="renderWorldMap()">🗺️ 세계 지도 (월드 맵)</button>
+       <button class="wide primary" onclick="renderAreaSelect()">⚔️ 사냥터로 이동</button>
+       <button class="wide primary" onclick="renderBlacksmith()" style="grid-column: span 2; background: linear-gradient(180deg, #441d63, #251038); border-color: var(--gold-bright); color: #fef08a;">
+         🐙 문어의 신비한 대장간 (무기 강화 · 무기 합성 · 잡화 합성)
+       </button>
+       <button class="wide primary" onclick="renderHoneyGarden()">🍯 비밀의 꿀동산 (꿀 채집)</button>
+       <button class="wide" onclick="renderWorldMap()">🗺️ 세계 지도 (월드 맵)</button>
       <button class="wide" onclick="renderJobAcademy()">🎓 전직소 (직업 마스터)</button>
       <button class="wide" onclick="renderWeaponShop()">🗡️ 백투명강아지 (무기 상점)</button>
       <button class="wide" onclick="renderItemShop()">🧪 백디몬 (잡화 상점)</button>
@@ -934,14 +2148,44 @@ function maybeUnfairEvent(context){
    ========================================================= */
 function renderAreaSelect(){
   const area = $('content-area');
-  let html = `<h3 style="margin-top:0;color:var(--gold-bright);">사냥터 선택</h3><div class="btn-grid cols1">`;
-  AREAS.forEach(a=>{
+  let html = `<h3 style="margin-top:0;color:var(--gold-bright);">사냥터 선택</h3>`;
+
+  // [할로윈 5일 한정 사냥터] 타임 오버 시 자동 종료
+  if (isHalloweenEventActive()) {
+    const sec = getHalloweenRemainingSeconds();
+    html += `
+      <div style="background:linear-gradient(90deg, #2f123a, #441717); border:1px solid #ff7518; border-radius:6px; padding:12px; margin-bottom:14px; box-shadow:0 0 12px rgba(255,117,24,0.3);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <strong style="color:#ffaa33; font-size:14.5px;">🎃 [이벤트 한정] 할로윈 테마 사냥터</strong>
+          <span style="color:#ffe082; font-size:12px; font-weight:bold; font-family:monospace;">${formatHalloweenTime(sec)}</span>
+        </div>
+        <p style="margin:4px 0 10px 0; font-size:12px; color:#d8b4fe;">호박귀신, 검은고양이, 사탕미믹, 빙의된 갑옷, 잭오랜턴 킹이 서식합니다.</p>
+        <div class="btn-grid" style="grid-template-columns:1fr 1fr; gap:8px;">
+          <button class="primary" onclick="exploreArea('halloween_forest')" style="background:linear-gradient(180deg,#732890,#411354); border-color:#ff9800; color:#ffe082; padding:10px;">
+            🎃 할로윈 유령 숲 (Lv.1+)
+          </button>
+          <button class="primary" onclick="exploreArea('halloween_castle')" style="background:linear-gradient(180deg,#8b1e2a,#4a1018); border-color:#ff5722; color:#ffccbc; padding:10px;">
+            🏰 할로윈 악령 고성 (Lv.10+)
+          </button>
+        </div>
+      </div>
+    `;
+  } else {
+    html += `
+      <div style="background:rgba(30,24,38,0.7); border:1px dashed #554466; border-radius:4px; padding:8px 12px; margin-bottom:12px; font-size:12px; color:#888;">
+        🎃 할로윈 이벤트가 종료되었습니다. (할로윈 사냥터 폐쇄)
+      </div>
+    `;
+  }
+
+  html += `<div class="btn-grid cols1">`;
+  AREAS.filter(a => !a.isHalloween).forEach(a=>{
     const locked = player.level < a.reqLevel;
     html += `<button class="wide" ${locked?'disabled':''} onclick="exploreArea('${a.id}')">
-      ${a.name} ${locked?`<span class="tag">Lv.${a.reqLevel} 필요</span>`:`<span class="tag">Lv.${a.reqLevel}+</span>`}
+      ${a.id==='lake'?'🌊':'⚔️'} ${a.name} ${locked?`<span class="tag">Lv.${a.reqLevel} 필요</span>`:`<span class="tag">Lv.${a.reqLevel}+ 입장 가능</span>`}
     </button>`;
   });
-  html += `</div><div class="back-row"><button onclick="renderTown()">← 마을로</button></div>`;
+  html += `</div><div class="back-row" style="margin-top:14px;"><button onclick="renderTown()">← 마을로</button></div>`;
   area.innerHTML = html;
 }
 
@@ -956,13 +2200,28 @@ function exploreArea(areaId){
     renderAreaSelect();
     return;
   }
-  const monsterId = area.monsters[rand(0,area.monsters.length-1)];
+  
+  let monsterId = area ? area.monsters[rand(0,area.monsters.length-1)] : 'slime';
+
+  // [할로윈 5일 한정 몬스터 스폰 로직]
+  if (isHalloweenEventActive()) {
+    if (areaId === 'halloween_forest') {
+      const halloweenPool = ['pumpkin_jack', 'witch_cat', 'spooky_ghost', 'vampire_bat', 'candy_mimic'];
+      monsterId = halloweenPool[rand(0, halloweenPool.length - 1)];
+    } else if (areaId === 'halloween_castle') {
+      const castlePool = ['haunted_armor', 'candy_mimic', 'reaper_phantom', 'pumpkin_king'];
+      monsterId = castlePool[rand(0, castlePool.length - 1)];
+    } else if (Math.random() < 0.25) {
+      // 일반 사냥터에서도 25% 확률로 할로윈 몬스터 깜짝 난입!
+      const wildPool = ['pumpkin_jack', 'witch_cat', 'spooky_ghost', 'candy_mimic'];
+      monsterId = wildPool[rand(0, wildPool.length - 1)];
+      log('🎃 <b style="color:#ffaa33;">차원의 틈에서 할로윈 몬스터가 튀어나왔습니다!</b>');
+    }
+  }
+
   startBattle(monsterId);
 }
 
-/* =========================================================
-   전투
-   ========================================================= */
 function scaleMonster(monsterId){
   const def = MONSTERS[monsterId];
   const lvl = Math.max(1, player.level);
@@ -1025,28 +2284,90 @@ function enemyTurn(){
 function battleAttack(){
   const e = battle.enemy;
   let hitChance = 1 - (e.dodge||0) - (battle.playerMiss?0.35:0);
+  if(player.job === '사냥꾼') hitChance += 0.15; // 사냥꾼 명중 보정
   battle.playerMiss = false;
+
   if(Math.random() > hitChance){
     log(`${e.emoji}${e.name}의 몸이 흐릿하게 흔들리며 공격이 빗나갔다!`);
-  } else {
-    const dmg = rand(Math.round(totalAtk()*0.85), Math.round(totalAtk()*1.15));
-    e.hp = Math.max(0, e.hp-dmg);
-    log(`<b>${player.nickname}</b>의 공격! ${dmg}의 피해.`);
+    postPlayerAction();
+    return;
+  }
+
+  const attacksCount = player.job === '환장자' ? 2 : 1; // 환장자 2연타
+  for(let i=0; i<attacksCount; i++){
+    let baseDmg = rand(Math.round(totalAtk()*0.85), Math.round(totalAtk()*1.15));
+    if(player.job === '전사') baseDmg = Math.round(baseDmg * 1.15); // 전사 공격력 배율
+    
+    let isCrit = player.job === '검사' && Math.random() < 0.3; // 검사 30% 크리티컬
+    if(isCrit) baseDmg = Math.round(baseDmg * 2.2);
+
+    if(player.job === '환장자'){
+      const hpRatio = player.hp / player.maxHp;
+      if(hpRatio < 0.3) baseDmg = Math.round(baseDmg * (1 + (0.3 - hpRatio)*8)); // 환장자 버서커 모드
+    }
+
+    e.hp = Math.max(0, e.hp-baseDmg);
+    if(isCrit){
+      log(`💥 <b>[크리티컬!]</b> 검사의 예리한 일격! <b>${baseDmg}</b>의 치명적 피해!`);
+    } else {
+      log(`<b>${player.nickname}</b>의 공격${attacksCount>1?' ('+(i+1)+'타)':''}! ${baseDmg}의 피해.`);
+    }
+
+    if(player.job === '마검사'){
+      player.mp = Math.min(player.maxMp, player.mp + 5);
+      const magicDmg = Math.round(baseDmg * 0.3);
+      e.hp = Math.max(0, e.hp - magicDmg);
+      log(`✨ 마력검 발동! 추가 마법 피해 ${magicDmg} 및 MP +5 충전.`);
+    }
+
+    if(player.job === '천사'){
+      player.hp = Math.min(player.maxHp, player.hp + 25);
+      log(`👼 성스러운 은총! HP +25 치유.`);
+    }
+
+    if(player.job === '흑마법사'){
+      const healAmt = Math.round(baseDmg * 0.35);
+      player.hp = Math.min(player.maxHp, player.hp + healAmt);
+      log(`🧛 흡혈 귀기! HP +${healAmt} 흡수.`);
+    }
+
+    if(e.hp <= 0) break;
   }
   postPlayerAction();
 }
 
 function battleSkill(){
-  if(player.mp<15){ toast('MP가 부족하다.'); return; }
+  const skillKey = player.equippedSkill || 'slash';
+  const skillDef = (typeof SKILLS !== 'undefined' && SKILLS[skillKey]) ? SKILLS[skillKey] : { name:'필살기', mp:15, mult:1.8 };
+  const mpCost = skillDef.mp || 15;
+
+  if(player.mp < mpCost){ toast('MP가 부족하다.'); return; }
   const e = battle.enemy;
-  player.mp -= 15;
-  let hitChance = 1 - (e.dodge||0)*0.6; // 필살기는 명중률 보정
+  player.mp -= mpCost;
+
+  let hitChance = 1 - (e.dodge||0)*0.6;
+  if(player.job === '사냥꾼') hitChance = 1.0;
+
   if(Math.random() > hitChance){
-    log(`필살기를 시전했지만 ${e.name}이(가) 흐릿해지며 스쳐 지나갔다!`);
+    log(`[${skillDef.name}] 시전했으나 ${e.name}이(가) 회피했다!`);
   } else {
-    const dmg = rand(Math.round(totalAtk()*1.5), Math.round(totalAtk()*1.9));
-    e.hp = Math.max(0, e.hp-dmg);
-    log(`✨ <b>필살기 발동!</b> ${dmg}의 강력한 피해를 입혔다!`);
+    let dmg = rand(Math.round(totalAtk() * (skillDef.mult||1.8) * 0.9), Math.round(totalAtk() * (skillDef.mult||1.8) * 1.1));
+    if(player.job === '마법사' && skillKey === 'fireball') dmg = Math.round(dmg * 1.8);
+
+    e.hp = Math.max(0, e.hp - dmg);
+    log(`✨ <b>[스킬 발동: ${skillDef.name}]</b> ${dmg}의 강력한 피해를 입혔다!`);
+
+    if(skillDef.heal){
+      const healVal = skillDef.heal;
+      player.hp = Math.min(player.maxHp, player.hp + healVal);
+      log(`💖 치유의 빛으로 HP +${healVal} 회복!`);
+    }
+
+    if(player.job === '흑마법사'){
+      const healAmt = Math.round(dmg * 0.35);
+      player.hp = Math.min(player.maxHp, player.hp + healAmt);
+      log(`🧛 흑마법사 흡혈로 HP +${healAmt} 회복!`);
+    }
   }
   postPlayerAction();
 }
@@ -1084,14 +2405,19 @@ function useItemInBattle(id){
     battle.fled = true;
     refreshSidebar();
     saveGame();
-    setTimeout(()=>{ renderAreaSelect(); }, 400);
+    setTimeout(()=>{ renderAreaSelect(); }, 120);
   }
 }
 
 function battleFlee(){
-  const chance = battle.enemy.boss ? 0.35 : 0.7;
+  if(player.job === '엄마'){
+    toast('어머니는 자식(몬스터) 앞에서 등을 보이지 않습니다!');
+    log('🧹 <b>[엄마 특성]</b> 도주할 수 없습니다! 등을 보이지 마라!');
+    return;
+  }
+  const chance = player.job === '도적' ? 1.0 : (battle.enemy.boss ? 0.35 : 0.7);
   if(Math.random() < chance){
-    log('무사히 도주에 성공했다.');
+    log('무사히 도주에 성공했다.' + (player.job==='도적'?' (도적 100% 은신 도주)':''));
     battle.fled = true;
     renderAreaSelect();
   } else {
@@ -1100,6 +2426,36 @@ function battleFlee(){
     if(player.hp>0) renderBattle();
   }
   refreshSidebar();
+}
+
+function enemyTurn(){
+  const e = battle.enemy;
+  if(e.hp<=0 || battle.fled) return;
+
+  // 환상자 환영 회피
+  if(player.job === '환상자' && Math.random() < 0.2){
+    log(`🌫️ <b>[환상자 특성]</b> 실체 없는 환영의 몸으로 ${e.name}의 공격을 완전히 흘려보냈다! (피해 0)`);
+    return;
+  }
+
+  let dmg = rand(Math.round(e.atk*0.8), Math.round(e.atk*1.2));
+  if(player.job === '전사' && Math.random() < 0.3){
+    dmg = Math.round(dmg * 0.5);
+    log(`🛡️ <b>[전사 방패 방어]</b> ${e.name}의 공격을 단단하게 막아내어 피해가 반감되었다! (-${dmg} HP)`);
+    player.hp = Math.max(0, player.hp-dmg);
+  } else {
+    log(`${e.emoji}${e.name}의 반격! ${dmg}의 피해를 입었다.`);
+    player.hp = Math.max(0, player.hp-dmg);
+  }
+
+  if(e.thief && Math.random()<0.3){
+    const stolen = Math.min(player.gold, rand(5,20));
+    player.gold -= stolen;
+    log(`💸 ${e.name}이(가) 주머니에서 골드 ${stolen}을 훔쳐갔다!`);
+  }
+  if(player.hp<=0){
+    onPlayerDown();
+  }
 }
 
 function postPlayerAction(){
@@ -1144,7 +2500,7 @@ function onEnemyDefeated(){
     const area = AREAS.find(a=>a.id===currentAreaId) || AREAS[0];
     const monsterId = area.monsters[rand(0,area.monsters.length-1)];
     startBattle(monsterId);
-  }, 700);
+  }, 200);
 }
 
 function checkLevelUp(){
@@ -1182,7 +2538,170 @@ function onPlayerDown(){
   log(`골드 ${lost}을 흘리고 마을로 실려왔다. (억까지만 죽지는 않는다)`);
   refreshSidebar();
   saveGame();
-  setTimeout(()=>renderTown(), 300);
+  setTimeout(()=>renderTown(), 100);
+}
+
+/* =========================================================
+   모험 가방 시스템
+   ========================================================= */
+function renderInventoryBag(){
+  const area = $('content-area');
+  let html = `
+    <h3 style="margin-top:0;color:var(--gold-bright);">🎒 모험 가방 (소지품 보관함)</h3>
+    <p class="flavor">상점에서 구매한 물약, 채집한 꿀, 그리고 몬스터 전리품을 넣고 빼며 관리하는 가방입니다.</p>
+    
+    <div style="background:var(--bg-deep);border:1px solid var(--line);padding:14px;border-radius:4px;margin-bottom:14px;">
+      <h4 style="margin:0 0 8px 0;color:var(--gold-bright);">🗡️ 장착 중인 무기</h4>
+      <p style="margin:0;font-size:14px;color:var(--parchment);">${weaponOf(player).name} (공격력 +${weaponOf(player).atk})</p>
+    </div>
+
+    <h4 style="color:var(--parchment);margin:14px 0 8px;">📦 소지품 목록</h4>
+  `;
+
+  const items = Object.keys(player.inventory || {}).filter(k => player.inventory[k] > 0);
+  if(items.length === 0){
+    html += `<p class="flavor">가방이 텅 비어 있습니다. 상점이나 꿀동산에서 아이템을 모아보세요!</p>`;
+  } else {
+    items.forEach(itemName => {
+      const count = player.inventory[itemName];
+      const isConsumable = ['소형 체력 물약', '중형 체력 물약', '마나 물약', '도주용 연막탄', '야생 꿀', '로열 젤리', '할로윈 호박 사탕'].includes(itemName) || itemName.includes('물약') || itemName.includes('꿀') || itemName.includes('젤리') || itemName.includes('사탕');
+      html += `<div class="shop-item">
+        <div class="info"><b>${itemName}</b><div class="desc">보유 수량: ${count}개</div></div>
+        <div>
+          ${isConsumable ? `<button onclick="useItemFromBag('${itemName.replace(/'/g,"\\'")}')">사용하기</button>` : `<span class="tag">전리품/재화</span>`}
+        </div>
+      </div>`;
+    });
+  }
+
+  html += `<div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>`;
+  area.innerHTML = html;
+}
+
+function useItemFromBag(itemName){
+  if(!player.inventory[itemName] || player.inventory[itemName] <= 0) return;
+  const multiplier = player.job === '요리사' ? 2.5 : 1.0;
+  
+  if(itemName === '할로윈 호박 사탕' || itemName.includes('호박 사탕')){
+    player.inventory[itemName]--;
+    const healVal = Math.round(75 * multiplier);
+    player.hp = Math.min(player.maxHp, player.hp + healVal);
+    player.mp = Math.min(player.maxMp, player.mp + 20);
+    toast('달콤한 호박 사탕 냠냠!');
+    log(`🍬 할로윈 호박 사탕을 맛있게 먹어 HP +${healVal}, MP +20 회복되었다!`);
+  } else if(itemName === '소형 체력 물약' || itemName.includes('소형 체력')){
+    player.inventory[itemName]--;
+    const healVal = Math.round(40 * multiplier);
+    player.hp = Math.min(player.maxHp, player.hp + healVal);
+    toast(`체력 ${healVal} 회복!`);
+    log(`🧪 소형 체력 물약을 사용해 HP가 ${healVal} 회복되었다.${player.job==='요리사'?' (요리사 특성 2.5배)':''}`);
+  } else if(itemName === '중형 체력 물약' || itemName.includes('중형 체력')){
+    player.inventory[itemName]--;
+    const healVal = Math.round(120 * multiplier);
+    player.hp = Math.min(player.maxHp, player.hp + healVal);
+    toast(`체력 ${healVal} 회복!`);
+    log(`🧪 중형 체력 물약을 사용해 HP가 ${healVal} 회복되었다.${player.job==='요리사'?' (요리사 특성 2.5배)':''}`);
+  } else if(itemName === '마나 물약'){
+    player.inventory[itemName]--;
+    const healVal = Math.round(30 * multiplier);
+    player.mp = Math.min(player.maxMp, player.mp + healVal);
+    toast(`마나 ${healVal} 회복!`);
+    log(`🧪 마나 물약을 사용해 MP가 ${healVal} 회복되었다.${player.job==='요리사'?' (요리사 특성 2.5배)':''}`);
+  } else if(itemName === '야생 꿀'){
+    player.inventory[itemName]--;
+    player.hp = Math.min(player.maxHp, player.hp + 60);
+    player.mp = Math.min(player.maxMp, player.mp + 25);
+    toast('야생 꿀 섭취!');
+    log('🥄 야생 꿀을 먹어 HP +60, MP +25 회복되었다.');
+  } else if(itemName === '로열 젤리'){
+    player.inventory[itemName]--;
+    player.hp = player.maxHp;
+    player.mp = player.maxMp;
+    player.baseAtk += 3;
+    toast('로열 젤리 버프!');
+    log('👑 로열 젤리를 먹어 체력/마나가 완전히 회복되고 영구 공격력 +3 증가!');
+  } else {
+    toast('가방에서 직접 사용할 수 없는 아이템입니다. (상점에서 판매 가능)');
+    return;
+  }
+  refreshSidebar();
+  saveGame();
+  renderInventoryBag();
+}
+
+/* =========================================================
+   비밀의 꿀동산 & 꿀 시스템
+   ========================================================= */
+function renderHoneyGarden(){
+  const area = $('content-area');
+  const wildHoneyCount = player.inventory['야생 꿀'] || 0;
+  const royalHoneyCount = player.inventory['로열 젤리'] || 0;
+
+  area.innerHTML = `
+    <h3 style="margin-top:0;color:var(--gold-bright);">🍯 비밀의 꿀동산</h3>
+    <p class="flavor">달콤하고 끈적한 마력의 꿀이 흐르는 신비로운 숲입니다. 꿀을 채집하여 체력을 회복하거나 백디몬에게 비싸게 팔 수 있습니다!</p>
+    
+    <div style="background:var(--bg-deep);border:1px solid var(--gold);padding:12px;border-radius:4px;margin-bottom:14px;font-size:13.5px;color:var(--parchment);">
+      보유 중인 꿀: <b>야생 꿀 ${wildHoneyCount}개</b> | <b>로열 젤리 ${royalHoneyCount}개</b>
+    </div>
+
+    <div class="btn-grid">
+      <button class="primary" onclick="gatherHoney('wild')">🍯 야생 꿀 채집 (비용: 10G)</button>
+      <button class="primary" onclick="gatherHoney('royal')">👑 로열 젤리 채집 도전 (비용: 100G)</button>
+      <button onclick="consumeHoney('wild')" ${wildHoneyCount>0?'':'disabled'}>🥄 야생 꿀 먹기 (HP/MP 회복)</button>
+      <button onclick="consumeHoney('royal')" ${royalHoneyCount>0?'':'disabled'}>👑 로열 젤리 먹기 (대박 버프)</button>
+    </div>
+
+    <div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>
+  `;
+}
+
+function gatherHoney(type){
+  if(type === 'wild'){
+    if(player.gold < 10){ toast('골드가 부족합니다. (필요: 10G)'); return; }
+    player.gold -= 10;
+    player.inventory['야생 꿀'] = (player.inventory['야생 꿀'] || 0) + 1;
+    log(`🍯 달콤한 <b>야생 꿀</b>을 1개 채집했다!`);
+    toast('야생 꿀 채집 성공!');
+  } else if(type === 'royal'){
+    if(player.gold < 100){ toast('골드가 부족합니다. (필요: 100G)'); return; }
+    player.gold -= 100;
+    if(Math.random() < 0.35){
+      player.inventory['로열 젤리'] = (player.inventory['로열 젤리'] || 0) + 1;
+      log(`👑 영롱하게 빛나는 전설의 <b>로열 젤리</b>를 채집하는 데 성공했다!`);
+      toast('대박! 로열 젤리 획득!');
+    } else {
+      const stungDmg = rand(5, 15);
+      player.hp = Math.max(1, player.hp - stungDmg);
+      log(`🐝 앗! 거대한 여왕벌에게 쏘였다! HP -${stungDmg}. (로열 젤리 채집 실패)`);
+      toast('벌에 쏘였다! 앗따거!');
+    }
+  }
+  refreshSidebar();
+  saveGame();
+  renderHoneyGarden();
+}
+
+function consumeHoney(type){
+  if(type === 'wild'){
+    if(!player.inventory['야생 꿀'] || player.inventory['야생 꿀'] <= 0) return;
+    player.inventory['야생 꿀']--;
+    player.hp = Math.min(player.maxHp, player.hp + 60);
+    player.mp = Math.min(player.maxMp, player.mp + 25);
+    log(`🥄 야생 꿀을 맛있게 먹었다. HP +60, MP +25 회복!`);
+    toast('야생 꿀 섭취 완료');
+  } else if(type === 'royal'){
+    if(!player.inventory['로열 젤리'] || player.inventory['로열 젤리'] <= 0) return;
+    player.inventory['로열 젤리']--;
+    player.hp = player.maxHp;
+    player.mp = player.maxMp;
+    player.baseAtk += 3;
+    log(`👑 황금빛 로열 젤리를 섭취했다! HP/MP 완전 회복 및 <b>영구 공격력 +3</b> 상승!`);
+    toast('로열 젤리 버프 폭발!');
+  }
+  refreshSidebar();
+  saveGame();
+  renderHoneyGarden();
 }
 
 /* =========================================================
@@ -1191,6 +2710,7 @@ function onPlayerDown(){
 function questProgress(q){
   if(q.type==='kill') return Math.min(q.goal, player.kills[q.monster]||0);
   if(q.type==='level') return Math.min(q.goal, player.level);
+  if(q.type==='item') return Math.min(q.goal, player.inventory[q.item]||0);
   return 0;
 }
 function questDone(q){ return questProgress(q) >= q.goal; }
@@ -1328,25 +2848,138 @@ function sellItem(name,val){
 }
 
 /* =========================================================
-   파티 및 멀티플레이어 시스템
+   파티 및 온라인 멀티플레이어 시스템 (Firebase 실시간 DB 연동)
    ========================================================= */
+async function safeGet(key){
+  if(firebaseDb){
+    try{
+      const fKey = toFirebaseKey(key);
+      const fetchPromise = firebaseDb.ref(fKey).once('value');
+      const timeoutPromise = new Promise(resolve => setTimeout(() => resolve(null), 300));
+      const snapshot = await Promise.race([fetchPromise, timeoutPromise]);
+      if(snapshot && typeof snapshot.val === 'function'){
+        const val = snapshot.val();
+        if(val !== null && val !== undefined) return val;
+      }
+    }catch(e){}
+  }
+  if(window.storage && typeof window.storage.get === 'function'){
+    try{
+      const res = await window.storage.get(key, true);
+      if(res && res.value) return JSON.parse(res.value);
+    }catch(e){}
+  }
+  try{
+    const local = localStorage.getItem(key);
+    if(local) return JSON.parse(local);
+  }catch(e){}
+  return null;
+}
+
+async function safeSet(key, val){
+  if(firebaseDb){
+    try{
+      const fKey = toFirebaseKey(key);
+      // 논블로킹 백그라운드 동기화로 속도 0ms 지연
+      firebaseDb.ref(fKey).set(val).catch(e=>console.warn('Firebase sync warning:', e));
+    }catch(e){}
+  }
+  const str = typeof val === 'string' ? val : JSON.stringify(val);
+  if(window.storage && typeof window.storage.set === 'function'){
+    try{
+      await window.storage.set(key, str, true);
+    }catch(e){}
+  }
+  try{
+    localStorage.setItem(key, str);
+  }catch(e){}
+}
+
+async function safeList(prefix){
+  let keys = [];
+  if(firebaseDb){
+    try{
+      const fPrefix = toFirebaseKey(prefix).replace(/\/$/, '');
+      const snapshot = await firebaseDb.ref(fPrefix).once('value');
+      const val = snapshot.val();
+      if(val && typeof val === 'object'){
+        keys = Object.keys(val).map(k => prefix + k);
+        return keys;
+      }
+    }catch(e){
+      console.warn('Firebase safeList 오류, 로컬 목록 사용:', e);
+    }
+  }
+  if(window.storage && typeof window.storage.list === 'function'){
+    try{
+      const listRes = await window.storage.list(prefix, true);
+      if(listRes && listRes.keys) keys = listRes.keys;
+    }catch(e){}
+  }
+  try{
+    for(let i=0; i<localStorage.length; i++){
+      const k = localStorage.key(i);
+      if(k && k.startsWith(prefix) && !keys.includes(k)){
+        keys.push(k);
+      }
+    }
+  }catch(e){}
+  return keys;
+}
+
 async function renderPartyHub(){
   const area = $('content-area');
-  area.innerHTML = `<h3 style="margin-top:0;color:var(--gold-bright);">🛡️ 모험자 파티 허브</h3><p class="flavor">온라인 파티 목록을 불러오는 중...</p><div class="back-row"><button onclick="renderTown()">← 마을로</button></div>`;
+  area.innerHTML = `<h3 style="margin-top:0;color:var(--gold-bright);">🌐 온라인 멀티플레이어 허브</h3><p class="flavor">온라인 데이터와 실시간 전광판을 불러오는 중...</p><div class="back-row"><button onclick="renderTown()">← 마을로</button></div>`;
   
   try{
-    const listRes = await window.storage.list('party:', true);
-    const keys = (listRes && listRes.keys) || [];
+    const keys = await safeList('party:');
     const parties = [];
     for(const k of keys){
-      try{
-        const r = await window.storage.get(k, true);
-        if(r && r.value) parties.push(JSON.parse(r.value));
-      }catch(e){}
+      const data = await safeGet(k);
+      if(data) parties.push(data);
     }
 
-    let html = `<h3 style="margin-top:0;color:var(--gold-bright);">🛡️ 모험자 파티 허브</h3>
-    <p class="flavor">다른 플레이어들과 파티를 결성하여 함께 사냥하고 강력한 보스(서리안)에 도전하세요.</p>`;
+    let chatList = (await safeGet('world_chat')) || [];
+    let raidData = (await safeGet('world_boss_raid')) || { hp: 50000, maxHp: 50000, lastAttacker: '없음' };
+
+    const lbKeys = await safeList('leaderboard:');
+    let onlinePlayers = [];
+    if(firebaseDb){
+      try{
+        const snap = await firebaseDb.ref('online_players').once('value');
+        const pObj = snap.val() || {};
+        onlinePlayers = Object.values(pObj);
+      }catch(e){}
+    }
+    if(onlinePlayers.length === 0){
+      for(const k of lbKeys.slice(0, 10)){
+        const pData = await safeGet(k);
+        if(pData) onlinePlayers.push(pData);
+      }
+    }
+
+    let html = `
+      <h3 style="margin-top:0;color:var(--gold-bright);">🌐 온라인 멀티플레이어 허브</h3>
+      <p class="flavor">전 세계 플레이어들과 실시간으로 소통하고, 파티를 맺어 협동 월드 보스를 토벌하세요!</p>
+
+      <!-- 1. 협동 월드 보스 레이드 -->
+      <div style="background:var(--bg-deep);border:1px solid var(--blood);padding:14px;border-radius:4px;margin-bottom:14px;">
+        <h4 style="margin:0 0 6px 0;color:var(--blood-bright);">⚔️ 협동 월드 보스 레이드 (고대 암흑룡)</h4>
+        <p class="flavor" style="margin:0 0 8px 0;">전 세계 모험자들이 힘을 합쳐 보스를 공격하세요! 토벌 시 막대한 보상 지급.</p>
+        <div style="font-size:13px;color:var(--parchment);margin-bottom:8px;">보스 체력: <b>${raidData.hp} / ${raidData.maxHp}</b> (마지막 타격: ${raidData.lastAttacker})</div>
+        <div class="bar-bg" style="margin-bottom:10px;"><div class="bar-fill bar-hp" style="width:${(raidData.hp/raidData.maxHp)*100}%;"></div></div>
+        <button class="primary" onclick="challengeWorldRaid()">⚔️ 월드 보스 합동 공격하기</button>
+      </div>
+
+      <!-- 2. 세계수 전광판 (글로벌 채팅) -->
+      <div style="background:var(--bg-deep);border:1px solid var(--mystic);padding:14px;border-radius:4px;margin-bottom:14px;">
+        <h4 style="margin:0 0 6px 0;color:var(--mystic);">💬 세계수 전광판 (실시간 채팅)</h4>
+        <div style="max-height:100px;overflow-y:auto;font-size:12.5px;color:var(--parchment);background:#0a0812;padding:8px;border-radius:3px;margin-bottom:8px;white-space:pre-line;">
+          ${chatList.length === 0 ? '전광판에 등록된 메시지가 없습니다.' : chatList.map(c=>`<b>[${c.sender}]</b> ${c.text}`).join('\n')}
+        </div>
+        <button onclick="sendWorldChat()">✍️ 전광판에 메시지 남기기</button>
+      </div>
+    `;
 
     if(player.partyId){
       const myParty = parties.find(p=>p.id===player.partyId);
@@ -1361,7 +2994,7 @@ async function renderPartyHub(){
       </div>`;
     }
 
-    html += `<h4 style="color:var(--parchment);margin:14px 0 8px;">활성화된 파티 목록</h4>`;
+    html += `<h4 style="color:var(--parchment);margin:14px 0 8px;">🛡️ 활성화된 파티 목록</h4>`;
     if(parties.length===0){
       html += `<p class="flavor">생성된 파티가 없습니다. 새 파티를 만들어보세요!</p>`;
     } else {
@@ -1374,10 +3007,22 @@ async function renderPartyHub(){
       });
     }
 
-    html += `<div class="back-row"><button onclick="renderTown()">← 마을로</button></div>`;
+    html += `<h4 style="color:var(--parchment);margin:16px 0 8px;">👥 실시간 온라인 모험자 로비 (최근 접속)</h4>`;
+    if(onlinePlayers.length === 0){
+      html += `<p class="flavor">온라인에 접속 중인 다른 모험자가 없습니다.</p>`;
+    } else {
+      onlinePlayers.forEach(op=>{
+        html += `<div class="shop-item">
+          <div class="info"><b>${op.nickname}</b> <span class="tag">Lv.${op.level}</span><div class="desc">보유 골드: ${op.gold}G</div></div>
+          <span style="color:var(--green);font-size:12px;">● 온라인</span>
+        </div>`;
+      });
+    }
+
+    html += `<div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>`;
     area.innerHTML = html;
   }catch(e){
-    area.innerHTML = `<h3 style="margin-top:0;color:var(--gold-bright);">🛡️ 모험자 파티 허브</h3><p class="flavor">파티 정보를 불러오지 못했습니다.</p><div class="back-row"><button onclick="renderTown()">← 마을로</button></div>`;
+    area.innerHTML = `<h3 style="margin-top:0;color:var(--gold-bright);">🌐 온라인 멀티플레이어 허브</h3><p class="flavor">데이터를 불러오는 중 문제가 발생했습니다.</p><div class="back-row"><button onclick="renderTown()">← 마을로</button></div>`;
   }
 }
 
@@ -1393,7 +3038,7 @@ async function createPartyPrompt(){
     updated: Date.now()
   };
   try{
-    await window.storage.set('party:'+partyId, JSON.stringify(partyData), true);
+    await safeSet('party:'+partyId, partyData);
     player.partyId = partyId;
     toast('파티가 생성되었습니다!');
     saveGame();
@@ -1405,12 +3050,11 @@ async function createPartyPrompt(){
 
 async function joinParty(partyId){
   try{
-    const res = await window.storage.get('party:'+partyId, true);
-    if(res && res.value){
-      const partyData = JSON.parse(res.value);
+    const partyData = await safeGet('party:'+partyId);
+    if(partyData){
       if(!partyData.members.includes(player.nickname)){
         partyData.members.push(player.nickname);
-        await window.storage.set('party:'+partyId, JSON.stringify(partyData), true);
+        await safeSet('party:'+partyId, partyData);
       }
       player.partyId = partyId;
       toast('파티에 가입했습니다!');
@@ -1419,6 +3063,81 @@ async function joinParty(partyId){
     }
   }catch(e){
     toast('파티 가입에 실패했습니다.');
+  }
+}
+
+async function leaveParty(){
+  if(!player.partyId) return;
+  try{
+    const partyData = await safeGet('party:'+player.partyId);
+    if(partyData){
+      partyData.members = partyData.members.filter(m => m !== player.nickname);
+      await safeSet('party:'+player.partyId, partyData);
+    }
+  }catch(e){}
+  player.partyId = null;
+  toast('파티를 탈퇴했습니다.');
+  saveGame();
+  renderPartyHub();
+}
+
+async function sendWorldChat(){
+  const msg = prompt('전 세계 모험자들에게 전할 메시지(전광판)를 입력하세요:', '');
+  if(!msg) return;
+  const chatItem = { sender: player.nickname, text: msg, time: Date.now() };
+  try{
+    let chatList = (await safeGet('world_chat')) || [];
+    chatList.unshift(chatItem);
+    if(chatList.length > 15) chatList = chatList.slice(0, 15);
+    await safeSet('world_chat', chatList);
+    toast('전광판에 메시지가 전송되었습니다!');
+    renderPartyHub();
+  }catch(e){
+    toast('메시지 전송에 실패했습니다.');
+  }
+}
+
+async function challengeWorldRaid(){
+  if(player.hp <= 1){
+    toast('체력이 너무 낮아 레이드에 참여할 수 없습니다. 여관에서 휴식하세요.');
+    return;
+  }
+
+  const playerDmg = totalAtk() * rand(2, 4);
+  const bossDmg = rand(20, Math.round(player.maxHp * 0.35));
+
+  try{
+    let raidData = (await safeGet('world_boss_raid')) || { hp: 50000, maxHp: 50000, lastAttacker: '없음' };
+    raidData.hp = Math.max(0, raidData.hp - playerDmg);
+    raidData.lastAttacker = player.nickname;
+    await safeSet('world_boss_raid', raidData);
+
+    player.hp = Math.max(0, player.hp - bossDmg);
+
+    log(`⚔️ <b>[월드 보스 레이드]</b> ${player.nickname}의 공격! 고대 암흑룡에게 <b>${playerDmg}</b>의 피해를 입혔다.<br>🐉 <b>보스의 반격!</b> 암흑룡의 숨결로 <b>${bossDmg}</b>의 강력한 피해를 입었다! (보스 잔여 HP: ${raidData.hp}/${raidData.maxHp})`);
+    
+    if(player.hp <= 0){
+      log(`😵 월드 보스의 강력한 공격을 버티지 못하고 쓰러졌다...`);
+      onPlayerDown();
+      return;
+    }
+
+    if(raidData.hp <= 0){
+      const rewardGold = 2000;
+      const rewardExp = 3000;
+      player.gold += rewardGold;
+      player.exp += rewardExp;
+      log(`🎉 <b>[월드 보스 토벌 성공!]</b> 전 세계 모험자들의 힘으로 고대 암흑룡을 격파했습니다! 보상: 골드 +${rewardGold}, EXP +${rewardExp}`);
+      toast('월드 보스 토벌 보상 획득!');
+      raidData.hp = 50000;
+      await safeSet('world_boss_raid', raidData);
+      checkLevelUp();
+    }
+    refreshSidebar();
+    saveGame();
+    renderPartyHub();
+  }catch(e){
+    toast('레이드 공격에 실패했습니다.');
   }
 }
 
@@ -1449,37 +3168,59 @@ function changeJob(jobName, master){
 
 function renderJobAcademy(){
   const area = $('content-area');
-  area.innerHTML = `
+  const currentJob = player.job || '초보자';
+
+  let html = `
     <h3 style="margin-top:0;color:var(--gold-bright);">🎓 전직소 (직업 마스터)</h3>
-    <p class="flavor">현재 직업: <b>${player.job || '초보자'}</b></p>
-    
-    <h4 style="color:var(--gold-bright);margin:12px 0 6px;">🐾 1. 고멍멍이쿠션의 가르침 (검사, 마검사, 전사, 천사, 사냥꾼)</h4>
-    <div class="btn-grid">
-      <button onclick="changeJob('검사', '고멍멍이쿠션')">검사</button>
-      <button onclick="changeJob('마검사', '고멍멍이쿠션')">마검사</button>
-      <button onclick="changeJob('전사', '고멍멍이쿠션')">전사</button>
-      <button onclick="changeJob('천사', '고멍멍이쿠션')">천사</button>
-      <button onclick="changeJob('사냥꾼', '고멍멍이쿠션')" style="grid-column: span 2;">사냥꾼</button>
-    </div>
-
-    <h4 style="color:var(--gold-bright);margin:16px 0 6px;">🐾 2. 고새끼멍멍이쿠션의 가르침 (흑마법사, 마법사, 도적, 요리사)</h4>
-    <div class="btn-grid">
-      <button onclick="changeJob('흑마법사', '고새끼멍멍이쿠션')">흑마법사</button>
-      <button onclick="changeJob('마법사', '고새끼멍멍이쿠션')">마법사</button>
-      <button onclick="changeJob('도적', '고새끼멍멍이쿠션')">도적</button>
-      <button onclick="changeJob('요리사', '고새끼멍멍이쿠션')">요리사</button>
-    </div>
-
-    <h4 style="color:var(--gold-bright);margin:16px 0 6px;">🐾 3. 백헌멍멍이쿠션의 비전 (히든 직업: 엄마, 과자자, 환상자, 환장자)</h4>
-    <div class="btn-grid">
-      <button class="primary" onclick="changeJob('엄마', '백헌멍멍이쿠션')">엄마</button>
-      <button class="primary" onclick="changeJob('과자자', '백헌멍멍이쿠션')">과자자</button>
-      <button class="primary" onclick="changeJob('환상자', '백헌멍멍이쿠션')">환상자</button>
-      <button class="primary" onclick="changeJob('환장자', '백헌멍멍이쿠션')">환장자</button>
-    </div>
-
-    <div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>
+    <p class="flavor">현재 직업: <b style="color:var(--gold-bright);">${currentJob}</b> | 각 직업의 <b>[할 수 있는 것]</b>과 <b>[할 수 없는 것]</b>을 꼼꼼히 비교하고 전직하세요!</p>
   `;
+
+  // 카테고리별 직업 렌더링
+  const categories = [
+    '🐾 1. 고멍멍이쿠션의 가르침 (전투 & 기사도)',
+    '🐾 2. 고새끼멍멍이쿠션의 가르침 (마법 & 기술)',
+    '🐾 3. 백헌멍멍이쿠션의 비전 (히든 직업 - Lv.40+ 필요)'
+  ];
+
+  categories.forEach(cat => {
+    html += `<h4 style="color:var(--gold-bright);margin:16px 0 8px;">${cat}</h4>`;
+    const jobsInCat = Object.entries(JOB_DETAILS).filter(([jName, jData]) => jData.category === cat);
+
+    jobsInCat.forEach(([jobName, data]) => {
+      const isCurrent = currentJob === jobName;
+      const isHidden = ['엄마', '과자자', '환상자', '환장자'].includes(jobName);
+      const isLocked = isHidden && player.level < 40;
+
+      html += `
+        <div class="job-card ${isCurrent ? 'current' : ''}">
+          <div class="job-card-header">
+            <div class="job-card-title">
+              <span>${data.icon}</span> <span>${jobName}</span>
+              ${isCurrent ? '<span class="tag" style="background:var(--gold);color:#000;font-weight:bold;">현재 직업</span>' : ''}
+              ${isLocked ? '<span class="tag" style="background:#555;">Lv.40 필요</span>' : ''}
+            </div>
+            <div>
+              ${isCurrent 
+                ? '<button disabled style="opacity:0.6;">전직완료</button>' 
+                : `<button class="${isHidden?'primary':''}" ${isLocked?'disabled':''} onclick="changeJob('${jobName}', '${data.master}')">전직하기</button>`
+              }
+            </div>
+          </div>
+          <div class="job-can">
+            <span class="job-badge-can">✅ 할 수 있는 것</span>
+            <span>${data.can}</span>
+          </div>
+          <div class="job-cannot">
+            <span class="job-badge-cannot">❌ 할 수 없는 것</span>
+            <span>${data.cannot}</span>
+          </div>
+        </div>
+      `;
+    });
+  });
+
+  html += `<div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>`;
+  area.innerHTML = html;
 }
 
 function renderWorldMap(){
@@ -1499,6 +3240,27 @@ function renderWorldMap(){
   html += `</div><div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>`;
   area.innerHTML = html;
 }
+</script>
+<script>
+// 페이지 로딩 시 최근 플레이했던 닉네임 자동 입력
+window.addEventListener('DOMContentLoaded', function() {
+  try {
+    const lastPlayer = localStorage.getItem('fantasy_rpg_last_player');
+    const nickInput = document.getElementById('nickname-input');
+    if (lastPlayer && nickInput && !nickInput.value) {
+      nickInput.value = lastPlayer;
+    }
+  } catch(e) {}
+});
+setTimeout(function() {
+  try {
+    const lastPlayer = localStorage.getItem('fantasy_rpg_last_player');
+    const nickInput = document.getElementById('nickname-input');
+    if (lastPlayer && nickInput && !nickInput.value) {
+      nickInput.value = lastPlayer;
+    }
+  } catch(e) {}
+}, 50);
 </script>
 </body>
 </html>
