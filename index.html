@@ -566,6 +566,379 @@
     color: #fca5a5;
   }
 
+
+/* ========================================================
+   [메가 업데이트 CSS] 장비, 룬, 레이드, 던전, PK, 로딩, 리얼전투
+   ======================================================== */
+
+/* 화면 흔들림 & 크리티컬 섬광 */
+@keyframes screen-shake-anim {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-4px, 4px); }
+  40% { transform: translate(4px, -3px); }
+  60% { transform: translate(-3px, 1px); }
+  80% { transform: translate(3px, -2px); }
+  100% { transform: translate(0, 0); }
+}
+.screen-shake {
+  animation: screen-shake-anim 0.25s ease-in-out;
+}
+@keyframes crit-flash-anim {
+  0% { box-shadow: inset 0 0 0 0 rgba(239, 68, 68, 0); }
+  50% { box-shadow: inset 0 0 50px 20px rgba(239, 68, 68, 0.6); }
+  100% { box-shadow: inset 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+.crit-flash {
+  animation: crit-flash-anim 0.35s ease-out;
+}
+
+/* 로딩 오버레이 & 팁 */
+#loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 7, 18, 0.92);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+#loading-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(201, 162, 39, 0.2);
+  border-top-color: var(--gold-bright);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.loading-tip-box {
+  background: rgba(24, 20, 37, 0.95);
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  padding: 14px 22px;
+  max-width: 480px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+.loading-tip-title {
+  color: var(--gold-bright);
+  font-weight: 700;
+  font-size: 13.5px;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+.loading-tip-text {
+  font-size: 14px;
+  color: var(--parchment);
+  line-height: 1.5;
+}
+
+/* 다이아몬드 뱃지 */
+.diamond-badge {
+  color: #38bdf8;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+}
+
+/* 장비 슬롯 그리드 */
+.equip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.equip-slot {
+  background: rgba(24, 20, 37, 0.85);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.equip-slot:hover {
+  border-color: var(--gold);
+}
+.equip-slot-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--parchment);
+}
+.equip-slot-stat {
+  font-size: 12px;
+  color: var(--dim);
+  margin-top: 2px;
+}
+
+/* 룬 슬롯 */
+.rune-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.rune-slot {
+  background: rgba(18, 14, 28, 0.9);
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  padding: 10px 6px;
+  text-align: center;
+  font-size: 12px;
+}
+.rune-slot.equipped {
+  border-style: solid;
+  border-color: #a855f7;
+  background: rgba(45, 18, 77, 0.6);
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.25);
+}
+
+/* 고립 던전 경고 프레임 */
+.isolated-dungeon-frame {
+  border: 2px solid #ef4444 !important;
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.35) !important;
+  animation: pulse-danger 2s infinite alternate;
+}
+@keyframes pulse-danger {
+  0% { border-color: #ef4444; }
+  100% { border-color: #7f1d1d; }
+}
+
+/* 엘리트 몬스터 카드 발광 */
+.enemy-card.elite {
+  border: 2px solid #f59e0b !important;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.45) !important;
+  background: linear-gradient(180deg, #2a1f0a, #1a1425) !important;
+}
+.enemy-card.elite .enemy-name {
+  color: #fbbf24 !important;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.6) !important;
+}
+
+/* 미니게임 선택 버튼 */
+.choice-btn-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
+}
+.choice-btn {
+  padding: 18px 14px;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+}
+
+
+/* ========================================================
+   [모험 시스템 CSS] 덫, 습격, 탐험 조우, 상호작용 카드
+   ======================================================== */
+
+.adventure-card {
+  background: linear-gradient(180deg, #1f1930, #130f1e);
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.3s ease;
+}
+.adventure-card.ambush {
+  border-color: #ef4444;
+  box-shadow: 0 0 22px rgba(239, 68, 68, 0.35);
+}
+.adventure-card.trap {
+  border-color: #f59e0b;
+  box-shadow: 0 0 22px rgba(245, 158, 11, 0.35);
+}
+.adventure-card.encounter {
+  border-color: #38bdf8;
+  box-shadow: 0 0 22px rgba(56, 189, 248, 0.35);
+}
+
+.adventure-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.adventure-title {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--gold-bright);
+}
+.adventure-card.ambush .adventure-title { color: #f87171; }
+.adventure-card.trap .adventure-title { color: #fbbf24; }
+.adventure-card.encounter .adventure-title { color: #38bdf8; }
+
+.adventure-desc {
+  font-size: 13.5px;
+  color: var(--parchment);
+  line-height: 1.65;
+  margin-bottom: 14px;
+  background: rgba(0,0,0,0.35);
+  padding: 12px 14px;
+  border-radius: 6px;
+  border-left: 3px solid var(--gold);
+}
+.adventure-card.ambush .adventure-desc { border-left-color: #ef4444; }
+.adventure-card.trap .adventure-desc { border-left-color: #f59e0b; }
+.adventure-card.encounter .adventure-desc { border-left-color: #38bdf8; }
+
+.adventure-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.adventure-choice-btn {
+  padding: 12px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  border-radius: 6px;
+  cursor: pointer;
+  background: rgba(35, 26, 54, 0.9);
+  border: 1px solid var(--line);
+  color: var(--parchment);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.adventure-choice-btn:hover {
+  background: rgba(65, 45, 95, 0.95);
+  border-color: var(--gold);
+  transform: translateY(-1px);
+}
+.adventure-choice-btn.tool-btn {
+  background: linear-gradient(90deg, rgba(201,162,39,0.22), rgba(68,29,99,0.85));
+  border-color: var(--gold-bright);
+  color: #fef08a;
+  box-shadow: 0 0 10px rgba(254, 240, 138, 0.2);
+}
+.adventure-choice-btn.tool-btn:hover {
+  background: linear-gradient(90deg, rgba(201,162,39,0.35), rgba(88,39,129,0.95));
+  border-color: #fff;
+}
+
+.adventure-result-box {
+  background: rgba(20, 15, 30, 0.9);
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  padding: 14px;
+  margin-top: 12px;
+  animation: fadeIn 0.3s ease;
+}
+
+
+/* ========================================================
+   [실제 플레이어 PvP & 사냥터 전장 덫/방해요소 CSS]
+   ======================================================== */
+
+/* 전장 덫 & 방해요소 배너 */
+.battle-hazard-banner {
+  background: linear-gradient(180deg, rgba(70, 20, 20, 0.85), rgba(35, 10, 15, 0.9));
+  border: 1px dashed #ef4444;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.28);
+  animation: pulse-danger 2.2s infinite alternate;
+}
+.battle-hazard-title {
+  color: #fca5a5;
+  font-weight: 700;
+  font-size: 13.5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.battle-hazard-desc {
+  font-size: 12px;
+  color: var(--parchment);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.hazard-action-btn {
+  margin-top: 8px;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  background: linear-gradient(180deg, #b45309, #78350f);
+  border: 1px solid #f59e0b;
+  color: #fef08a;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+.hazard-action-btn:hover {
+  background: linear-gradient(180deg, #d97706, #92400e);
+  transform: translateY(-1px);
+}
+
+/* PvP 플레이어 카드 */
+.pvp-card {
+  background: linear-gradient(180deg, #241438, #180b26);
+  border: 1px solid #c084fc;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+  transition: all 0.2s ease;
+}
+.pvp-card:hover {
+  border-color: #f43f5e;
+  box-shadow: 0 0 18px rgba(244, 63, 94, 0.3);
+}
+.pvp-info-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #e9d5ff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pvp-info-stat {
+  font-size: 12px;
+  color: var(--dim);
+  margin-top: 4px;
+}
+.pvp-badge-online {
+  background: #10b981;
+  color: #000;
+  font-size: 10.5px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.pvp-badge-ranker {
+  background: #f59e0b;
+  color: #000;
+  font-size: 10.5px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
 </style>
   <!-- Firebase 실시간 멀티플레이어 라이브러리 (v9 compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -688,8 +1061,8 @@
           <div class="stat-row"><span>MP</span><span id="s-mp-num">0/0</span></div>
           <div class="bar-bg"><div class="bar-fill bar-mp" id="s-mp-bar" style="width:100%;"></div></div>
 
-          <div class="weapon-line">🗡️ 장착 무기: <b id="s-weapon">-</b><br>⚔️ 공격력: <b id="s-atk">-</b></div>
-          <div class="gold-line">💰 골드: <b id="s-gold">0</b></div>
+          <div class="weapon-line">🗡️ 무기: <b id="s-weapon">-</b> <span id="s-durability" style="font-size:11px;color:#a3e635;">(100%)</span><br>⚔️ 공격력: <b id="s-atk">-</b> | 🛡️ 방어력: <b id="s-def" style="color:#38bdf8;">0</b></div>
+          <div class="gold-line">💰 골드: <b id="s-gold">0</b> | 💎 다이아: <b id="s-diamond" style="color:#38bdf8;">0</b></div>
         </div>
 
         <div class="main">
@@ -1074,12 +1447,2201 @@ const QUESTS = [
   { id:'q8', name:'전설의 종막',   desc:'투명드래곤을 1마리 처치한다.',   type:'kill', monster:'dragon',   goal:1,  rewardExp:3000, rewardGold:2500 },
   { id:'q9', name:'달콤한 유혹',   desc:'야생 꿀을 3개 채집한다.',        type:'item', item:'야생 꿀', goal:3, rewardExp:150, rewardGold:200 },
   { id:'q10', name:'황금 꿀단지',  desc:'로열 젤리를 1개 획득한다.',      type:'item', item:'로열 젤리', goal:1, rewardExp:600, rewardGold:1000 },
+  { id:'q11', name:'고대 레이드 토벌', desc:'화염의 거수 베히모스를 1마리 토벌한다.', type:'kill', monster:'daily_behemoth', goal:1, rewardExp:1500, rewardGold:1200, rewardDia:5 },
+  { id:'q12', name:'콜로세움의 패자', desc:'PK 결투장 챔피언을 1회 쓰러뜨린다.', type:'kill', monster:'pk_champion', goal:1, rewardExp:800, rewardGold:600, rewardDia:3 },
+  { id:'q13', name:'호수의 수호령', desc:'호수 거북이를 4마리 처치한다.', type:'kill', monster:'lake_turtle', goal:4, rewardExp:350, rewardGold:280 },
+  { id:'q14', name:'할로윈 호박 사냥', desc:'호박머리 잭을 3마리 처치한다.', type:'kill', monster:'pumpkin_jack', goal:3, rewardExp:450, rewardGold:350 },
+  { id:'q15', name:'각성의 경지', desc:'레벨 45에 도달하여 3차 각성을 준비한다.', type:'level', goal:45, rewardExp:0, rewardGold:3000, rewardDia:20 },
 ];
 
 /* =========================================================
    상태
    ========================================================= */
 let player = null;
+
+/* [환상RPG] 진짜 플레이어 vs 플레이어 PvP & 사냥터 전장 덫/방해요소 */
+/* =========================================================
+   [환상RPG] 진짜 플레이어 vs 플레이어 PvP & 사냥터 전장 덫/방해요소
+   ========================================================= */
+
+// --- 1. 사냥터 전장 덫 & 방해요소 정의 ---
+const BATTLE_HAZARDS = {
+  vine_trap: {
+    id: 'vine_trap',
+    name: '🌿 엉킨 넝쿨 덤불 덫',
+    desc: '발밑에 도사린 가시 넝쿨이 이동과 회피를 방해하며, 발목을 옥죄어옵니다!',
+    actionBtn: '🤸 [넝쿨 덫 끊어내기 & 역습]'
+  },
+  floor_spikes: {
+    id: 'floor_spikes',
+    name: '⚙️ 바닥 숨겨진 쇠가시 덫',
+    desc: '지면 아래 압력식 쇠가시 덫이 묻혀있어, 전투 충격 시 무차별 솟구칩니다!',
+    actionBtn: '💥 [적을 쇠가시 덫으로 걷어차기!]'
+  },
+  falling_rocks: {
+    id: 'falling_rocks',
+    name: '🪨 천장 불안정 낙석 트랩',
+    desc: '전투의 진동으로 천장의 뾰족한 종유석과 바위 파편이 굉음을 내며 떨어집니다!',
+    actionBtn: '🛡️ [방패로 낙석을 튕겨 적에게 강타!]'
+  },
+  poison_swamp: {
+    id: 'poison_swamp',
+    name: '☣️ 맹독 안개 웅덩이',
+    desc: '독기 품은 늪지에서 보랏빛 유독 가스가 뿜어져 나와 시야와 호흡을 방해합니다!',
+    actionBtn: '🧪 [해독 약초를 씹어 독기 정화]'
+  },
+  lava_vent: {
+    id: 'lava_vent',
+    name: '🌋 마그마 간헐천 분출구',
+    desc: '달아오른 지열 분출구에서 언제 폭발할지 모르는 화염 기둥이 치솟습니다!',
+    actionBtn: '💨 [마그마 분출을 유도하여 적 태우기!]'
+  },
+  trick_candy_bomb: {
+    id: 'trick_candy_bomb',
+    name: '🎃 할로윈 호박 폭탄 덫',
+    desc: '발을 헛디디면 폭발하는 장난감 호박 폭탄이 전장에 어지럽게 굴러다닙니다!',
+    actionBtn: '🎃 [호박 폭탄을 적에게 발로 차기!]'
+  }
+};
+
+// --- 전투 시작 시 전장 덫/방해요소 배정 ---
+function assignBattleHazard(areaId){
+  if(!battle || battle.enemy.boss || battle.enemy.isPvP) return;
+  // 55% 확률로 사냥터 전장에 덫 및 방해요소 활성화
+  if(Math.random() > 0.55){
+    battle.hazard = null;
+    return;
+  }
+
+  let hazardKey = 'floor_spikes';
+  if(areaId === 'field' || areaId === 'forest') hazardKey = Math.random() < 0.5 ? 'vine_trap' : 'floor_spikes';
+  else if(areaId === 'mine') hazardKey = 'falling_rocks';
+  else if(areaId === 'graveyard' || areaId === 'lake') hazardKey = 'poison_swamp';
+  else if(areaId === 'volcano') hazardKey = 'lava_vent';
+  else if(areaId && areaId.includes('halloween')) hazardKey = 'trick_candy_bomb';
+  else hazardKey = 'floor_spikes';
+
+  battle.hazard = { ...BATTLE_HAZARDS[hazardKey], turnsActive: 0, usedAction: false };
+  log(`⚠️ <b>[전장 경보]</b> 현재 사냥터 바닥에 <b>${battle.hazard.name}</b>이(가) 도사리고 있습니다!`);
+}
+
+// --- 플레이어 전장 덫 역이용 액션 ---
+function triggerBattleHazardAction(){
+  if(!battle || !battle.hazard || battle.hazard.usedAction) return;
+  const h = battle.hazard;
+  const e = battle.enemy;
+  h.usedAction = true;
+
+  if(h.id === 'floor_spikes'){
+    const dmg = rand(45, 75);
+    e.hp = Math.max(0, e.hp - dmg);
+    triggerCombatFX(true);
+    log(`💥 <b>[전장 덫 역이용!]</b> ${player.nickname}이(가) 강력한 발차기로 <b>${e.name}</b>을(를) 쇠가시 덫 위로 밀쳐냈습니다! <b>(${dmg} 피해!)</b>`);
+  } else if(h.id === 'falling_rocks'){
+    const dmg = rand(50, 80);
+    e.hp = Math.max(0, e.hp - dmg);
+    triggerCombatFX(true);
+    log(`🪨 <b>[낙석 쳐내기!]</b> 머리 위로 떨어지는 바위를 무기로 강타하여 <b>${e.name}</b>에게 튕겨냈습니다! <b>(${dmg} 피해!)</b>`);
+  } else if(h.id === 'vine_trap'){
+    log(`🌿 <b>[덤불 덫 끊어내기!]</b> 넝쿨을 단칼에 끊어내며 적의 허를 찔렀습니다! 다음 공격이 100% 치명타로 적중합니다!`);
+    player.activeBuffs = player.activeBuffs || {};
+    player.activeBuffs.guaranteed_crit = 1;
+  } else if(h.id === 'poison_swamp'){
+    player.hp = Math.min(player.maxHp, player.hp + 50);
+    log(`🧪 <b>[독기 정화!]</b> 품속의 정화 약초를 씹어 독기를 몰아내고 체력을 <b>+50 회복</b>했습니다!`);
+  } else if(h.id === 'lava_vent'){
+    const dmg = rand(65, 95);
+    e.hp = Math.max(0, e.hp - dmg);
+    triggerCombatFX(true);
+    log(`🌋 <b>[화염 유도!]</b> 마그마 분출구를 피해 몸을 날려 뿜어져 나오는 화염 기둥으로 <b>${e.name}</b>을(를) 덮쳤습니다! <b>(${dmg} 화염 피해!)</b>`);
+  } else if(h.id === 'trick_candy_bomb'){
+    const dmg = rand(55, 85);
+    e.hp = Math.max(0, e.hp - dmg);
+    triggerCombatFX(true);
+    log(`🎃 <b>[호박 폭탄 슛!]</b> 바닥의 호박 폭탄을 걷어차 <b>${e.name}</b>의 면상에서 폭발시켰습니다! <b>(${dmg} 피해!)</b>`);
+  }
+
+  refreshSidebar();
+  if(e.hp <= 0){
+    onEnemyDefeated();
+  } else {
+    renderBattle();
+  }
+}
+
+// --- 매 턴 전장 덫/방해요소 작동 체크 ---
+function tickBattleHazard(){
+  if(!battle || !battle.hazard || battle.enemy.hp <= 0 || battle.fled) return;
+  const h = battle.hazard;
+  h.turnsActive = (h.turnsActive || 0) + 1;
+
+  // 25% 확률로 전장 환경 요소 발동
+  if(Math.random() < 0.28){
+    // 황금 나침반 보유 시 덫 완전 사전 회피
+    if(player.inventory && player.inventory['🧭 황금 나침반'] > 0){
+      log(`🧭 <b>[황금 나침반 감지]</b> 나침반의 감각으로 <b>${h.name}</b>의 격발 위치를 사전에 파악하여 무피해로 회피했습니다!`);
+      return;
+    }
+
+    if(h.id === 'floor_spikes'){
+      let dmg = rand(18, 32);
+      if(player.armors && player.armors.shield) dmg = Math.round(dmg * 0.5);
+      player.hp = Math.max(1, player.hp - dmg);
+      triggerCombatFX(true);
+      log(`⚙️ <b>[전장 쇠가시 덫 격발!]</b> 바닥의 압력판이 눌리며 쇠가시가 솟구쳤습니다! <b>(-${dmg} HP)</b>`);
+    } else if(h.id === 'falling_rocks'){
+      if(Math.random() < 0.5){
+        const dmg = rand(20, 35);
+        player.hp = Math.max(1, player.hp - dmg);
+        triggerCombatFX(true);
+        log(`🪨 <b>[천장 낙석 추락!]</b> 천장에서 떨어진 뾰족한 돌조각이 어깨를 강타했습니다! <b>(-${dmg} HP)</b>`);
+      } else {
+        const dmg = rand(30, 50);
+        battle.enemy.hp = Math.max(0, battle.enemy.hp - dmg);
+        log(`🪨 <b>[천장 낙석 강타!]</b> 천장의 거대한 바위가 <b>${battle.enemy.name}</b>의 머리로 떨어졌습니다! <b>(적에게 ${dmg} 피해!)</b>`);
+      }
+    } else if(h.id === 'vine_trap'){
+      battle.playerMiss = true;
+      log(`🌿 <b>[덤불 덫 결박!]</b> 질긴 넝쿨이 발목을 휘감아 다음 공격의 명중률이 대폭 감소합니다!`);
+    } else if(h.id === 'poison_swamp'){
+      player.hp = Math.max(1, player.hp - 15);
+      log(`☣️ <b>[맹독 늪지 중독]</b> 유독 가스를 들이마셔 중독 피해를 입었습니다! <b>(-15 HP)</b>`);
+    } else if(h.id === 'lava_vent'){
+      const dmg = rand(35, 55);
+      player.hp = Math.max(1, player.hp - dmg);
+      triggerCombatFX(true);
+      log(`🌋 <b>[마그마 분출!]</b> 바닥 틈새에서 치솟은 뜨거운 용암 증기에 화상을 입었습니다! <b>(-${dmg} HP)</b>`);
+    } else if(h.id === 'trick_candy_bomb'){
+      const dmg = rand(25, 45);
+      player.hp = Math.max(1, player.hp - dmg);
+      triggerCombatFX(true);
+      log(`🎃 <b>[호박 폭탄 격발!]</b> 숨겨진 장난감 폭탄이 터져 파편 피해를 입었습니다! <b>(-${dmg} HP)</b>`);
+    }
+    refreshSidebar();
+  }
+}
+
+// --- 2. 진짜 플레이어 vs 플레이어 PvP 결투 엔진 ---
+
+// 랭커 및 온라인 유저 목록 불러오기
+async function getRealPvpOpponents(){
+  let opponents = [];
+
+  // 1. Firebase 실시간 온라인 플레이어 조회
+  if(firebaseDb){
+    try {
+      const snap = await firebaseDb.ref('online_players').once('value');
+      const val = snap.val() || {};
+      Object.values(val).forEach(p => {
+        if(p && p.nickname && p.nickname !== player.nickname){
+          opponents.push({
+            nickname: p.nickname,
+            job: p.job || '모험가',
+            level: p.level || 1,
+            maxHp: p.maxHp || (180 + p.level * 22),
+            totalAtk: p.baseAtk || (20 + p.level * 4),
+            totalDef: p.totalDef || Math.round(p.level * 2.2),
+            weaponName: p.weaponName || '장검',
+            rating: p.rating || (1000 + (p.level||1)*15),
+            isOnline: true
+          });
+        }
+      });
+    } catch(e){}
+  }
+
+  // 2. 명예의 전당 / 로컬 저장 유저 조회
+  try {
+    const lbKeys = await safeList('leaderboard:');
+    for(const k of lbKeys.slice(0, 10)){
+      const p = await safeGet(k);
+      if(p && p.nickname && p.nickname !== player.nickname && !opponents.find(o => o.nickname === p.nickname)){
+        opponents.push({
+          nickname: p.nickname,
+          job: p.job || '검사',
+          level: p.level || 15,
+          maxHp: p.maxHp || (200 + p.level * 20),
+          totalAtk: p.totalAtk || (35 + p.level * 4),
+          totalDef: p.totalDef || Math.round(p.level * 2.5),
+          weaponName: p.weapon || '은빛 장검',
+          rating: p.rating || (1100 + (p.level||1)*20),
+          isRanker: true
+        });
+      }
+    }
+  } catch(e){}
+
+  // 3. 만약 온라인/등록 유저가 부족할 경우 실제 유저 스펙의 랭커 데이터 보충
+  if(opponents.length < 3){
+    const dummyRankers = [
+      { nickname: '대검호_카엘', job: '소드 마스터', level: Math.max(5, player.level - 1), weaponName: '단단한 합금 대검 +5강', rating: 1150 },
+      { nickname: '마도사_루나', job: '대마도사', level: Math.max(8, player.level), weaponName: '백은 마도검 +6강', rating: 1280 },
+      { nickname: '그림자_제로', job: '섀도우 어쌔신', level: Math.max(10, player.level + 2), weaponName: '심연의 흑도 +7강', rating: 1390 },
+      { nickname: '성기사_미카엘', job: '불멸의 수호신', level: Math.max(15, player.level + 4), weaponName: '이지스의 성스러운 방패 +8강', rating: 1520 }
+    ];
+    dummyRankers.forEach(dr => {
+      if(!opponents.find(o => o.nickname === dr.nickname)){
+        opponents.push({
+          nickname: dr.nickname,
+          job: dr.job,
+          level: dr.level,
+          maxHp: Math.round(220 + dr.level * 24),
+          totalAtk: Math.round(40 + dr.level * 4.5),
+          totalDef: Math.round(dr.level * 3.0),
+          weaponName: dr.weaponName,
+          rating: dr.rating,
+          isRanker: true
+        });
+      }
+    });
+  }
+
+  return opponents;
+}
+
+// --- 콜로세움 PK 결투장 렌더러 ---
+async function renderColosseumPK(){
+  ensurePlayerExtendedData();
+  const area = $('content-area');
+  player.rating = player.rating || 1000;
+
+  area.innerHTML = `
+    <h3 style="margin-top:0;color:var(--gold-bright);">⚔️ 영웅의 콜로세움 (1:1 실시간 PK 결투장)</h3>
+    <p class="flavor">전 세계 실제 플레이어 및 랭커들과 목숨을 건 1:1 진검승부를 펼치고 랭킹 포인트와 다이아몬드를 쟁취하세요!</p>
+    <div style="background:var(--bg-deep);border:1px solid var(--gold);padding:12px;border-radius:6px;margin-bottom:14px;font-size:13.5px;color:var(--parchment);">
+      내 PvP 랭킹 레이팅: <b style="color:#38bdf8;">${player.rating}점</b> | 전적: <b style="color:#a3e635;">${player.stats.pkWins}승</b> <b style="color:#ef4444;">${player.stats.pkLosses}패</b>
+    </div>
+    <div style="margin-bottom:12px;display:flex;gap:8px;">
+      <input type="text" id="pvp-search-input" placeholder="도전할 플레이어 닉네임 직접 입력" style="flex:1;">
+      <button class="primary" onclick="searchAndDuelPlayer()">⚔️ 직접 지목 결투</button>
+    </div>
+    <div id="pvp-opponents-list">
+      <p class="flavor">전 세계 실시간 모험가 및 랭커 데이터를 조회하는 중...</p>
+    </div>
+    <div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>
+  `;
+
+  const opponents = await getRealPvpOpponents();
+  const listEl = $('pvp-opponents-list');
+  if(!listEl) return;
+
+  let html = '';
+  opponents.forEach(op => {
+    html += `
+      <div class="pvp-card">
+        <div>
+          <div class="pvp-info-title">
+            <span>🤺 ${op.nickname}</span>
+            <span class="tag" style="background:#581c87;color:#d8b4fe;">${op.job}</span>
+            <span class="tag">Lv.${op.level}</span>
+            ${op.isOnline ? '<span class="pvp-badge-online">온라인</span>' : '<span class="pvp-badge-ranker">랭커</span>'}
+          </div>
+          <div class="pvp-info-stat">
+            🗡️ 무기: <b>${op.weaponName}</b> | 예상 HP: <b>${op.maxHp}</b> | 방어력: <b>${op.totalDef}</b> | 레이팅: <b style="color:#38bdf8;">${op.rating}점</b>
+          </div>
+        </div>
+        <div>
+          <button class="danger" onclick="startRealPlayerDuel('${op.nickname}', '${op.job}', ${op.level}, ${op.maxHp}, ${op.totalAtk}, ${op.totalDef}, '${op.weaponName}', ${op.rating})">
+            ⚔️ 결투 신청
+          </button>
+        </div>
+      </div>
+    `;
+  });
+  listEl.innerHTML = html;
+}
+
+// 닉네임 직접 검색 결투
+async function searchAndDuelPlayer(){
+  const input = $('pvp-search-input');
+  if(!input || !input.value.trim()){ toast('도전할 닉네임을 입력하세요!'); return; }
+  const targetNick = input.value.trim();
+  if(targetNick === player.nickname){ toast('자기 자신과는 결투할 수 없습니다!'); return; }
+
+  let foundPlayer = null;
+  if(firebaseDb){
+    try {
+      const snap = await firebaseDb.ref('online_players').once('value');
+      const val = snap.val() || {};
+      foundPlayer = Object.values(val).find(p => p.nickname === targetNick);
+    } catch(e){}
+  }
+
+  if(!foundPlayer){
+    foundPlayer = await safeGet('leaderboard:' + targetNick);
+  }
+
+  if(foundPlayer){
+    startRealPlayerDuel(
+      foundPlayer.nickname, foundPlayer.job || '검사', foundPlayer.level || 10,
+      foundPlayer.maxHp || 250, foundPlayer.baseAtk || 35, foundPlayer.totalDef || 20,
+      foundPlayer.weaponName || '장검', foundPlayer.rating || 1050
+    );
+  } else {
+    // 가상 등록된 라이벌 유저 생성
+    const fakeLvl = Math.max(1, player.level + rand(-2, 3));
+    startRealPlayerDuel(targetNick, '방랑 검사', fakeLvl, 180 + fakeLvl*22, 25 + fakeLvl*4, fakeLvl*2, '모험가의 검', 1000 + fakeLvl*15);
+  }
+}
+
+// --- 진짜 플레이어 결투 돌입 ---
+function startRealPlayerDuel(nick, job, level, hp, atk, def, weapon, rating){
+  showLoading(()=>{
+    battle = {
+      enemy: {
+        id: 'real_pvp_' + nick,
+        name: nick,
+        job: job,
+        level: level,
+        emoji: '🤺',
+        hp: hp,
+        maxHp: hp,
+        atk: atk,
+        def: def,
+        weapon: weapon,
+        rating: rating,
+        dodge: (job.includes('도적') || job.includes('어쌔신')) ? 0.20 : 0.06,
+        expReward: level * 35,
+        goldReward: level * 40,
+        diaReward: 5,
+        boss: true,
+        isPvP: true,
+        isRealPvP: true
+      },
+      playerMiss: false,
+      fled: false
+    };
+    clearLog();
+    log(`⚔️ <b>[콜로세움 1:1 진검승부 개시!] [${job}] ${nick}</b>님과의 명예를 건 실시간 결투에 돌입했습니다!`);
+    log(`🛡️ 상대 장비: <b>${weapon}</b> (상대 방어력: ${def})`);
+    renderBattle();
+  }, `콜로세움 함성 속에 [${job}] ${nick}님과 맞서는 중...`);
+}
+
+
+
+/* [환상RPG 모험 시스템] 덫, 습격, 탐험 인카운터 엔진 */
+/* =========================================================
+   [환상RPG 모험 시스템] 덫, 습격, 탐험 인카운터 엔진
+   ========================================================= */
+
+const ADVENTURE_EVENTS = [
+  // 1. 습격: 숲속 산적단의 기습
+  {
+    id: 'ambush_bandits',
+    type: 'ambush',
+    title: '🦹 [돌발 습격] 굶주린 숲속 산적단의 기습!',
+    tag: '기습 습격',
+    desc: '길목의 우거진 수풀 속에서 거친 고함과 함께 도끼와 단검을 든 산적들이 뛰쳐나와 당신을 에워쌌습니다! "어이 모험가, 가진 금화를 순순히 내놓으면 피는 보지 않겠다!"',
+    choices: [
+      {
+        text: '⚔️ [즉각 반격] 칼을 뽑아 산적 두목과 맞서 싸운다!',
+        action: 'fight_bandit_boss'
+      },
+      {
+        text: '🛡️ [방패 방어 및 반격] 방패로 기습을 막아내고 진형을 무너뜨린다!',
+        action: 'shield_counter'
+      },
+      {
+        text: '💰 [골드 60G 던져주고 시선 돌리기] 돈을 흩뿌리고 신속히 빠져나간다.',
+        action: 'bribe_escape'
+      }
+    ],
+    toolCheck: {
+      tool: '🧭 황금 나침반',
+      choice: {
+        text: '🧭 [황금 나침반] 나침반의 감각으로 산적단의 매복을 역이용하여 기습 섬멸!',
+        action: 'tool_compass_ambush'
+      }
+    }
+  },
+
+  // 2. 습격: 그림자 암살자의 배후 기습
+  {
+    id: 'ambush_shadow_assassin',
+    type: 'ambush',
+    title: '🗡️ [암살자 습격] 등 뒤에서 날아든 어둠의 비수!',
+    tag: '암살 기습',
+    desc: '서늘한 살기와 함께 등 뒤의 그림자 속에서 은신한 암살자가 목덜미를 겨누며 급습했습니다! 차가운 쇠의 감촉이 등골을 서늘하게 만듭니다!',
+    choices: [
+      {
+        text: '⚡ [반사적인 옆 구르기] 날렵하게 몸을 날려 비수를 피하고 반격한다!',
+        action: 'dodge_counter'
+      },
+      {
+        text: '🗡️ [일도양단 맞받아치기] 무기의 궤적으로 적의 비수를 정면 격파!',
+        action: 'fight_assassin_boss'
+      },
+      {
+        text: '💨 [도주용 연막탄 투척] 짙은 연막을 피워 적의 시야를 가린다!',
+        action: 'smoke_escape'
+      }
+    ]
+  },
+
+  // 3. 습격: 흉포한 늑대 무리
+  {
+    id: 'ambush_beast_pack',
+    type: 'ambush',
+    title: '🐺 [야수 떼의 습격] 붉은 눈의 흉폭한 늑대 무리!',
+    tag: '야수 습격',
+    desc: '어두운 덤불 속에서 침을 흘리는 굶주린 늑대 떼가 일제히 포효하며 당신의 사지를 물어뜯기 위해 달려듭니다!',
+    choices: [
+      {
+        text: '🔥 [횃불 휘두르며 기선 제압] 거센 불꽃을 휘둘러 늑대들의 기세를 꺾는다!',
+        action: 'torch_scare'
+      },
+      {
+        text: '⚔️ [우두머리 알파 울프 직접 격퇴] 무리의 우두머리를 단칼에 베어버린다!',
+        action: 'fight_wolf_boss'
+      },
+      {
+        text: '🍖 [가방의 음식/야생꿀 던져 유인] 먹잇감을 던져주고 신속히 이탈한다.',
+        action: 'feed_escape'
+      }
+    ]
+  },
+
+  // 4. 덫: 낙엽 속 강철 쇠덫
+  {
+    id: 'trap_bear_steel',
+    type: 'trap',
+    title: '⚙️ [치명적 덫] 낙엽 속 숨겨진 강철 쇠덫!',
+    tag: '지상 함정',
+    desc: '찰칵! 바닥의 낙엽 더미 아래 숨겨져 있던 녹슨 강철 쇠덫이 맹렬하게 발목을 향해 닫힙니다! 순식간에 뼈를 부술 듯한 톱니가 덮쳐옵니다!',
+    choices: [
+      {
+        text: '🗡️ [무기 칼등으로 틈새 비틀기] 무기를 지렛대 삼아 덫을 박살낸다. (무기 내구도 -2)',
+        action: 'weapon_pry_trap'
+      },
+      {
+        text: '🤸 [순발력으로 뛰어넘기] 덫이 닫히기 직전 발을 빼내며 도약한다!',
+        action: 'jump_trap'
+      }
+    ],
+    toolCheck: {
+      tool: '🧭 황금 나침반',
+      choice: {
+        text: '🧭 [황금 나침반] 나침반의 금속 탐지 경보로 쇠덫을 사전에 간파하고 해체!',
+        action: 'tool_compass_trap'
+      }
+    }
+  },
+
+  // 5. 덫: 굴러떨어지는 고대의 거대 바위
+  {
+    id: 'trap_boulder_ruins',
+    type: 'trap',
+    title: '🪨 [낙석 트랩] 절벽에서 굴러떨어지는 거대한 바위!',
+    tag: '낙석 함정',
+    desc: '우르릉 쿠구구궁!! 길목 절벽 위에서 장치된 와이어가 끊어지며 집채만 한 거대 바위가 당신을 향해 맹렬한 속도로 굴러떨어집니다!',
+    choices: [
+      {
+        text: '🏃 [전력 질주하여 샛길로 다이빙] 몸을 날려 바위의 궤적을 피한다!',
+        action: 'dive_boulder'
+      },
+      {
+        text: '🛡️ [방패와 갑옷으로 정면 방어] 방어력을 집중하여 바위를 막아선다!',
+        action: 'guard_boulder'
+      }
+    ],
+    toolCheck: {
+      tool: '⛏️ 미스릴 채광 곡괭이',
+      choice: {
+        text: '⛏️ [미스릴 곡괭이] 다가오는 바위의 약점을 일격에 부수고 보석 채굴!',
+        action: 'tool_pickaxe_boulder'
+      }
+    }
+  },
+
+  // 6. 덫: 맹독 토템 석상
+  {
+    id: 'trap_poison_totem',
+    type: 'trap',
+    title: '☣️ [고대 함정] 맹독 안개를 뿜어내는 저주의 토템 석상!',
+    tag: '독기 함정',
+    desc: '쉬이익! 길목의 토템 석상의 눈이 붉게 빛나며 숨을 쉴 수 없는 보랏빛 맹독 안개가 사방으로 분출됩니다! 폐부를 찌르는 독기가 엄습합니다!',
+    choices: [
+      {
+        text: '🧪 [코와 입을 막고 신속 돌파] 피해를 감수하며 단숨에 석상을 지나친다.',
+        action: 'rush_poison'
+      },
+      {
+        text: '🔮 [마력의 힘으로 결계 정화] MP를 소모하여 독기 결계를 정화한다. (MP 15)',
+        action: 'cleanse_poison'
+      },
+      {
+        text: '迂 [먼 길로 안전하게 우회하기] 시간이 걸리더라도 샛길로 돌아간다.',
+        action: 'bypass_poison'
+      }
+    ]
+  },
+
+  // 7. 덫: 가시 구덩이
+  {
+    id: 'trap_pitfall_spikes',
+    type: 'trap',
+    title: '🕳️ [낙하 함정] 바닥이 꺼지는 날카로운 가시 구덩이!',
+    tag: '낙하 함정',
+    desc: '우지직! 밟은 흙바닥이 푹 꺼지며 날카로운 죽창과 쇠가시가 솟아있는 깊은 구덩이로 추락합니다!',
+    choices: [
+      {
+        text: '🧗 [벽면을 차고 반동 도약] 추락하는 도중 벽을 박차고 위로 솟구친다!',
+        action: 'wall_jump'
+      },
+      {
+        text: '🛡️ [갑옷 방어력으로 충격 흡수] 몸을 웅크려 급소를 보호하며 착지한다.',
+        action: 'armor_fall'
+      }
+    ]
+  },
+
+  // 8. 조우: 부상당한 선배 모험가
+  {
+    id: 'encounter_wounded_adventurer',
+    type: 'encounter',
+    title: '🩸 [모험가 조우] 피를 흘리며 쓰러진 선배 모험가',
+    tag: '모험 조우',
+    desc: '바위 그늘에 기댄 채 치명상을 입은 모험가가 가쁜 숨을 몰아쉬며 도움을 청합니다. "콜록... 지나가던 모험가여... 체력 물약이나 붕대 하나만 나눠줄 수 없겠소...?"',
+    choices: [
+      {
+        text: '💖 [체력 물약 1병 건네기] 가방의 물약을 건네 생명을 구한다. (물약 1개 소모)',
+        action: 'heal_adventurer'
+      },
+      {
+        text: '🩹 [간이 응급처치 지혈] 정성껏 지혈을 돕고 안전한 동굴로 부축해준다.',
+        action: 'first_aid_adventurer'
+      },
+      {
+        text: '🚶 [미안하지만 무시하고 지나가기] 사냥터로 발걸음을 재촉한다.',
+        action: 'ignore_adventurer'
+      }
+    ]
+  },
+
+  // 9. 조우: 고대 바람의 여신 제단
+  {
+    id: 'encounter_mystery_shrine',
+    type: 'encounter',
+    title: '⛩️ [신비의 성소] 고대 바람의 여신 제단',
+    tag: '신비 조우',
+    desc: '안개 낀 고요한 숲속 공터에 푸른빛을 은은하게 발하는 여신의 제단이 서 있습니다. 상쾌하고 신비로운 마력이 전신을 감쌉니다.',
+    choices: [
+      {
+        text: '🪙 [골드 50G를 제물로 바치고 기도] 신성한 가호를 간구한다.',
+        action: 'pray_shrine'
+      },
+      {
+        text: '🔮 [제단의 영기를 흡수하기] 제단의 마나를 전신으로 받아들인다.',
+        action: 'absorb_shrine'
+      },
+      {
+        text: '🚶 [경의를 표하고 조용히 지나가기] 고개를 숙이고 지나간다.',
+        action: 'pass_shrine'
+      }
+    ]
+  },
+
+  // 10. 조우: 방랑 노움 보물상
+  {
+    id: 'encounter_wandering_gnome',
+    type: 'encounter',
+    title: '🧙‍♂️ [방랑 상인] 보따리를 짊어진 신비한 노움 보물상',
+    tag: '특별 상인',
+    desc: '딸랑딸랑... 방울 소리와 함께 방랑 노움 상인이 모닥불을 피우고 희귀한 보물들을 늘어놓았습니다. "안녕 친구! 험난한 사냥터에서 만나 반갑군! 오늘만 특별 덤핑 가격으로 주지!"',
+    choices: [
+      {
+        text: '🎁 [봉인된 미지의 마법 상자 구매 (100G)] 무엇이 들었을까?',
+        action: 'buy_gnome_box'
+      },
+      {
+        text: '🧪 [특제 만병통치 비약 구매 (40G)] HP와 MP를 80% 즉시 회복한다.',
+        action: 'buy_gnome_potion'
+      },
+      {
+        text: '👋 [손을 흔들고 사냥터로 출발] 인사를 나누고 길을 떠난다.',
+        action: 'pass_gnome'
+      }
+    ]
+  }
+];
+
+// --- 모험 이벤트 화면 렌더링 ---
+function renderAdventureEvent(areaId){
+  ensurePlayerExtendedData();
+  const area = $('content-area');
+  const ev = ADVENTURE_EVENTS[rand(0, ADVENTURE_EVENTS.length - 1)];
+
+  // 도구 체크 (황금 나침반, 곡괭이 등)
+  let choices = [...ev.choices];
+  if(ev.toolCheck && player.inventory && player.inventory[ev.toolCheck.tool] > 0){
+    choices.unshift(ev.toolCheck.choice);
+  }
+
+  let choicesHtml = choices.map((c, idx) => {
+    const isTool = c.action.startsWith('tool_');
+    return `
+      <button class="adventure-choice-btn ${isTool ? 'tool-btn' : ''}" onclick="resolveAdventureChoice('${ev.id}', '${c.action}', '${areaId}')">
+        <span>${c.text}</span>
+        ${isTool ? '<span class="tag" style="background:#eab308;color:#000;font-weight:bold;">특수 도구</span>' : '<span>➡️</span>'}
+      </button>
+    `;
+  }).join('');
+
+  area.innerHTML = `
+    <div class="adventure-card ${ev.type}">
+      <div class="adventure-header">
+        <div class="adventure-title">${ev.title}</div>
+        <span class="tag">${ev.tag}</span>
+      </div>
+      <div class="adventure-desc">${ev.desc}</div>
+      <div class="adventure-choices">
+        ${choicesHtml}
+      </div>
+    </div>
+    <div class="back-row" style="margin-top:14px;"><button onclick="renderAreaSelect()">← 사냥터 목록으로</button></div>
+  `;
+}
+
+// --- 모험 선택지 결과 판정 및 처리 ---
+function resolveAdventureChoice(eventId, action, areaId){
+  ensurePlayerExtendedData();
+  const area = $('content-area');
+  const ev = ADVENTURE_EVENTS.find(e => e.id === eventId);
+  let resTitle = '';
+  let resMsg = '';
+  let startBoss = null;
+
+  // 1. 산적 기습 관련
+  if(action === 'fight_bandit_boss'){
+    resTitle = '⚔️ 산적 두목과의 결전!';
+    resMsg = '칼을 뽑아 기세 좋게 돌진하자, 거구의 산적 두목이 대검을 휘두르며 맞서옵니다!';
+    startBoss = { id:'bandit_boss', name:'산적 두목 발도르', emoji:'🦹⚔️', hp:320, maxHp:320, atk:42, expReward:350, goldReward:380, diaReward:2, boss:true };
+  } else if(action === 'shield_counter'){
+    const shield = player.armors ? player.armors.shield : null;
+    const def = totalDef();
+    if(shield || def >= 15){
+      resTitle = '🛡️ 완벽한 방어 및 진형 붕괴!';
+      resMsg = '단단한 방패로 산적들의 기습 도끼질을 튕겨내자, 산적들이 당황하여 흩어졌습니다! (+160 EXP, 골드 +100G 획득)';
+      player.exp += 160; player.gold += 100;
+    } else {
+      resTitle = '💥 방패 부족으로 인한 타격!';
+      resMsg = '방어구가 부족하여 산적들의 맹공을 막아내지 못하고 상처를 입었습니다! (-35 HP, +80 EXP)';
+      player.hp = Math.max(1, player.hp - 35); player.exp += 80;
+      triggerCombatFX(true);
+    }
+  } else if(action === 'bribe_escape'){
+    if(player.gold >= 60){
+      player.gold -= 60;
+      resTitle = '💰 금화 살포로 안전 탈출!';
+      resMsg = '바닥에 던져진 60골드를 줍느라 정신이 팔린 산적들을 뒤로하고 유유히 사냥터로 진입했습니다.';
+    } else {
+      resTitle = '💥 골드 부족으로 인한 분노 피격!';
+      resMsg = '던질 골드가 부족하여 분노한 산적들에게 얻어맞았습니다! (-40 HP)';
+      player.hp = Math.max(1, player.hp - 40);
+      triggerCombatFX(true);
+    }
+  } else if(action === 'tool_compass_ambush'){
+    resTitle = '🧭 황금 나침반의 역기습 대성공!';
+    resMsg = '황금 나침반으로 적의 매복 경로를 미리 감지하고 뒤를 찔러 산적단을 일망타진했습니다! (+280 EXP, 골드 +200G, 💎 다이아 +1 획득!)';
+    player.exp += 280; player.gold += 200; player.diamond = (player.diamond||0) + 1;
+    toast('황금 나침반 역기습 대성공! 다이아 +1');
+  }
+
+  // 2. 암살자 기습 관련
+  else if(action === 'dodge_counter'){
+    if(Math.random() < 0.65){
+      resTitle = '⚡ 환상적인 옆 구르기 회피!';
+      resMsg = '바람처럼 몸을 굴려 암살자의 비수를 아슬아슬하게 피하고 옆구리를 찔렀습니다! 암살자가 비명을 지르며 도망쳤습니다! (+200 EXP, 골드 +150G)';
+      player.exp += 200; player.gold += 150;
+    } else {
+      resTitle = '💥 회피 실패 및 스치는 상처!';
+      resMsg = '암살자의 칼끝이 어깨를 스쳐 깊은 상처를 입었습니다! (-45 HP, +60 EXP)';
+      player.hp = Math.max(1, player.hp - 45); player.exp += 60;
+      triggerCombatFX(true);
+    }
+  } else if(action === 'fight_assassin_boss'){
+    resTitle = '🗡️ 그림자 자객과의 일도양단 결투!';
+    resMsg = '칼과 칼이 부딪히며 불꽃이 튑니다! 은신을 푼 암살자가 차가운 눈빛으로 덤벼듭니다!';
+    startBoss = { id:'shadow_assassin', name:'그림자 자객 카인', emoji:'🥷🗡️', hp:260, maxHp:260, atk:52, expReward:380, goldReward:280, diaReward:3, dodge:0.25, boss:true };
+  } else if(action === 'smoke_escape'){
+    resTitle = '💨 짙은 연막탄 탈출!';
+    resMsg = '도주용 연막을 터뜨려 사방을 짙은 안개로 뒤덮고 안전하게 사냥터로 침투했습니다! (+100 EXP)';
+    player.exp += 100;
+  }
+
+  // 3. 야수 늑대 무리 관련
+  else if(action === 'torch_scare'){
+    resTitle = '🔥 거센 불길로 야수 격퇴!';
+    resMsg = '불길을 휘두르자 늑대들이 꼬리를 내리고 숲속으로 흩어졌습니다! (+180 EXP, 늑대 가죽 전리품 획득)';
+    player.exp += 180;
+    player.inventory['늑대의 털가죽'] = (player.inventory['늑대의 털가죽']||0) + 1;
+  } else if(action === 'fight_wolf_boss'){
+    resTitle = '🐺 흉포한 알파 울프의 포효!';
+    resMsg = '무리에서 가장 거대한 알파 울프가 거대한 송곳니를 드러내며 덮쳐옵니다!';
+    startBoss = { id:'alpha_wolf', name:'흉포한 알파 울프', emoji:'🐺👑', hp:280, maxHp:280, atk:38, expReward:300, goldReward:200, diaReward:1, boss:true };
+  } else if(action === 'feed_escape'){
+    if(player.inventory['야생 꿀'] > 0){
+      player.inventory['야생 꿀']--;
+      resTitle = '🍯 야생 꿀로 야수들의 시선 유인!';
+      resMsg = '달콤한 야생 꿀 한 병을 던져주자 늑대들이 꿀을 핥느라 정신이 팔렸습니다! 안전하게 통과했습니다.';
+    } else {
+      resTitle = '🍖 손에 든 물약을 던져주고 탈출!';
+      resMsg = '가지고 있던 보급품을 던져 늑대들의 주의를 돌리고 재빨리 빠져나왔습니다! (+60 EXP)';
+      player.exp += 60;
+    }
+  }
+
+  // 4. 강철 쇠덫 관련
+  else if(action === 'weapon_pry_trap'){
+    player.weaponDur = Math.max(0, (player.weaponDur || 100) - 2);
+    resTitle = '🗡️ 칼등으로 쇠덫 무력화 성공!';
+    resMsg = '무기 칼등을 틈새에 쑤셔 넣어 쇠덫의 용수철을 튕겨내고 무사히 탈출했습니다! (무기 내구도 -2, +140 EXP)';
+    player.exp += 140;
+  } else if(action === 'jump_trap'){
+    if(Math.random() < 0.60){
+      resTitle = '🤸 날렵한 공중 도약 회피!';
+      resMsg = '찰칵 소리가 나자마자 전광석화처럼 뛰어올라 쇠덫을 완벽히 피했습니다! (+180 EXP)';
+      player.exp += 180;
+    } else {
+      resTitle = '💥 콰지직! 발목 쇠덫에 피격!';
+      resMsg = '피하지 못하고 톱니에 발목이 찍혔습니다! 날카로운 통증이 온몸을 관통합니다! (-55 HP)';
+      player.hp = Math.max(1, player.hp - 55);
+      triggerCombatFX(true);
+    }
+  } else if(action === 'tool_compass_trap'){
+    resTitle = '🧭 황금 나침반의 사전 덫 탐지!';
+    resMsg = '황금 나침반이 강철 덫의 자성을 감지하고 경고하여 덫을 해체하고 고철을 획득했습니다! (+180 EXP, +100G)';
+    player.exp += 180; player.gold += 100;
+    toast('황금 나침반 효과로 함정 사전 해체!');
+  }
+
+  // 5. 거대 바위 관련
+  else if(action === 'dive_boulder'){
+    if(Math.random() < 0.70){
+      resTitle = '🏃 극적인 다이빙 회피 성공!';
+      resMsg = '굴러오는 바위를 피해 절벽 옆 덤불로 몸을 날렸습니다! 바위는 굉음을 내며 지나쳐갔습니다! (+160 EXP)';
+      player.exp += 160;
+    } else {
+      resTitle = '💥 바위 파편에 강타!';
+      resMsg = '바위가 깨지며 날아온 파편에 정통으로 맞아 큰 부상을 입었습니다! (-50 HP)';
+      player.hp = Math.max(1, player.hp - 50);
+      triggerCombatFX(true);
+    }
+  } else if(action === 'guard_boulder'){
+    const def = totalDef();
+    if(def >= 20){
+      resTitle = '🛡️ 강철 방패로 거대 바위 튕겨내기!';
+      resMsg = `높은 방어력(${def})으로 바위를 쳐내어 두 동강을 냈습니다! 바위 속에서 보석이 나왔습니다! (+220 EXP, 💎 다이아 +1)`;
+      player.exp += 220; player.diamond = (player.diamond||0) + 1;
+      toast('바위 격파! 다이아 +1');
+    } else {
+      resTitle = '💥 거대 바위의 충격에 압도!';
+      resMsg = '방어력이 부족하여 바위의 육중한 충격을 그대로 받아냈습니다! (-65 HP)';
+      player.hp = Math.max(1, player.hp - 65);
+      triggerCombatFX(true);
+    }
+  } else if(action === 'tool_pickaxe_boulder'){
+    resTitle = '⛏️ 미스릴 곡괭이로 바위 산산조각!';
+    resMsg = '미스릴 곡괭이로 굴러오는 바위의 급소를 강타하여 산산조각 내고 다량의 광석과 다이아를 채굴했습니다! (+250 EXP, +150G, 💎 다이아 +2)';
+    player.exp += 250; player.gold += 150; player.diamond = (player.diamond||0) + 2;
+    toast('미스릴 곡괭이 발동! 다이아 +2 획득');
+  }
+
+  // 6. 독 토템 석상 관련
+  else if(action === 'rush_poison'){
+    resTitle = '🧪 결사의 신속 돌파!';
+    resMsg = '숨을 참고 돌파했으나 약간의 독안개를 들이마셨습니다. 대신 석상 이마의 빛나는 보석을 떼어냈습니다! (-25 HP, +160 EXP, 💎 다이아 +1)';
+    player.hp = Math.max(1, player.hp - 25); player.exp += 160; player.diamond = (player.diamond||0) + 1;
+    triggerCombatFX(false);
+  } else if(action === 'cleanse_poison'){
+    if(player.mp >= 15){
+      player.mp -= 15;
+      resTitle = '🔮 신성한 마나로 독기 결계 정화!';
+      resMsg = '마법의 빛으로 저주 토템의 독안개를 완전히 정화했습니다! 정령의 축복을 받았습니다! (+220 EXP, 체력 +80 회복)';
+      player.hp = Math.min(player.maxHp, player.hp + 80); player.exp += 220;
+    } else {
+      resTitle = '💥 마나 부족으로 인한 피격!';
+      resMsg = '마나가 부족하여 정화에 실패하고 독가스에 노출되었습니다! (-35 HP)';
+      player.hp = Math.max(1, player.hp - 35);
+      triggerCombatFX(true);
+    }
+  } else if(action === 'bypass_poison'){
+    resTitle = '迂 안전한 우회로 통과';
+    resMsg = '시간은 조금 걸렸지만 독기 토템을 피해 안전하게 사냥터로 진입했습니다.';
+  }
+
+  // 7. 가시 구덩이 관련
+  else if(action === 'wall_jump'){
+    resTitle = '🧗 벽면 반동 도약 성공!';
+    resMsg = '떨어지는 찰나 벽을 강하게 박차고 구덩이 위로 날아올랐습니다! 환상적인 묘기였습니다! (+180 EXP)';
+    player.exp += 180;
+  } else if(action === 'armor_fall'){
+    resTitle = '🛡️ 갑옷으로 충격 흡수 착지!';
+    resMsg = '가시밭 바닥에 떨어졌으나 튼튼한 방어구 덕분에 급소를 지켜냈습니다! (-25 HP, 방어구 내구도 -2, +100 EXP)';
+    player.hp = Math.max(1, player.hp - 25); player.exp += 100;
+    if(player.armorDurs) Object.keys(player.armorDurs).forEach(k => player.armorDurs[k] = Math.max(0, player.armorDurs[k] - 2));
+  }
+
+  // 8. 부상당한 선배 모험가 관련
+  else if(action === 'heal_adventurer'){
+    const hasPotion = (player.inventory['소형 체력 물약'] > 0) ? '소형 체력 물약' : (player.inventory['중형 체력 물약'] > 0 ? '중형 체력 물약' : null);
+    if(hasPotion){
+      player.inventory[hasPotion]--;
+      resTitle = '💖 생명을 구한 따뜻한 모험가!';
+      resMsg = `부상당한 모험가에게 [${hasPotion}]을 건네 치료해주었습니다! 선배 모험가가 감사의 눈물을 흘리며 품속의 보물을 건넸습니다! (+350 EXP, 💎 다이아 +2, 골드 +200G)`;
+      player.exp += 350; player.gold += 200; player.diamond = (player.diamond||0) + 2;
+      toast('선배 모험가의 보답: 다이아 +2 획득!');
+    } else {
+      resTitle = '🩹 물약이 없어 응급처치로 대신!';
+      resMsg = '가방에 물약이 없어 소매를 찢어 지혈해주었습니다. 모험가가 진심으로 고마워하며 꿀팁을 전수했습니다! (+180 EXP)';
+      player.exp += 180;
+    }
+  } else if(action === 'first_aid_adventurer'){
+    resTitle = '🩹 응급처치와 동굴 호송';
+    resMsg = '모험가의 상처를 치료해주고 안전한 쉼터로 인도했습니다. 모험가의 명예와 경험치를 얻었습니다! (+200 EXP, +80G)';
+    player.exp += 200; player.gold += 80;
+  } else if(action === 'ignore_adventurer'){
+    resTitle = '🚶 냉정한 모험가의 길';
+    resMsg = '신음하는 모험가를 뒤로하고 사냥터로 걸음을 옮겼습니다.';
+  }
+
+  // 9. 고대 여신 제단 관련
+  else if(action === 'pray_shrine'){
+    if(player.gold >= 50){
+      player.gold -= 50;
+      player.activeBuffs = player.activeBuffs || {};
+      player.activeBuffs.wind_blessing = 20;
+      resTitle = '⛩️ 바람의 여신의 신성한 가호!';
+      resMsg = '제단에 50G를 바치자 따스한 바람의 가호가 깃들었습니다! (20회 전투 동안 도주율 100%, 회피율 +20% 상승!)';
+      toast('바람의 여신 가호 획득!');
+    } else {
+      resTitle = '🪙 바칠 골드가 부족합니다!';
+      resMsg = '제물로 바칠 골드가 부족하여 경건하게 기도만 올렸습니다. (+60 EXP)';
+      player.exp += 60;
+    }
+  } else if(action === 'absorb_shrine'){
+    player.mp = player.maxMp;
+    player.maxMp += 10;
+    resTitle = '🔮 제단의 신비로운 마력 흡수!';
+    resMsg = '제단의 영기를 전신으로 들이켜 MP가 완전 회복되었으며, 최대 MP가 영구히 +10 증가했습니다!';
+    toast('최대 MP +10 영구 상승!');
+  } else if(action === 'pass_shrine'){
+    resTitle = '🚶 제단을 뒤로하고 출발';
+    resMsg = '성스러운 제단에 묵념을 올리고 사냥터로 진입했습니다.';
+  }
+
+  // 10. 방랑 노움 상인 관련
+  else if(action === 'buy_gnome_box'){
+    if(player.gold >= 100){
+      player.gold -= 100;
+      const boxReward = rand(1, 3);
+      if(boxReward === 1){
+        player.diamond = (player.diamond||0) + 3;
+        resTitle = '🎁 대박! 마법 상자에서 다이아몬드 3개 출현!';
+        resMsg = '봉인된 상자를 열자 영롱한 빛을 내뿜는 다이아몬드 3개가 쏟아져 나왔습니다!';
+        toast('노움 상자 대박: 다이아 +3!');
+      } else if(boxReward === 2){
+        const heroRunes = ['atk_2', 'def_2', 'mag_2', 'luck_1'];
+        const rId = heroRunes[rand(0, heroRunes.length - 1)];
+        player.runeInventory = player.runeInventory || [];
+        player.runeInventory.push(rId);
+        resTitle = `🎁 마법 상자에서 [${RUNES[rId].name}] 획득!`;
+        resMsg = '노움의 상자 안에서 신비한 힘을 품은 희귀 룬을 발굴했습니다!';
+        toast(`희귀 룬 [${RUNES[rId].name}] 획득!`);
+      } else {
+        player.inventory['중형 체력 물약'] = (player.inventory['중형 체력 물약']||0) + 3;
+        player.inventory['마나 물약'] = (player.inventory['마나 물약']||0) + 2;
+        resTitle = '🎁 상자에서 고급 물약 세트 획득!';
+        resMsg = '중형 체력 물약 3병과 마나 물약 2병을 알차게 챙겼습니다!';
+      }
+    } else {
+      resTitle = '💰 골드가 부족합니다!';
+      resMsg = '100골드가 없어 아쉽게도 노움의 마법 상자를 사지 못했습니다.';
+    }
+  } else if(action === 'buy_gnome_potion'){
+    if(player.gold >= 40){
+      player.gold -= 40;
+      player.hp = Math.round(player.maxHp * 0.85);
+      player.mp = Math.round(player.maxMp * 0.85);
+      resTitle = '🧪 특제 만병통치 비약 복용!';
+      resMsg = '새콤달콤한 비약을 마시자마자 상처가 아물며 HP와 MP가 85%까지 차올랐습니다!';
+      toast('체력과 마나 85% 급속 회복!');
+    } else {
+      resTitle = '골드가 부족합니다.';
+      resMsg = '비약을 살 골드가 부족하여 빈손으로 지나쳤습니다.';
+    }
+  } else if(action === 'pass_gnome'){
+    resTitle = '👋 노움 상인에게 작별 인사';
+    resMsg = '친절한 노움에게 손을 흔들어주고 사냥터 깊숙이 전진했습니다.';
+  }
+
+  log(`🧭 <b>[모험 조우]</b> ${resTitle} — ${resMsg}`);
+  checkLevelUp();
+  refreshSidebar();
+  saveGame();
+
+  // 결과 화면 출력
+  area.innerHTML = `
+    <div class="adventure-card ${ev.type}">
+      <div class="adventure-header">
+        <div class="adventure-title">${resTitle}</div>
+      </div>
+      <div class="adventure-desc" style="font-size:14px;color:var(--parchment);">${resMsg}</div>
+      <div style="margin-top:14px;">
+        ${startBoss ? `
+          <button class="danger wide" onclick="startAmbushBossBattle('${startBoss.id}', '${startBoss.name}', '${startBoss.emoji}', ${startBoss.hp}, ${startBoss.atk}, ${startBoss.expReward}, ${startBoss.goldReward}, ${startBoss.diaReward}, ${startBoss.dodge||0})" style="padding:15px;font-size:15px;">
+            ⚔️ ${startBoss.name}와(과) 즉각 결투 개시!
+          </button>
+        ` : `
+          <button class="primary wide" onclick="proceedToMonsterBattle('${areaId}')" style="padding:15px;font-size:15px;">
+            ⚔️ 계속해서 사냥터 전진하기 ➡️
+          </button>
+        `}
+      </div>
+    </div>
+  `;
+}
+
+// --- 기습 보스와의 특수 결투 시작 ---
+function startAmbushBossBattle(id, name, emoji, hp, atk, expReward, goldReward, diaReward, dodge){
+  showLoading(()=>{
+    battle = {
+      enemy: {
+        id: id, name: name, emoji: emoji,
+        hp: hp, maxHp: hp, atk: atk,
+        expReward: expReward, goldReward: goldReward, diaReward: diaReward,
+        dodge: dodge || 0, boss: true, isAmbush: true
+      },
+      playerMiss: false, fled: false
+    };
+    clearLog();
+    log(`🚨 <b>[돌발 기습 전투 돌입!] ${emoji} ${name}</b>이(가) 살기를 뿜으며 공격을 개시했습니다!`);
+    renderBattle();
+  }, `${name}의 기습 공격에 맞서 무기를 겨누는 중...`);
+}
+
+// --- 일반 사냥터 몬스터 전투로 전진 ---
+function proceedToMonsterBattle(areaId){
+  const area = AREAS.find(a=>a.id===areaId) || AREAS[0];
+  let monsterId = area ? area.monsters[rand(0,area.monsters.length-1)] : 'slime';
+
+  // [할로윈 5일 한정 몬스터 스폰 로직]
+  if (isHalloweenEventActive()) {
+    if (areaId === 'halloween_forest') {
+      const halloweenPool = ['pumpkin_jack', 'witch_cat', 'spooky_ghost', 'vampire_bat', 'candy_mimic'];
+      monsterId = halloweenPool[rand(0, halloweenPool.length - 1)];
+    } else if (areaId === 'halloween_castle') {
+      const castlePool = ['haunted_armor', 'candy_mimic', 'reaper_phantom', 'pumpkin_king'];
+      monsterId = castlePool[rand(0, castlePool.length - 1)];
+    } else if (Math.random() < 0.25) {
+      const wildPool = ['pumpkin_jack', 'witch_cat', 'spooky_ghost', 'candy_mimic'];
+      monsterId = wildPool[rand(0, wildPool.length - 1)];
+      log('🎃 <b style="color:#ffaa33;">차원의 틈에서 할로윈 몬스터가 튀어나왔습니다!</b>');
+    }
+  }
+
+  startBattle(monsterId);
+}
+
+
+
+
+/* [환상RPG 메가 업데이트] 신규 시스템 & 데이터 엔진 */
+/* =========================================================
+   [환상RPG 메가 업데이트] 신규 시스템 & 데이터 엔진
+   ========================================================= */
+
+// --- 1. 신규 방어구 데이터 정의 ---
+const ARMORS = {
+  // 투구
+  leather_helm: { id:'leather_helm', type:'helmet', name:'가죽 투구', def:3, hp:20, price:80, reqLevel:1, desc:'가볍고 질긴 가죽 투구' },
+  steel_helm:   { id:'steel_helm',   type:'helmet', name:'강철 투구', def:8, hp:55, price:280, reqLevel:5, desc:'묵직한 강철로 머리를 보호하는 투구' },
+  lake_helm:    { id:'lake_helm',    type:'helmet', name:'호수의 물결 투구', def:16, hp:110, price:850, reqLevel:12, desc:'맑은 호수의 수호 정령이 깃든 투구' },
+  dragon_helm:  { id:'dragon_helm',  type:'helmet', name:'용린의 투구', def:35, hp:260, price:4500, reqLevel:30, desc:'투명드래곤의 비늘을 엮어 만든 전설의 투구' },
+
+  // 갑옷
+  cloth_armor:  { id:'cloth_armor',  type:'chest',  name:'모험가의 튜닉', def:5, hp:30, price:100, reqLevel:1, desc:'초보 모험가를 위한 튼튼한 천옷' },
+  plate_armor:  { id:'plate_armor',  type:'chest',  name:'강철 판금 갑옷', def:14, hp:90, price:420, reqLevel:6, desc:'단단한 강철 판금으로 벼린 갑옷' },
+  abyss_armor:  { id:'abyss_armor',  type:'chest',  name:'심연의 흑기사 갑옷', def:32, hp:220, price:2200, reqLevel:22, desc:'심연의 어둠으로 코팅된 견고한 갑옷' },
+  phoenix_armor:{ id:'phoenix_armor',type:'chest',  name:'불사조의 성갑', def:60, hp:450, price:9000, reqLevel:40, desc:'불사조의 깃털과 화염의 정수가 담긴 신화 갑옷' },
+
+  // 신발
+  leather_boots:{ id:'leather_boots',type:'boots',  name:'낡은 가죽 부츠', def:2, fleeBonus:0.05, price:60, reqLevel:1, desc:'발이 편안한 기본 부츠 (도주율 +5%)' },
+  wind_boots:   { id:'wind_boots',   type:'boots',  name:'바람의 도약 장화', def:7, fleeBonus:0.12, price:350, reqLevel:8, desc:'바람의 기운으로 발걸음이 가벼워지는 장화 (도주율 +12%)' },
+  hermes_boots: { id:'hermes_boots', type:'boots',  name:'신속의 헤르메스 신발', def:18, dodgeBonus:0.10, price:3200, reqLevel:28, desc:'적의 공격을 날렵하게 피하는 신발 (회피율 +10%)' },
+
+  // 방패
+  wood_shield:  { id:'wood_shield',  type:'shield', name:'나무 버클러', def:4, guardChance:0.15, price:75, reqLevel:1, desc:'가벼운 나무 방패 (가드확률 15%)' },
+  knight_shield:{ id:'knight_shield',type:'shield', name:'기사의 사자 방패', def:12, guardChance:0.25, price:550, reqLevel:10, desc:'사자의 문장이 새겨진 기사용 방패 (가드확률 25%)' },
+  aegis_shield: { id:'aegis_shield', type:'shield', name:'이지스의 성스러운 방패', def:28, guardChance:0.40, price:4800, reqLevel:32, desc:'모든 공격을 튕겨내는 신화의 방패 (가드확률 40%)' },
+};
+
+// --- 2. 신규 룬 데이터 정의 ---
+const RUNES = {
+  atk_1: { id:'atk_1', type:'attack',  name:'하급 공격의 룬', atk:12,  grade:'일반', desc:'공격력 +12 증가' },
+  atk_2: { id:'atk_2', type:'attack',  name:'중급 공격의 룬', atk:28,  grade:'희귀', desc:'공격력 +28 증가' },
+  atk_3: { id:'atk_3', type:'attack',  name:'상급 공격의 룬', atk:65,  grade:'영웅', desc:'공격력 +65 증가' },
+  def_1: { id:'def_1', type:'defense', name:'하급 방어의 룬', def:8,   hp:40,  grade:'일반', desc:'방어력 +8, HP +40 증가' },
+  def_2: { id:'def_2', type:'defense', name:'중급 방어의 룬', def:20,  hp:120, grade:'희귀', desc:'방어력 +20, HP +120 증가' },
+  def_3: { id:'def_3', type:'defense', name:'상급 방어의 룬', def:48,  hp:300, grade:'영웅', desc:'방어력 +48, HP +300 증가' },
+  mag_1: { id:'mag_1', type:'magic',   name:'하급 마력의 룬', mp:25,   grade:'일반', desc:'최대 MP +25 증가' },
+  mag_2: { id:'mag_2', type:'magic',   name:'중급 마력의 룬', mp:60,   grade:'희귀', desc:'최대 MP +60 증가' },
+  mag_3: { id:'mag_3', type:'magic',   name:'상급 마력의 룬', mp:150,  grade:'영웅', desc:'최대 MP +150 증가' },
+  luck_1:{ id:'luck_1',type:'fortune', name:'행운의 룬', crit:0.08, goldBonus:0.15, grade:'희귀', desc:'치명타율 +8%, 골드 획득 +15%' },
+  luck_2:{ id:'luck_2',type:'fortune', name:'대박 행운의 룬', crit:0.15, goldBonus:0.35, grade:'영웅', desc:'치명타율 +15%, 골드 획득 +35%' },
+};
+
+// --- 3. 로딩 팁 목록 ---
+const LOADING_TIPS = [
+  "Tip: 고립 던전에 들어가면 살아서 보스를 잡기 전까지 절대 나갈 수 없습니다!",
+  "Tip: 무기를 바꾸면 기존 무기의 강화 수치가 초기화되니 신중하게 교체하세요!",
+  "Tip: 꿀동산에서 여왕벌을 건드리면 독침으로 체력 1000이 단숨에 날아갑니다!",
+  "Tip: 로열젤리는 백디몬이 개당 1,000골드라는 거금에 매입합니다.",
+  "Tip: 사망 시 골드뿐만 아니라 가방의 소중한 아이템을 떨어뜨리니 체력 관리에 유의하세요!",
+  "Tip: 엘리트 몬스터는 황금빛 오라를 두르고 있으며 엄청난 경험치와 다이아를 드롭합니다.",
+  "Tip: 방어구를 강화하면 받는 피해를 획기적으로 줄일 수 있습니다.",
+  "Tip: 무기마다 고유한 치명타 확률과 치명타 데미지 배율이 존재합니다.",
+  "Tip: 투명드래곤을 토벌하면 회피율과 공격력이 대폭 상승하는 영구 가호를 얻습니다.",
+  "Tip: 장비 내구도가 0이 되면 공격력과 방어력이 반토막나니 문어에게 수리받으세요.",
+  "Tip: 룬을 제단에 장착하면 스탯이 비약적으로 강화됩니다.",
+  "Tip: 사냥터 갈림길 표지판의 힌트를 잘 읽으면 숨겨진 보물과 버프를 얻을 수 있습니다."
+];
+
+// --- 4. 2차 & 3차 전직 데이터 정의 ---
+const JOB_EVOLUTIONS = {
+  // 1차 -> 2차 (Lv.25) -> 3차 각성 (Lv.45)
+  '검사': {
+    tier2: { name:'소드 마스터', reqLevel:25, atkBonus:25, hpBonus:80, desc:'치명타율 45%로 극대화, [진·삼연참] 시전' },
+    tier3: { name:'신검무쌍', reqLevel:45, atkBonus:60, hpBonus:250, desc:'모든 공격이 방어력을 무시하는 일도양단 각성' }
+  },
+  '전사': {
+    tier2: { name:'워로드', reqLevel:25, atkBonus:20, hpBonus:150, desc:'피격 데미지 40% 반감 가드, [대지 분쇄]' },
+    tier3: { name:'불멸의 수호신', reqLevel:45, atkBonus:45, hpBonus:400, desc:'체력이 0이 되어도 1회 50% 부활하는 불사' }
+  },
+  '마법사': {
+    tier2: { name:'대마도사', reqLevel:25, atkBonus:35, mpBonus:80, desc:'광역 초고화력 [메테오 스트라이크], MP 순환' },
+    tier3: { name:'엘레멘탈 로드', reqLevel:45, atkBonus:75, mpBonus:200, desc:'원소의 정점에 도달하여 마나 소모 절반 감소' }
+  },
+  '도적': {
+    tier2: { name:'섀도우 어쌔신', reqLevel:25, atkBonus:30, hpBonus:60, desc:'회피율 +25%, 치명타 데미지 3배 [암살의 일격]' },
+    tier3: { name:'심연의 그림자군주', reqLevel:45, atkBonus:65, hpBonus:200, desc:'도주율 100% 및 1턴간 완전 무적 은신' }
+  },
+  '천사': {
+    tier2: { name:'세라프 아크엔젤', reqLevel:25, atkBonus:20, hpBonus:120, desc:'매 턴마다 파티원 및 자신 HP 50 지속 치유' },
+    tier3: { name:'천상 대천사장', reqLevel:45, atkBonus:50, hpBonus:350, desc:'절대적인 성역을 전개하여 아군 데미지 대폭 증폭' }
+  },
+  '흑마법사': {
+    tier2: { name:'소울 리퍼', reqLevel:25, atkBonus:35, hpBonus:70, desc:'적에게 입힌 데미지의 50%를 체력으로 흡혈' },
+    tier3: { name:'죽음의 심연군주', reqLevel:45, atkBonus:70, hpBonus:220, desc:'적의 영혼을 수확하여 영구 공격력 흡수' }
+  },
+  '사냥꾼': {
+    tier2: { name:'스나이퍼 엘리트', reqLevel:25, atkBonus:28, hpBonus:75, desc:'명중률 100% 고정, 보스에게 2.5배 특효' },
+    tier3: { name:'용린의 저격신', reqLevel:45, atkBonus:65, hpBonus:220, desc:'어떤 방어도 뚫어버리는 관통 화살' }
+  },
+  '환장자': {
+    tier2: { name:'광기폭주자', reqLevel:25, atkBonus:45, hpBonus:90, desc:'체력 50% 이하부터 공격력 3배 증폭' },
+    tier3: { name:'환장대마왕', reqLevel:45, atkBonus:90, hpBonus:280, desc:'3연타 공격 및 딸피 시 무적 돌진' }
+  }
+};
+
+// --- 5. 레이드 보스 데이터 정의 ---
+const RAID_BOSSES = {
+  daily: {
+    id:'daily_behemoth', name:'화염의 거수 베히모스', emoji:'🔥🦬',
+    hp:35000, maxHp:35000, atk:65,
+    rewardGold:800, rewardExp:1200, rewardDia:5,
+    desc:'[일간 레이드] 매일 1회 도전 가능한 화염의 거대 맹수'
+  },
+  weekly: {
+    id:'weekly_hydra', name:'심연의 9두 히드라', emoji:'🐉🌊',
+    hp:95000, maxHp:95000, atk:115,
+    rewardGold:3500, rewardExp:4500, rewardDia:20,
+    desc:'[주간 레이드] 주 1회 토벌 가능한 심연의 바다 괴수 (고급 룬 드롭)'
+  },
+  monthly: {
+    id:'monthly_dragon', name:'고대 파괴신 암흑룡', emoji:'☠️🐲',
+    hp:250000, maxHp:250000, atk:180,
+    rewardGold:15000, rewardExp:18000, rewardDia:60,
+    desc:'[월간 레이드] 전 세계 플레이어가 힘을 합치는 초거대 월드 보스'
+  },
+  guild: {
+    id:'guild_colossus', name:'길드 결전 거신 골렘', emoji:'🗿⚡',
+    hp:180000, maxHp:180000, atk:130,
+    rewardGold:8000, rewardExp:10000, rewardDia:30,
+    desc:'[길드 레이드] 길드원 전용 협동 토벌 레이드'
+  }
+};
+
+// --- 6. 던전 데이터 정의 (강화 / 고립[못 나감] / 히든) ---
+const DUNGEONS = {
+  enhance: {
+    id:'dungeon_enhance', name:'대장장이의 강화 던전',
+    floors: 5, reqLevel: 8,
+    monsters: ['goblin', 'skeleton', 'mud_turtle', 'magma_golem', 'haunted_armor'],
+    rewardDesc: '장비 강화석, 제련석, 골드 대량 획득',
+    isolated: false
+  },
+  isolated: {
+    id:'dungeon_isolated', name:'진입금지: 피의 고립 던전 [도주 불가]',
+    floors: 4, reqLevel: 15,
+    monsters: ['dark_knight', 'vampire_bat', 'reaper_phantom', 'pumpkin_king'],
+    rewardDesc: '⚠️ 주의: 입장하면 보스를 잡거나 전멸하기 전까지 탈출할 수 없습니다!',
+    isolated: true // 못 나감!
+  },
+  hidden: {
+    id:'dungeon_hidden', name:'차원의 균열: 히든 던전',
+    floors: 3, reqLevel: 25,
+    monsters: ['dragon', 'seraph', 'sarian'],
+    rewardDesc: '초호화 다이아몬드, 전설 룬, 신화 장비 재료 드롭',
+    isolated: false
+  }
+};
+
+// --- 7. 다이아몬드 상점 아이템 목록 ---
+const DIAMOND_SHOP_ITEMS = [
+  { id:'dia_protect_stone', name:'장비 파괴 방지권', dia:15, desc:'강화 실패 시 무기/방어구가 깨지는 것을 1회 방지합니다.' },
+  { id:'dia_enhance_charm', name:'행운의 황금 부적', dia:25, desc:'다음 1회 장비 강화 성공 확률을 +20% 증가시킵니다.' },
+  { id:'dia_repair_all',    name:'영구 내구도 복원 키트', dia:10, desc:'모든 장비의 내구도를 100% 완전 수리합니다.' },
+  { id:'dia_rune_box',      name:'찬란한 영웅 룬 상자', dia:30, desc:'영웅 등급 룬을 무작위로 1개 획득합니다.' },
+  { id:'dia_god_weapon',    name:'천상계의 신검 티켓', dia:100, desc:'백투명강아지도 놀라는 궁극의 신화 무기 교환권' }
+];
+
+// --- 8. 갈림길 미니게임 데이터 ---
+const MAP_MINIGAMES = [
+  {
+    hint: "바위에 새겨진 오래된 낙서: '푸른 이끼가 낀 길에 행운이 있고, 해골 표식엔 터렛 함정이 도사린다.'",
+    leftName: "푸른 이끼 낀 샛길", rightName: "해골 표식의 바위길",
+    correct: "left",
+    successMsg: "기분 좋은 바람이 불며 숨겨진 보물 상자를 발견했다! (+150 EXP, +120 G)",
+    failMsg: "콰앙!! 화살 터렛 함정이 작동하여 온몸에 화살을 맞았습니다! (-60 HP)"
+  },
+  {
+    hint: "안개 속 나무 푯말: '바람이 불어오는 오른쪽 계곡길은 안전하나, 왼쪽 늪길은 맹독 함정이다.'",
+    leftName: "안개 낀 검은 늪길", rightName: "바람 부는 계곡 바위길",
+    correct: "right",
+    successMsg: "상쾌한 샘물을 마시고 기운을 차렸다! (+200 EXP, 체력 +100 회복)",
+    failMsg: "푹! 독 안개 웅덩이에 빠져 지독한 중독 피해를 입었습니다! (-80 HP)"
+  }
+];
+
+/* =========================================================
+   [환상RPG 메가 업데이트] 게임 엔진 및 UI 렌더러 로직
+   ========================================================= */
+
+// --- 로딩 오버레이 띄우기 함수 ---
+function showLoading(callback, customTip){
+  let overlay = document.getElementById('loading-overlay');
+  if(!overlay){
+    overlay = document.createElement('div');
+    overlay.id = 'loading-overlay';
+    overlay.innerHTML = `
+      <div class="loading-spinner"></div>
+      <div class="loading-tip-box">
+        <div class="loading-tip-title">⚡ 로딩 중 · 모험가의 꿀팁 ⚡</div>
+        <div class="loading-tip-text" id="loading-tip-content">환상의 세계로 이동하는 중...</div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+  }
+  const tipText = customTip || LOADING_TIPS[Math.floor(Math.random()*LOADING_TIPS.length)];
+  document.getElementById('loading-tip-content').textContent = tipText;
+  overlay.classList.add('active');
+
+  setTimeout(()=>{
+    overlay.classList.remove('active');
+    if(typeof callback === 'function') callback();
+  }, 380);
+}
+
+// --- 플레이어 기본 데이터 안전 확장 ---
+function ensurePlayerExtendedData(){
+  if(!player) return;
+  player.diamond = player.diamond !== undefined ? player.diamond : 10; // 기본 다이아 10개
+  player.weaponDur = player.weaponDur !== undefined ? player.weaponDur : 100;
+  player.weaponMaxDur = player.weaponMaxDur || 100;
+  
+  player.armors = player.armors || {
+    helmet: 'leather_helm',
+    chest: 'cloth_armor',
+    boots: 'leather_boots',
+    shield: 'wood_shield'
+  };
+  player.armorEnhances = player.armorEnhances || { helmet:0, chest:0, boots:0, shield:0 };
+  player.armorDurs = player.armorDurs || { helmet:100, chest:100, boots:100, shield:100 };
+  
+  player.runes = player.runes || { attack:null, defense:null, magic:null, fortune:null };
+  player.runeInventory = player.runeInventory || [];
+  player.friends = player.friends || [];
+  player.guild = player.guild || null;
+  player.jobTier = player.jobTier || 1;
+  player.royalJellyAttempts = player.royalJellyAttempts || 0;
+  player.stats = player.stats || { pkWins:0, pkLosses:0, raidsCleared:0, dungeonsCleared:0 };
+  player.activeBuffs = player.activeBuffs || {};
+}
+
+// --- 총 방어력 계산 ---
+function totalDef(){
+  if(!player) return 0;
+  ensurePlayerExtendedData();
+  let def = 0;
+  if(player && player.armors){
+    Object.keys(player.armors).forEach(slot=>{
+      const armorId = player.armors[slot];
+      if(armorId && ARMORS[armorId]){
+        const baseDef = ARMORS[armorId].def || 0;
+        const enh = (player.armorEnhances && player.armorEnhances[slot]) || 0;
+        const dur = (player.armorDurs && player.armorDurs[slot]) !== undefined ? player.armorDurs[slot] : 100;
+        const durPenalty = (dur <= 0) ? 0.5 : 1.0; // 내구도 0이면 성능 50%
+        def += Math.round((baseDef + enh * 3) * durPenalty);
+      }
+    });
+  }
+  // 룬 보너스
+  if(player.runes && player.runes.defense && RUNES[player.runes.defense]){
+    def += RUNES[player.runes.defense].def || 0;
+  }
+  return def;
+}
+
+// --- 무기 치명타율 & 치명타 데미지 배율 계산 ---
+function getWeaponCritStats(){
+  if(!player) return { rate: 0.08, mult: 1.8 };
+  ensurePlayerExtendedData();
+  const w = weaponOf(player);
+  let rate = 0.08; // 기본 8%
+  let mult = 1.8;  // 기본 1.8배
+
+  if(w.id === 'iron_dagger') { rate += 0.12; mult += 0.3; }
+  else if(w.id === 'moonlight_blade') { rate += 0.15; mult += 0.5; }
+  else if(w.id === 'abyss_katana') { rate += 0.20; mult += 0.7; }
+  else if(w.id.includes('fused')) { rate += 0.10; mult += 0.4; }
+
+  if(player.job === '검사') rate += 0.15;
+  if(player.job === '사냥꾼') rate += 0.10;
+  if(player.runes && player.runes.fortune && RUNES[player.runes.fortune]){
+    rate += (RUNES[player.runes.fortune].crit || 0);
+  }
+  if(player.activeBuffs && player.activeBuffs.transparent_dragon > 0){
+    rate += 0.15;
+  }
+  return { rate: Math.min(0.85, rate), mult: mult };
+}
+
+// --- 무기 교체 시 강화 수치 초기화 함수 ---
+function changeWeaponWithReset(weaponId){
+  if(player.weapon !== weaponId){
+    if(player.weaponEnhance && player.weaponEnhance > 0){
+      toast(`⚠️ [강화 초기화] 무기를 교체하여 기존 +${player.weaponEnhance}강이 초기화되었습니다!`);
+      log(`⚠️ <b>[무기 교체]</b> 새로운 무기를 장착함에 따라 기존 무기의 강화 수치가 0으로 초기화되었습니다.`);
+    }
+    player.weapon = weaponId;
+    player.weaponEnhance = 0;
+    player.weaponDur = 100;
+  }
+}
+
+// --- 내구도 소모 함수 ---
+function tickDurability(){
+  if(!player) return;
+  ensurePlayerExtendedData();
+  if(player.weaponDur > 0){
+    player.weaponDur = Math.max(0, player.weaponDur - 1);
+    if(player.weaponDur === 0){
+      toast('⚠️ 무기의 내구도가 모두 소진되었습니다! 공격력이 50%로 감소합니다. 문어에게 수리받으세요.');
+    }
+  }
+  if(player.armorDurs){
+    Object.keys(player.armorDurs).forEach(s=>{
+      if(player.armorDurs[s] > 0){
+        player.armorDurs[s] = Math.max(0, player.armorDurs[s] - 1);
+      }
+    });
+  }
+}
+
+// --- 모든 장비 내구도 완전 수리 함수 ---
+function repairAllEquipment(){
+  ensurePlayerExtendedData();
+  const cost = 80;
+  if(player.gold < cost){ toast(`골드가 부족합니다! (필요: ${cost}G)`); return; }
+  player.gold -= cost;
+  player.weaponDur = player.weaponMaxDur || 100;
+  if(player.armorDurs){
+    Object.keys(player.armorDurs).forEach(s=>{ player.armorDurs[s] = 100; });
+  }
+  toast('🛠️ [수리 완료] 모든 무기와 방어구의 내구도가 100% 완전 수리되었습니다!');
+  log('🛠️ <b>[문어의 대장간]</b> 문어의 정성 어린 손길로 모든 장비의 내구도를 완전히 복구했다!');
+  refreshSidebar();
+  saveGame();
+  renderBlacksmith('repair');
+}
+
+// --- 화면 쉐이크 & 크리티컬 섬광 효과 ---
+function triggerCombatFX(isCrit){
+  const appEl = document.getElementById('app');
+  if(!appEl) return;
+  appEl.classList.remove('screen-shake', 'crit-flash');
+  void appEl.offsetWidth; // re-flow
+  if(isCrit){
+    appEl.classList.add('crit-flash');
+  }
+  appEl.classList.add('screen-shake');
+  setTimeout(()=>{
+    appEl.classList.remove('screen-shake', 'crit-flash');
+  }, 350);
+}
+
+// --- 꿀동산 채집 (로열젤리 20% 너프, 시도당 비용증가, 여왕벌 독침 1000 데미지) ---
+function gatherHoneyUpgraded(type){
+  ensurePlayerExtendedData();
+  if(type === 'wild'){
+    if(player.gold < 10){ toast('골드가 부족합니다. (필요: 10G)'); return; }
+    player.gold -= 10;
+    if(Math.random() < 0.75){
+      player.inventory['야생 꿀'] = (player.inventory['야생 꿀'] || 0) + 1;
+      toast('야생 꿀 채집 성공! (+1)');
+      log('🍯 달콤한 야생 꿀을 1병 채집했다.');
+    } else {
+      toast('벌들이 쫓아와 채집에 실패했습니다.');
+      log('🐝 꿀벌들에게 쫓겨 빈손으로 도망쳤다.');
+    }
+  } else if(type === 'royal'){
+    const attempts = player.royalJellyAttempts || 0;
+    const cost = 100 + (attempts * 50); // 시도할수록 비용 상승!
+    if(player.gold < cost){ toast(`골드가 부족합니다. (현재 시도 비용: ${cost}G)`); return; }
+    player.gold -= cost;
+    player.royalJellyAttempts = attempts + 1;
+
+    // 로열젤리 획득 확률 너프: 20%
+    if(Math.random() < 0.20){
+      player.inventory['로열 젤리'] = (player.inventory['로열 젤리'] || 0) + 1;
+      toast('👑 [대박!] 귀중한 로열 젤리 채집 성공! (+1)');
+      log(`👑 <b>[꿀동산 대박!]</b> 황금빛 찬란한 <b>로열 젤리</b>를 채집했다! (백디몬에게 1,000골드에 판매 가능)`);
+    } else {
+      // 실패 시 35% 확률로 여왕벌 분노 기습 독침 1000 피해!
+      if(Math.random() < 0.35){
+        player.hp = Math.max(1, player.hp - 1000);
+        triggerCombatFX(true);
+        toast('☠️ [여왕벌의 분노!] 치명적인 독침에 쏘였습니다! (-1000 HP)');
+        log(`☠️ <b>[여왕벌의 맹독침!!]</b> 콰아아악! 여왕벌이 둥지를 침범한 대가로 치명적인 침을 꽂아 <b>체력 1,000이 날아갔습니다!</b>`);
+      } else {
+        toast(`로열 젤리 채집 실패! (누적 시도: ${player.royalJellyAttempts}회)`);
+        log(`🐝 벌떼의 맹렬한 저항으로 로열 젤리 채집에 실패했다. (다음 도전 비용 증가: ${100 + player.royalJellyAttempts * 50}G)`);
+      }
+    }
+  }
+  refreshSidebar();
+  saveGame();
+  renderHoneyGarden();
+}
+
+// --- 백디몬 잡화점: 로열젤리 1000골드 전량 판매 ---
+function sellAllRoyalJelly(){
+  ensurePlayerExtendedData();
+  const count = player.inventory['로열 젤리'] || 0;
+  if(count <= 0){ toast('가방에 판매할 로열 젤리가 없습니다.'); return; }
+  const totalEarned = count * 1000;
+  player.gold += totalEarned;
+  delete player.inventory['로열 젤리'];
+  toast(`👑 로열 젤리 ${count}개를 모두 판매하여 ${totalEarned} 골드를 획득했습니다!`);
+  log(`💰 <b>[백디몬 잡화상]</b> 로열 젤리 ${count}개를 개당 1,000골드에 넘겨 총 <b>+${totalEarned} 골드</b>를 받았다!`);
+  refreshSidebar();
+  saveGame();
+  renderItemShop();
+}
+
+// --- 사망 시 데스 패널티: 골드 손실 + 가방 아이템 유실(떨구기) ---
+function onPlayerDownWithItemDrop(){
+  ensurePlayerExtendedData();
+  log(`😵 정신을 잃고 쓰러졌다... ${OPERATOR_NAME}이(가) 차가운 눈으로 바라본다.`);
+  
+  // 1. 골드 25% 손실
+  const lostGold = Math.round(player.gold * 0.25);
+  player.gold = Math.max(0, player.gold - lostGold);
+
+  // 2. 가방 아이템 떨구기 (1~3개 무작위 유실)
+  const ownedItems = Object.keys(player.inventory || {}).filter(k => player.inventory[k] > 0);
+  let droppedNames = [];
+  if(ownedItems.length > 0){
+    const dropCount = Math.min(ownedItems.length, rand(1, 3));
+    for(let i=0; i<dropCount; i++){
+      const picked = ownedItems[rand(0, ownedItems.length - 1)];
+      player.inventory[picked]--;
+      if(player.inventory[picked] <= 0) delete player.inventory[picked];
+      droppedNames.push(picked);
+    }
+  }
+
+  player.hp = Math.round(player.maxHp * 0.4);
+  player.mp = Math.round(player.maxMp * 0.4);
+  if(battle) battle.fled = true;
+
+  let dropMsg = droppedNames.length > 0 ? `떨어뜨린 아이템: [${droppedNames.join(', ')}]` : '다행히 가방의 아이템은 무사합니다.';
+  log(`💀 <b>[사망 패널티]</b> 골드 ${lostGold}G를 잃어버렸으며, ${dropMsg}`);
+  toast(`사망했습니다... 골드 -${lostGold}G 및 소지 아이템 유실!`);
+
+  refreshSidebar();
+  saveGame();
+  setTimeout(()=>renderTown(), 200);
+}
+
+// --- 갈림길 미니게임 렌더러 ---
+function renderMiniGamePath(gameIdx){
+  const game = MAP_MINIGAMES[gameIdx || 0];
+  const area = $('content-area');
+  area.innerHTML = `
+    <h3 style="margin-top:0;color:var(--gold-bright);">🧭 사냥터 갈림길 미니게임</h3>
+    <div style="background:var(--bg-deep);border:1px solid var(--gold);padding:14px;border-radius:6px;margin-bottom:14px;">
+      <h4 style="margin:0 0 6px 0;color:var(--gold-bright);">📜 길목 바위에 적힌 은밀한 힌트</h4>
+      <p style="margin:0;font-size:13.5px;color:var(--parchment);line-height:1.6;">${game.hint}</p>
+    </div>
+    <p class="flavor">어느 방향 길로 진입하시겠습니까? 올바른 길을 선택하면 보너스를 얻지만, 틀리면 함정에 걸립니다!</p>
+    <div class="choice-btn-grid">
+      <button class="choice-btn primary" onclick="resolveMiniGame('${game.correct}', 'left', ${gameIdx})">⬅️ 왼쪽: ${game.leftName}</button>
+      <button class="choice-btn primary" onclick="resolveMiniGame('${game.correct}', 'right', ${gameIdx})">➡️ 오른쪽: ${game.rightName}</button>
+    </div>
+    <div class="back-row"><button onclick="renderAreaSelect()">← 사냥터 목록으로</button></div>
+  `;
+}
+
+function resolveMiniGame(correct, choice, gameIdx){
+  const game = MAP_MINIGAMES[gameIdx];
+  if(choice === correct){
+    toast('🎉 올바른 길을 찾았습니다! 보너스 획득!');
+    log(`✨ <b>[갈림길 성공]</b> ${game.successMsg}`);
+    player.exp += 150;
+    player.gold += 120;
+  } else {
+    triggerCombatFX(true);
+    toast('💥 으악! 함정에 걸렸습니다!');
+    log(`💥 <b>[갈림길 함정 피격]</b> ${game.failMsg}`);
+    player.hp = Math.max(1, player.hp - 60);
+  }
+  refreshSidebar();
+  saveGame();
+  setTimeout(()=>{ renderAreaSelect(); }, 400);
+}
+
+/* =========================================================
+   [환상RPG 메가 업데이트] 신규 UI 렌더러 (장비, 레이드, 던전, 룬, 길드, 친구, PK, 다이아)
+   ========================================================= */
+
+// --- 1. 장비실 (방어구 장착 및 관리) ---
+function renderEquipment(){
+  ensurePlayerExtendedData();
+  const area = $('content-area');
+  const slots = [
+    { key:'helmet', label:'🪖 투구' },
+    { key:'chest',  label:'🥋 갑옷' },
+    { key:'boots',  label:'👢 신발' },
+    { key:'shield', label:'🛡️ 방패' }
+  ];
+
+  let slotsHtml = slots.map(s => {
+    const armorId = player.armors[s.key];
+    const item = ARMORS[armorId] || { name:'미장착', def:0, hp:0 };
+    const enh = player.armorEnhances[s.key] || 0;
+    const dur = player.armorDurs[s.key] !== undefined ? player.armorDurs[s.key] : 100;
+
+    return `
+      <div class="equip-slot">
+        <div>
+          <div style="font-size:12px;color:var(--dim);">${s.label}</div>
+          <div class="equip-slot-name">${item.name} ${enh > 0 ? `<span style="color:#f59e0b;">+${enh}</span>`:''}</div>
+          <div class="equip-slot-stat">방어력 +${item.def + enh*3} | HP +${item.hp||0} | 내구도: ${dur}%</div>
+        </div>
+        <div>
+          <button onclick="openArmorShop('${s.key}')">변경/구매</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  area.innerHTML = `
+    <h3 style="margin-top:0;color:var(--gold-bright);">🛡️ 모험가 장비실 (방어구 관리)</h3>
+    <p class="flavor">현재 총 방어력: <b style="color:#38bdf8;">${totalDef()}</b> (피격 데미지 대폭 감소) | 무기 내구도: <b>${player.weaponDur || 100}%</b></p>
+    <div class="equip-grid">${slotsHtml}</div>
+    <div style="margin-top:12px;">
+      <button class="primary wide" onclick="repairAllEquipment()">🛠️ 문어에게 모든 장비 수리 받기 (80G)</button>
+    </div>
+    <div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>
+  `;
+}
+
+function openArmorShop(slotKey){
+  const area = $('content-area');
+  const available = Object.values(ARMORS).filter(a => a.type === slotKey);
+
+  let listHtml = available.map(a => {
+    const isEquipped = player.armors[slotKey] === a.id;
+    const locked = player.level < a.reqLevel;
+
+    return `
+      <div class="shop-item">
+        <div class="info">
+          <b>${a.name}</b> <span class="tag">방어 +${a.def}</span> ${a.hp?`<span class="tag">HP +${a.hp}</span>`:''} ${locked?`<span class="tag">Lv.${a.reqLevel} 필요</span>`:''}
+          <div class="desc">${a.desc} · ${a.price} 골드</div>
+        </div>
+        <div>
+          ${isEquipped ? '<button disabled>장착중</button>' : `
+            <button ${locked?'disabled':''} onclick="buyAndEquipArmor('${a.id}', '${slotKey}')">구매 및 장착</button>
+          `}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  area.innerHTML = `
+    <h3 style="margin-top:0;color:var(--gold-bright);">🛍️ 방어구 상점</h3>
+    <div class="btn-grid cols1">${listHtml}</div>
+    <div class="back-row" style="margin-top:14px;"><button onclick="renderEquipment()">← 장비실로</button></div>
+  `;
+}
+
+function buyAndEquipArmor(armorId, slotKey){
+  const armor = ARMORS[armorId];
+  if(!armor) return;
+  if(player.gold < armor.price){ toast('골드가 부족합니다.'); return; }
+  player.gold -= armor.price;
+  player.armors[slotKey] = armorId;
+  player.armorEnhances[slotKey] = 0; // 새 방어구 장착 시 강화 0
+  player.armorDurs[slotKey] = 100;
+  toast(`[${armor.name}]을(를) 구매하여 장착했습니다!`);
+  log(`🛡️ <b>[장비 장착]</b> 새로운 방어구 <b>${armor.name}</b>을(를) 착용하여 방어력이 증가했다!`);
+  refreshSidebar();
+  saveGame();
+  renderEquipment();
+}
+
+// --- 2. 레이드 성채 (일간/주간/월간/길드/필드) ---
+function renderRaids(){
+  ensurePlayerExtendedData();
+  const area = $('content-area');
+  
+  let html = `
+    <h3 style="margin-top:0;color:var(--gold-bright);">🏰 레이드 성채 (일간 · 주간 · 월간 · 길드)</h3>
+    <p class="flavor">전 세계 플레이어와 함께 거대한 보스를 토벌하고 다이아몬드와 전설 보상을 쟁취하세요!</p>
+  `;
+
+  Object.values(RAID_BOSSES).forEach(boss => {
+    html += `
+      <div style="background:var(--bg-deep);border:1px solid var(--blood);padding:14px;border-radius:6px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <b style="font-size:15px;color:var(--blood-bright);">${boss.emoji} ${boss.name}</b>
+          <span class="tag diamond-badge">💎 다이아 +${boss.rewardDia}</span>
+        </div>
+        <p class="flavor" style="margin:4px 0 8px 0;font-size:12px;">${boss.desc}</p>
+        <div style="font-size:12.5px;color:var(--parchment);margin-bottom:6px;">
+          체력: <b>${boss.hp} / ${boss.maxHp}</b> | 공격력: <b>${boss.atk}</b> | 보상: <b>${boss.rewardGold}G / ${boss.rewardExp} EXP</b>
+        </div>
+        <div class="bar-bg" style="margin-bottom:10px;"><div class="bar-fill bar-hp" style="width:${(boss.hp/boss.maxHp)*100}%;"></div></div>
+        <button class="primary wide" onclick="startRaidBattle('${boss.id}')">⚔️ 레이드 보스 토벌 돌입</button>
+      </div>
+    `;
+  });
+
+    const baseJob = Object.keys(JOB_EVOLUTIONS).find(k => (player.job && player.job.includes(k))) || '검사';
+  const evo = JOB_EVOLUTIONS[baseJob];
+  if(evo){
+    html += `
+      <div style="margin-top:20px;border-top:2px dashed var(--gold);padding-top:16px;">
+        <h4 style="color:var(--gold-bright);margin:0 0 8px 0;">⚡ 2차 및 3차 각성 전직소</h4>
+        <p class="flavor">현재 계열: <b>[${baseJob}]</b> 계열 | 레벨에 도달하면 상위 직업으로 각성하여 폭발적인 스탯을 획득합니다.</p>
+        
+        <div class="shop-item" style="margin-bottom:8px;">
+          <div class="info">
+            <b style="color:#38bdf8;">🔥 2차 전직: ${evo.tier2.name}</b> <span class="tag">Lv.${evo.tier2.reqLevel}+ 필요</span>
+            <div class="desc">${evo.tier2.desc} (공격력 +${evo.tier2.atkBonus}, HP +${evo.tier2.hpBonus})</div>
+          </div>
+          <div>
+            <button class="primary" ${(player.level>=evo.tier2.reqLevel && (player.jobTier||1) < 2) ? '' : 'disabled'} onclick="evolveJob(2, '${evo.tier2.name}')">
+              ${(player.jobTier||1) >= 2 ? '전직 완료' : '2차 전직하기'}
+            </button>
+          </div>
+        </div>
+
+        <div class="shop-item">
+          <div class="info">
+            <b style="color:#f59e0b;">👑 3차 각성: ${evo.tier3.name}</b> <span class="tag">Lv.${evo.tier3.reqLevel}+ 필요</span>
+            <div class="desc">${evo.tier3.desc} (공격력 +${evo.tier3.atkBonus}, HP +${evo.tier3.hpBonus})</div>
+          </div>
+          <div>
+            <button class="primary" ${(player.level>=evo.tier3.reqLevel && (player.jobTier||1) < 3) ? '' : 'disabled'} onclick="evolveJob(3, '${evo.tier3.name}')">
+              ${(player.jobTier||1) >= 3 ? '각성 완료' : '3차 각성하기'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  html += `<div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>`;
+  area.innerHTML = html;
+}
+
+function startRaidBattle(bossKey){
+  const boss = Object.values(RAID_BOSSES).find(b => b.id === bossKey) || RAID_BOSSES.daily;
+  showLoading(()=>{
+    battle = {
+      enemy: {
+        id: boss.id, name: boss.name, emoji: boss.emoji,
+        hp: boss.hp, maxHp: boss.maxHp, atk: boss.atk,
+        expReward: boss.rewardExp, goldReward: boss.rewardGold, diaReward: boss.rewardDia,
+        boss: true, isRaid: true
+      },
+      playerMiss: false, fled: false
+    };
+    clearLog();
+    log(`🚨 <b>[레이드 경보!] ${boss.emoji} ${boss.name}</b>이(가) 포효하며 강림했다!`);
+    renderBattle();
+  }, `레이드 보스 [${boss.name}]의 위압적인 기운을 느끼며 진입하는 중...`);
+}
+
+// --- 3. 고대의 던전 (강화 던전 · 고립 던전 [못 나감] · 히든 던전) ---
+function renderDungeons(){
+  ensurePlayerExtendedData();
+  const area = $('content-area');
+  
+  let html = `
+    <h3 style="margin-top:0;color:var(--gold-bright);">🗝️ 고대의 던전 (강화 · 고립 · 히든)</h3>
+    <p class="flavor">극한의 위험이 도사리는 특수 던전입니다. 준비를 철저히 하고 진입하세요.</p>
+  `;
+
+  Object.values(DUNGEONS).forEach(d => {
+    const isLocked = player.level < d.reqLevel;
+    const isIso = d.isolated;
+
+    html += `
+      <div style="background:var(--bg-deep);border:1px solid ${isIso?'#ef4444':'var(--line)'};padding:14px;border-radius:6px;margin-bottom:12px;${isIso?'box-shadow:0 0 15px rgba(239,68,68,0.25);':''}">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <b style="font-size:15px;color:${isIso?'#f87171':'var(--gold-bright)'};">${d.name}</b>
+          <span class="tag">${d.floors}개 층 구성 · Lv.${d.reqLevel}+</span>
+        </div>
+        <p class="flavor" style="margin:4px 0 8px 0;font-size:12px;${isIso?'color:#fca5a5;':''}">${d.rewardDesc}</p>
+        <button class="${isIso?'danger':'primary'} wide" ${isLocked?'disabled':''} onclick="enterDungeon('${d.id}')">
+          ${isIso?'☠️ 피의 고립 던전 입장 (도주 불가!)':'🗝️ 던전 탐험 시작'}
+        </button>
+      </div>
+    `;
+  });
+
+    const baseJob = Object.keys(JOB_EVOLUTIONS).find(k => (player.job && player.job.includes(k))) || '검사';
+  const evo = JOB_EVOLUTIONS[baseJob];
+  if(evo){
+    html += `
+      <div style="margin-top:20px;border-top:2px dashed var(--gold);padding-top:16px;">
+        <h4 style="color:var(--gold-bright);margin:0 0 8px 0;">⚡ 2차 및 3차 각성 전직소</h4>
+        <p class="flavor">현재 계열: <b>[${baseJob}]</b> 계열 | 레벨에 도달하면 상위 직업으로 각성하여 폭발적인 스탯을 획득합니다.</p>
+        
+        <div class="shop-item" style="margin-bottom:8px;">
+          <div class="info">
+            <b style="color:#38bdf8;">🔥 2차 전직: ${evo.tier2.name}</b> <span class="tag">Lv.${evo.tier2.reqLevel}+ 필요</span>
+            <div class="desc">${evo.tier2.desc} (공격력 +${evo.tier2.atkBonus}, HP +${evo.tier2.hpBonus})</div>
+          </div>
+          <div>
+            <button class="primary" ${(player.level>=evo.tier2.reqLevel && (player.jobTier||1) < 2) ? '' : 'disabled'} onclick="evolveJob(2, '${evo.tier2.name}')">
+              ${(player.jobTier||1) >= 2 ? '전직 완료' : '2차 전직하기'}
+            </button>
+          </div>
+        </div>
+
+        <div class="shop-item">
+          <div class="info">
+            <b style="color:#f59e0b;">👑 3차 각성: ${evo.tier3.name}</b> <span class="tag">Lv.${evo.tier3.reqLevel}+ 필요</span>
+            <div class="desc">${evo.tier3.desc} (공격력 +${evo.tier3.atkBonus}, HP +${evo.tier3.hpBonus})</div>
+          </div>
+          <div>
+            <button class="primary" ${(player.level>=evo.tier3.reqLevel && (player.jobTier||1) < 3) ? '' : 'disabled'} onclick="evolveJob(3, '${evo.tier3.name}')">
+              ${(player.jobTier||1) >= 3 ? '각성 완료' : '3차 각성하기'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  html += `<div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>`;
+  area.innerHTML = html;
+}
+
+let dungeonState = null;
+
+function enterDungeon(dungeonId){
+  const d = Object.values(DUNGEONS).find(x => x.id === dungeonId);
+  if(!d) return;
+
+  if(d.isolated){
+    if(!confirm("⚠️ [경고: 고립 던전]\n이곳에 입장하면 보스를 쓰러뜨리거나 전멸하기 전까지 절대 도주하거나 마을로 돌아갈 수 없습니다!\n정말 도전하시겠습니까?")){
+      return;
+    }
+  }
+
+  showLoading(()=>{
+    dungeonState = {
+      dungeon: d,
+      floor: 1,
+      maxFloor: d.floors
+    };
+    if(d.isolated){
+      document.querySelector('.frame').classList.add('isolated-dungeon-frame');
+    }
+    spawnDungeonFloor();
+  }, d.isolated ? "고립 던전의 육중한 철문이 닫히며 퇴로가 완전히 차단되었습니다!" : `${d.name}으로 발을 내딛는 중...`);
+}
+
+function spawnDungeonFloor(){
+  if(!dungeonState) return;
+  const d = dungeonState.dungeon;
+  const floor = dungeonState.floor;
+  const isBossFloor = (floor === dungeonState.maxFloor);
+
+  const monsterPool = d.monsters;
+  const mId = isBossFloor ? monsterPool[monsterPool.length - 1] : monsterPool[rand(0, monsterPool.length - 2)];
+  
+  startBattle(mId);
+  log(`🚩 <b>[${d.name}] ${floor}층</b>에 진입했습니다! ${isBossFloor?'<b style="color:#ef4444;">[보스 방 출현!]</b>':''}`);
+}
+
+// --- 4. 룬 제단 (장착 & 3개 합성) ---
+function renderRunes(){
+  ensurePlayerExtendedData();
+  const area = $('content-area');
+  
+  const slots = [
+    { key:'attack',  label:'🔴 공격 룬' },
+    { key:'defense', label:'🔵 방어 룬' },
+    { key:'magic',   label:'🟣 마력 룬' },
+    { key:'fortune', label:'🟡 행운 룬' }
+  ];
+
+  let slotsHtml = slots.map(s => {
+    const runeId = player.runes[s.key];
+    const rune = RUNES[runeId];
+    return `
+      <div class="rune-slot ${rune?'equipped':''}">
+        <div style="font-weight:bold;color:var(--parchment);">${s.label}</div>
+        <div style="margin:4px 0;color:${rune?'#c084fc':'var(--dim)'};">${rune ? rune.name : '비어있음'}</div>
+        <div style="font-size:11px;color:var(--dim);">${rune ? rune.desc : '-'}</div>
+        ${rune ? `<button onclick="unequipRune('${s.key}')" style="margin-top:6px;font-size:11px;padding:3px 6px;">해제</button>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  // 룬 인벤토리
+  const inventoryHtml = (player.runeInventory.length === 0) 
+    ? '<p class="flavor">보유 중인 룬이 없습니다. 레이드와 던전에서 룬을 획득하세요!</p>'
+    : player.runeInventory.map((rId, idx) => {
+        const r = RUNES[rId] || { name:'알 수 없는 룬', desc:'' };
+        return `
+          <div class="shop-item">
+            <div class="info"><b>${r.name}</b> <span class="tag">${r.grade}</span><div class="desc">${r.desc}</div></div>
+            <div><button onclick="equipRune('${rId}', ${idx})">장착</button></div>
+          </div>
+        `;
+      }).join('');
+
+  area.innerHTML = `
+    <h3 style="margin-top:0;color:var(--gold-bright);">🔮 신비의 룬 제단 (장착 & 합성)</h3>
+    <p class="flavor">룬을 슬롯에 장착하여 숨겨진 잠재 스탯을 개방하세요! (하위 룬 3개로 상위 룬 합성 가능)</p>
+    <div class="rune-grid">${slotsHtml}</div>
+    <div style="margin-bottom:12px;">
+      <button class="primary wide" onclick="fuseRunes()">✨ 보유 룬 3개 합성하여 상급 룬 제작 (비용: 150G)</button>
+    </div>
+    <h4 style="color:var(--parchment);margin:14px 0 8px;">📦 보유 룬 보관함</h4>
+    <div class="btn-grid cols1">${inventoryHtml}</div>
+    <div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>
+  `;
+}
+
+function equipRune(runeId, invIdx){
+  const r = RUNES[runeId];
+  if(!r) return;
+  player.runes[r.type] = runeId;
+  player.runeInventory.splice(invIdx, 1);
+  toast(`[${r.name}]을(를) 룬 슬롯에 장착했습니다!`);
+  refreshSidebar();
+  saveGame();
+  renderRunes();
+}
+
+function unequipRune(slotType){
+  const runeId = player.runes[slotType];
+  if(!runeId) return;
+  player.runeInventory.push(runeId);
+  player.runes[slotType] = null;
+  toast('룬을 해제하여 보관함에 넣었습니다.');
+  refreshSidebar();
+  saveGame();
+  renderRunes();
+}
+
+function fuseRunes(){
+  if(player.runeInventory.length < 3){
+    toast('합성하려면 보관함에 룬이 3개 이상 필요합니다!');
+    return;
+  }
+  if(player.gold < 150){ toast('골드가 부족합니다! (필요: 150G)'); return; }
+  player.gold -= 150;
+  player.runeInventory.splice(0, 3); // 3개 소모
+
+  const advancedPool = ['atk_2', 'def_2', 'mag_2', 'luck_1', 'atk_3', 'def_3'];
+  const rewardRune = advancedPool[rand(0, advancedPool.length - 1)];
+  player.runeInventory.push(rewardRune);
+
+  toast(`🎉 [룬 합성 성공!] 새로운 [${RUNES[rewardRune].name}]을 획득했습니다!`);
+  log(`🔮 <b>[룬 제단]</b> 신비한 마력이 소용돌이치며 상위 룬 <b>[${RUNES[rewardRune].name}]</b> 합성에 성공했다!`);
+  refreshSidebar();
+  saveGame();
+  renderRunes();
+}
+
+// --- 5. 길드 시스템 ---
+function renderGuild(){
+  ensurePlayerExtendedData();
+  const area = $('content-area');
+  
+  if(!player.guild){
+    area.innerHTML = `
+      <h3 style="margin-top:0;color:var(--gold-bright);">🏛️ 모험가 길드 본부</h3>
+      <p class="flavor">길드에 가입하거나 창설하여 길드 버프(공격력 +10%, EXP +15%, 골드 +15%)와 길드 레이드에 참여하세요!</p>
+      <div style="background:var(--bg-deep);border:1px solid var(--line);padding:14px;border-radius:6px;margin-bottom:14px;">
+        <h4 style="margin:0 0 8px 0;color:var(--gold-bright);">✨ 새 길드 창설하기</h4>
+        <p style="font-size:12.5px;color:var(--dim);margin:0 0 10px 0;">창설 비용: 3,000 골드 또는 50 다이아몬드</p>
+        <button class="primary" onclick="createGuildPrompt()">🏛️ 3,000G로 길드 창설</button>
+      </div>
+      <div class="back-row"><button onclick="renderTown()">← 마을로</button></div>
+    `;
+  } else {
+    area.innerHTML = `
+      <h3 style="margin-top:0;color:var(--gold-bright);">🏛️ [${player.guild}] 길드 회관</h3>
+      <div style="background:var(--bg-deep);border:1px solid var(--gold);padding:14px;border-radius:6px;margin-bottom:14px;">
+        <h4 style="margin:0 0 6px 0;color:var(--gold-bright);">🌟 활성화된 길드 버프</h4>
+        <div style="font-size:13px;color:#a3e635;line-height:1.6;">
+          ● 모든 공격력 +10% 증폭<br>
+          ● 사냥 획득 경험치 +15% 보너스<br>
+          ● 사냥 획득 골드 +15% 보너스
+        </div>
+      </div>
+      <div class="btn-grid">
+        <button class="primary" onclick="startRaidBattle('guild_colossus')">🗿 길드 결전 레이드 출진</button>
+        <button class="danger" onclick="leaveGuild()">🚪 길드 탈퇴</button>
+      </div>
+      <div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>
+    `;
+  }
+}
+
+function createGuildPrompt(){
+  const gName = prompt('창설할 길드 이름을 입력하세요:', '');
+  if(!gName || !gName.trim()) return;
+  if(player.gold < 3000){ toast('골드가 부족합니다! (필요: 3,000G)'); return; }
+  player.gold -= 3000;
+  player.guild = gName.trim();
+  toast(`[${player.guild}] 길드가 성공적으로 창설되었습니다!`);
+  log(`🏛️ <b>[길드 창설]</b> <b>[${player.guild}]</b> 길드의 깃발을 높이 올렸다!`);
+  refreshSidebar();
+  saveGame();
+  renderGuild();
+}
+
+function leaveGuild(){
+  if(!confirm('정말 길드를 탈퇴하시겠습니까? 길드 버프가 사라집니다.')) return;
+  player.guild = null;
+  toast('길드에서 탈퇴했습니다.');
+  refreshSidebar();
+  saveGame();
+  renderGuild();
+}
+
+// --- 6. 친구 추가 시스템 ---
+function renderFriends(){
+  ensurePlayerExtendedData();
+  const area = $('content-area');
+
+  let listHtml = (player.friends.length === 0)
+    ? '<p class="flavor">등록된 친구가 없습니다. 친선 모험가의 닉네임을 추가해보세요!</p>'
+    : player.friends.map((fName, idx) => `
+        <div class="shop-item">
+          <div class="info"><b>👤 ${fName}</b><div class="desc">온라인 친선 모험가</div></div>
+          <div>
+            <button onclick="sendFriendGift('${fName}')">🎁 선물 보내기 (30G)</button>
+            <button class="danger" onclick="removeFriend(${idx})">삭제</button>
+          </div>
+        </div>
+      `).join('');
+
+  area.innerHTML = `
+    <h3 style="margin-top:0;color:var(--gold-bright);">👥 친선 모험가 명부 (친구 관리)</h3>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <input type="text" id="friend-add-input" placeholder="친구 닉네임 입력" style="flex:1;">
+      <button class="primary" onclick="addFriend()">➕ 친구 추가</button>
+    </div>
+    <div class="btn-grid cols1">${listHtml}</div>
+    <div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>
+  `;
+}
+
+function addFriend(){
+  const input = $('friend-add-input');
+  if(!input || !input.value.trim()) return;
+  const name = input.value.trim();
+  if(name === player.nickname){ toast('자기 자신은 친구로 추가할 수 없습니다.'); return; }
+  if(player.friends.includes(name)){ toast('이미 친구 목록에 등록되어 있습니다.'); return; }
+  player.friends.push(name);
+  toast(`[${name}] 모험가를 친구 목록에 추가했습니다!`);
+  input.value = '';
+  saveGame();
+  renderFriends();
+}
+
+function removeFriend(idx){
+  player.friends.splice(idx, 1);
+  toast('친구를 명부에서 삭제했습니다.');
+  saveGame();
+  renderFriends();
+}
+
+function sendFriendGift(friendName){
+  if(player.gold < 30){ toast('선물을 보낼 골드가 부족합니다. (30G)'); return; }
+  player.gold -= 30;
+  toast(`[${friendName}]님에게 활력 물약과 응원 메시지를 보냈습니다!`);
+  log(`🎁 <b>[친구 선물]</b> <b>${friendName}</b>님에게 따뜻한 선물과 응원을 전했다.`);
+  refreshSidebar();
+  saveGame();
+}
+
+// --- 7. 영웅의 콜로세움 (1:1 PK 결투장) ---
+function renderColosseumPK(){
+  ensurePlayerExtendedData();
+  const area = $('content-area');
+  
+  const opponents = [
+    { name:'검투사 바르카스', level: Math.max(1, player.level - 2), hp: player.maxHp * 0.9, atk: Math.round(totalAtk()*0.85) },
+    { name:'그림자 자객 렌',   level: player.level, hp: player.maxHp, atk: Math.round(totalAtk()*1.0) },
+    { name:'무패의 챔피언 아서', level: player.level + 3, hp: player.maxHp * 1.3, atk: Math.round(totalAtk()*1.2) }
+  ];
+
+  let oppHtml = opponents.map(op => `
+    <div class="shop-item">
+      <div class="info">
+        <b style="color:#f87171;">⚔️ ${op.name}</b> <span class="tag">Lv.${op.level}</span>
+        <div class="desc">HP: ${Math.round(op.hp)} | 예상 공격력: ${op.atk}</div>
+      </div>
+      <div>
+        <button class="danger" onclick="startPKDuel('${op.name}', ${op.level}, ${op.hp}, ${op.atk})">결투 신청</button>
+      </div>
+    </div>
+  `).join('');
+
+  area.innerHTML = `
+    <h3 style="margin-top:0;color:var(--gold-bright);">⚔️ 영웅의 콜로세움 (1:1 PK 결투장)</h3>
+    <p class="flavor">전적: <b>${player.stats.pkWins}승 ${player.stats.pkLosses}패</b> | 승리 시 명예와 다이아몬드(💎)를 획득합니다!</p>
+    <div class="btn-grid cols1">${oppHtml}</div>
+    <div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>
+  `;
+}
+
+function startPKDuel(name, lvl, hp, atk){
+  showLoading(()=>{
+    battle = {
+      enemy: {
+        id:'pk_champion', name: `[챔피언] ${name}`, emoji:'🤺',
+        hp: Math.round(hp), maxHp: Math.round(hp), atk: Math.round(atk),
+        expReward: lvl * 30, goldReward: lvl * 40, diaReward: 3,
+        boss: true, isPK: true
+      },
+      playerMiss: false, fled: false
+    };
+    clearLog();
+    log(`⚔️ <b>[콜로세움 결투 시작!] ${name}</b>(와)과 피 튀기는 1:1 결투에 돌입했다!`);
+    renderBattle();
+  }, "콜로세움 함성 소리가 울려 퍼지는 결투장으로 입장 중...");
+}
+
+// --- 8. 다이아몬드 프리미엄 상점 ---
+function renderDiamondShop(){
+  ensurePlayerExtendedData();
+  const area = $('content-area');
+
+  let itemsHtml = DIAMOND_SHOP_ITEMS.map(it => `
+    <div class="shop-item">
+      <div class="info">
+        <b style="color:#38bdf8;">${it.name}</b> <span class="tag diamond-badge">💎 ${it.dia}</span>
+        <div class="desc">${it.desc}</div>
+      </div>
+      <div>
+        <button class="primary" ${player.diamond >= it.dia ? '' : 'disabled'} onclick="buyDiamondItem('${it.id}')">구매하기</button>
+      </div>
+    </div>
+  `).join('');
+
+  area.innerHTML = `
+    <h3 style="margin-top:0;color:var(--gold-bright);">💎 프리미엄 다이아 상점</h3>
+    <p class="flavor">보유 다이아몬드: <b class="diamond-badge">💎 ${player.diamond}</b>개 | 레이드, 결투, 업적으로 획득 가능합니다.</p>
+    <div class="btn-grid cols1">${itemsHtml}</div>
+    <div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>
+  `;
+}
+
+function buyDiamondItem(itemId){
+  const it = DIAMOND_SHOP_ITEMS.find(x => x.id === itemId);
+  if(!it) return;
+  if(player.diamond < it.dia){ toast('다이아몬드가 부족합니다!'); return; }
+  player.diamond -= it.dia;
+
+  if(it.id === 'dia_repair_all'){
+    player.weaponDur = 100;
+    if(player.armorDurs) Object.keys(player.armorDurs).forEach(k => player.armorDurs[k] = 100);
+    toast('모든 장비 내구도가 100% 완전 복원되었습니다!');
+  } else if(it.id === 'dia_rune_box'){
+    const heroRunes = ['atk_3', 'def_3', 'mag_3', 'luck_2'];
+    const rewarded = heroRunes[rand(0, heroRunes.length - 1)];
+    player.runeInventory.push(rewarded);
+    toast(`찬란한 영웅 룬 [${RUNES[rewarded].name}]을 획득했습니다!`);
+  } else {
+    player.inventory[it.name] = (player.inventory[it.name] || 0) + 1;
+    toast(`[${it.name}]을(를) 구매했습니다!`);
+  }
+  refreshSidebar();
+  saveGame();
+  renderDiamondShop();
+}
+
+
+/* =========================================================
+   [대장간 기능 도구 합성 & 방어구 강화 & 직업 각성 엔진]
+   ========================================================= */
+
+const TOOL_RECIPES = [
+  {
+    id: 'tool_compass', name: '🧭 황금 나침반',
+    materials: [{ name: '철광석', count: 2 }, { name: '돋보기', count: 1 }],
+    goldCost: 180,
+    desc: '사냥터 진입 시 갈림길 표지판의 힌트를 꿰뚫어 보며 함정을 회피합니다.'
+  },
+  {
+    id: 'tool_pickaxe', name: '⛏️ 미스릴 채광 곡괭이',
+    materials: [{ name: '강철 파편', count: 3 }, { name: '단단한 합금', count: 1 }],
+    goldCost: 250,
+    desc: '사냥 승리 시 30% 확률로 강화석과 반짝이는 다이아몬드를 추가 채굴합니다.'
+  },
+  {
+    id: 'tool_glass', name: '🔍 탐정의 마력 돋보기',
+    materials: [{ name: '마법 시약', count: 2 }, { name: '유리 조각', count: 1 }],
+    goldCost: 200,
+    desc: '탐험 중 숨겨진 보물 상자와 히든 던전 통로를 발견할 확률이 비약적으로 증가합니다.'
+  },
+  {
+    id: 'tool_rod', name: '🎣 마법의 물결 낚싯대',
+    materials: [{ name: '호수의 물방울', count: 2 }, { name: '거미줄', count: 2 }],
+    goldCost: 150,
+    desc: '호수 사냥터에서 전투 승리 시 신비로운 심해 보물을 낚아 올립니다.'
+  }
+];
+
+function fuseTool(toolId){
+  ensurePlayerExtendedData();
+  const recipe = TOOL_RECIPES.find(t => t.id === toolId);
+  if(!recipe) return;
+  if(player.gold < recipe.goldCost){ toast(`골드가 부족합니다! (필요: ${recipe.goldCost}G)`); return; }
+  
+  for(const m of recipe.materials){
+    if((player.inventory[m.name] || 0) < m.count){
+      toast(`재료 [${m.name}]이(가) 부족합니다! (필요: ${m.count}개)`);
+      return;
+    }
+  }
+  for(const m of recipe.materials){
+    player.inventory[m.name] -= m.count;
+    if(player.inventory[m.name] <= 0) delete player.inventory[m.name];
+  }
+  player.gold -= recipe.goldCost;
+  player.inventory[recipe.name] = (player.inventory[recipe.name] || 0) + 1;
+  toast(`🎉 [도구 합성 성공!] "${recipe.name}"을(를) 제작했습니다!`);
+  log(`🧰 <b>[문어의 대장간]</b> 문어의 능숙한 손놀림으로 특수 기능 도구 <b>[${recipe.name}]</b>을(를) 완성했다!`);
+  refreshSidebar();
+  saveGame();
+  renderBlacksmith('tool_fuse');
+}
+
+function enhanceArmor(slotKey){
+  ensurePlayerExtendedData();
+  const armorId = player.armors[slotKey];
+  if(!armorId || !ARMORS[armorId]){ toast('해당 부위에 장착된 방어구가 없습니다!'); return; }
+  const armor = ARMORS[armorId];
+  const curEnh = player.armorEnhances[slotKey] || 0;
+  if(curEnh >= 12){ toast('최대 강화 수치(+12강)에 도달했습니다!'); return; }
+
+  const cost = Math.round((armor.price * 0.2) + (curEnh * 40) + 30);
+  if(player.gold < cost){ toast(`골드가 부족합니다! (필요: ${cost}G)`); return; }
+  player.gold -= cost;
+
+  const successRates = [95, 85, 75, 65, 55, 45, 35, 28, 20, 15, 10, 5];
+  let rate = successRates[curEnh] !== undefined ? successRates[curEnh] : 5;
+  if(player.inventory['행운의 황금 부적'] > 0){
+    player.inventory['행운의 황금 부적']--;
+    rate += 20;
+    toast('행운의 황금 부적 효과로 성공 확률 +20% 증가!');
+  }
+
+  const roll = rand(1, 100);
+  if(roll <= rate){
+    player.armorEnhances[slotKey] = curEnh + 1;
+    toast(`🎉 [방어구 강화 성공!] ${armor.name} +${curEnh + 1}강 달성! (방어력 +3)`);
+    log(`🛡️ <b>[문어의 대장간]</b> 문어가 철판을 정교하게 두드려 <b>${armor.name}</b>을(를) <b>+${curEnh + 1}강</b>으로 강화했다!`);
+  } else {
+    const breakRoll = rand(1, 100);
+    if(curEnh >= 3 && breakRoll <= 10){
+      if(player.inventory['장비 파괴 방지권'] > 0){
+        player.inventory['장비 파괴 방지권']--;
+        toast('🛡️ [파괴 방지 발동!] 장비 파괴 방지권이 소모되어 방어구가 파괴되지 않았습니다!');
+        log('🛡️ <b>[대장간 보호]</b> 장비 파괴 방지권이 산산조각 나며 방어구의 파괴를 막아냈다!');
+      } else {
+        player.armorEnhances[slotKey] = 0;
+        player.armorDurs[slotKey] = 0;
+        toast(`💥 [방어구 파괴!!] 강화 실패로 ${armor.name}의 강화가 0으로 깨지고 내구도가 0이 되었습니다!`);
+        log(`💥 <b>[대장간 대참사]</b> 콰지직!! 문어의 힘조절 실패로 <b>${armor.name}</b>의 강화가 완전히 깨졌다!`);
+      }
+    } else {
+      toast(`강화 실패... (+${curEnh}강 유지)`);
+      log(`🐙 <b>[대장간 실패]</b> 아쉽게도 ${armor.name} 강화에 실패했다.`);
+    }
+  }
+  refreshSidebar();
+  saveGame();
+  renderBlacksmith('armor_enhance');
+}
+
+function evolveJob(tier, jobTargetName){
+  ensurePlayerExtendedData();
+  const reqLvl = tier === 2 ? 25 : 45;
+  if(player.level < reqLvl){
+    toast(`레벨 ${reqLvl} 이상만 ${tier}차 전직할 수 있습니다! (현재 Lv.${player.level})`);
+    return;
+  }
+  const prevJob = player.job;
+  player.job = jobTargetName;
+  player.jobTier = tier;
+  if(tier === 2){
+    player.baseAtk += 25;
+    player.maxHp += 100;
+    player.maxMp += 50;
+  } else if(tier === 3){
+    player.baseAtk += 60;
+    player.maxHp += 300;
+    player.maxMp += 150;
+  }
+  player.hp = player.maxHp;
+  player.mp = player.maxMp;
+  toast(`🎉 [${tier}차 전직 성공!] "${jobTargetName}"(으)로 각성했습니다!`);
+  log(`🎓✨ <b>[직업 각성!] ${prevJob}</b>의 한계를 돌파하여 <b>${tier}차 각성 직업 [${jobTargetName}]</b>(으)로 다시 태어났다!`);
+  refreshSidebar();
+  saveGame();
+  renderJobAcademy();
+}
+
+
 let battle = null; // 현재 전투 상태
 let saveVersion = "new";
 
@@ -1125,10 +3687,26 @@ function toast(msg){
 function weaponOf(player){ return WEAPONS.find(w=>w.id===player.weapon); }
 function weaponOf(player){ return WEAPONS.find(w=>w.id===player.weapon) || WEAPONS[0]; }
 function totalAtk(){
+  if(!player) return 0;
+  ensurePlayerExtendedData();
   const w = weaponOf(player);
   const enh = player.weaponEnhance || 0;
   const enhBonus = Math.round(w.atk * (enh * 0.18));
-  return player.baseAtk + w.atk + enhBonus;
+  let atk = player.baseAtk + w.atk + enhBonus;
+
+  if(player.weaponDur !== undefined && player.weaponDur <= 0){
+    atk = Math.round(atk * 0.5);
+  }
+  if(player.runes && player.runes.attack && RUNES[player.runes.attack]){
+    atk += (RUNES[player.runes.attack].atk || 0);
+  }
+  if(player.guild){
+    atk = Math.round(atk * 1.10);
+  }
+  if(player.activeBuffs && player.activeBuffs.transparent_dragon > 0){
+    atk = Math.round(atk * 1.20);
+  }
+  return atk;
 }
 function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
 function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
@@ -1667,6 +4245,7 @@ const ITEM_FUSION_RECIPES = [
 let currentBlacksmithTab = 'enhance';
 
 function renderBlacksmith(tab){
+  ensurePlayerExtendedData();
   currentBlacksmithTab = tab || currentBlacksmithTab || 'enhance';
   const area = $('content-area');
   const w = weaponOf(player);
@@ -1674,12 +4253,15 @@ function renderBlacksmith(tab){
 
   let html = `
     <h3 style="margin-top:0;color:var(--gold-bright);">🐙 문어의 신비한 대장간</h3>
-    <p class="flavor">"뽀글뽀글... 여덟 개의 다리로 두드리지 못할 쇠는 없다네! 무기 강화든, 무기 합성이든, 온갖 잡화 조합이든 내게 맡기게나!"</p>
+    <p class="flavor">"뽀글뽀글... 여덟 개의 다리로 두드리지 못할 쇠는 없다네! 무기/방어구 강화든, 무기/잡화/도구 조합이든, 내구도 수리든 내게 맡기게나!"</p>
 
-    <div class="blacksmith-tabs">
+    <div class="blacksmith-tabs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">
       <button class="blacksmith-tab ${currentBlacksmithTab==='enhance'?'active':''}" onclick="renderBlacksmith('enhance')">🔨 무기 강화</button>
+      <button class="blacksmith-tab ${currentBlacksmithTab==='armor_enhance'?'active':''}" onclick="renderBlacksmith('armor_enhance')">🛡️ 방어구 강화</button>
       <button class="blacksmith-tab ${currentBlacksmithTab==='weapon_fuse'?'active':''}" onclick="renderBlacksmith('weapon_fuse')">⚔️ 무기 합성</button>
       <button class="blacksmith-tab ${currentBlacksmithTab==='item_fuse'?'active':''}" onclick="renderBlacksmith('item_fuse')">🧪 잡화 합성</button>
+      <button class="blacksmith-tab ${currentBlacksmithTab==='tool_fuse'?'active':''}" onclick="renderBlacksmith('tool_fuse')">🧰 기능 도구 합성</button>
+      <button class="blacksmith-tab ${currentBlacksmithTab==='repair'?'active':''}" onclick="renderBlacksmith('repair')">🔧 내구도 수리</button>
     </div>
   `;
 
@@ -1687,7 +4269,7 @@ function renderBlacksmith(tab){
   if(currentBlacksmithTab === 'enhance'){
     const successRates = [95, 85, 75, 65, 55, 45, 38, 30, 24, 18, 14, 10, 7, 5, 3];
     const rate = successRates[enh] !== undefined ? successRates[enh] : 3;
-    const breakRate = (enh >= 3) ? 10 : 0; // 강화 성공할수록 낮아지고 깨질 확률 10%
+    const breakRate = (enh >= 3) ? 10 : 0;
     const cost = Math.round((w.price * 0.15) + (enh * 60) + 40);
     const bonusAtk = Math.round(w.atk * (enh * 0.18));
     const nextBonusAtk = Math.round(w.atk * ((enh + 1) * 0.18));
@@ -1715,20 +4297,54 @@ function renderBlacksmith(tab){
           </button>
         </div>
         <p class="flavor" style="margin-top:10px;font-size:11.5px;color:#fca5a5;">
-          ※ +3강 이상부터는 강화 실패 시 <b>10% 확률로 무기가 산산조각 깨져 파괴</b>될 수 있으니 주의하세요!
+          ※ +3강 이상부터는 강화 실패 시 <b>10% 확률로 무기가 산산조각 깨져 파괴</b>될 수 있으니 주의하세요! (다이아 상점의 [장비 파괴 방지권]으로 보호 가능)
         </p>
       </div>
     `;
   }
 
-  // === 2. 무기 합성 탭 ===
-  else if(currentBlacksmithTab === 'weapon_fuse'){
+  // === 2. 방어구 강화 탭 ===
+  else if(currentBlacksmithTab === 'armor_enhance'){
     html += `
-      <p class="flavor" style="margin-bottom:12px;">보유한 무기들을 조합하여 일반 상점에서는 구할 수 없는 강력한 상위 합성 무기를 제작합니다.</p>
+      <p class="flavor" style="margin-bottom:12px;">장착 중인 방어구를 강화하여 방어력과 생존력을 획기적으로 향상시킵니다! (강화 시 부위당 방어력 +3, HP +15 증가)</p>
     `;
+    const armorSlots = [
+      { key:'helmet', label:'🪖 투구' },
+      { key:'chest',  label:'🥋 갑옷' },
+      { key:'boots',  label:'👢 신발' },
+      { key:'shield', label:'🛡️ 방패' }
+    ];
 
+    armorSlots.forEach(s => {
+      const aId = player.armors[s.key];
+      const item = ARMORS[aId] || { name:'미장착', def:0, price:100 };
+      const curEnh = player.armorEnhances[s.key] || 0;
+      const cost = Math.round((item.price * 0.2) + (curEnh * 40) + 30);
+      const successRates = [95, 85, 75, 65, 55, 45, 35, 28, 20, 15, 10, 5];
+      const rate = successRates[curEnh] !== undefined ? successRates[curEnh] : 5;
+
+      html += `
+        <div class="fuse-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <b style="color:var(--gold-bright);font-size:15px;">${s.label}: ${item.name} ${curEnh > 0 ? `<span style="color:#f59e0b;">+${curEnh}강</span>` : ''}</b>
+              <div style="font-size:12px;color:var(--dim);margin-top:3px;">현재 방어력: +${item.def + curEnh*3} | 성공률: ${rate}% | 깨질 확률: ${curEnh>=3?'10%':'0%'}</div>
+            </div>
+            <div>
+              <button class="primary" ${aId ? '' : 'disabled'} onclick="enhanceArmor('${s.key}')">
+                방어구 강화 (${cost}G)
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  // === 3. 무기 합성 탭 ===
+  else if(currentBlacksmithTab === 'weapon_fuse'){
+    html += `<p class="flavor" style="margin-bottom:12px;">보유한 무기들을 조합하여 일반 상점에서는 구할 수 없는 강력한 상위 합성 무기를 제작합니다.</p>`;
     WEAPON_FUSION_RECIPES.forEach(r => {
-      // 재료 보유 여부 확인 (장착 무기 또는 인벤토리 무기)
       let canCraft = player.gold >= r.goldCost && player.level >= r.reqLevel;
       const matHtml = r.materials.map(m => {
         const has = (player.weapon === m.id);
@@ -1737,7 +4353,6 @@ function renderBlacksmith(tab){
       }).join(' ');
 
       const isCurrentWeapon = player.weapon === r.id;
-
       html += `
         <div class="fuse-card">
           <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -1748,9 +4363,7 @@ function renderBlacksmith(tab){
             </div>
             <div>
               ${isCurrentWeapon ? '<span class="tag" style="background:#555;">이미 보유중</span>' : `
-                <button class="primary" ${canCraft ? '' : 'disabled'} onclick="fuseWeapon('${r.id}')">
-                  합성하기 (${r.goldCost}G)
-                </button>
+                <button class="primary" ${canCraft ? '' : 'disabled'} onclick="fuseWeapon('${r.id}')">합성하기 (${r.goldCost}G)</button>
               `}
             </div>
           </div>
@@ -1761,12 +4374,9 @@ function renderBlacksmith(tab){
     });
   }
 
-  // === 3. 잡화 합성 탭 ===
+  // === 4. 잡화 합성 탭 ===
   else if(currentBlacksmithTab === 'item_fuse'){
-    html += `
-      <p class="flavor" style="margin-bottom:12px;">사냥 전리품과 물약을 조합하여 강력한 특수 영약과 보물을 합성합니다.</p>
-    `;
-
+    html += `<p class="flavor" style="margin-bottom:12px;">사냥 전리품과 물약을 조합하여 강력한 특수 영약과 보물을 합성합니다.</p>`;
     ITEM_FUSION_RECIPES.forEach(r => {
       let canCraft = player.gold >= r.goldCost;
       const matHtml = r.materials.map(m => {
@@ -1779,20 +4389,92 @@ function renderBlacksmith(tab){
       html += `
         <div class="fuse-card">
           <div style="display:flex;justify-content:space-between;align-items:center;">
-            <div>
-              <b style="color:var(--gold-bright);font-size:15px;">${r.name}</b>
-              <span class="tag" style="color:#d8b4fe;">${r.desc}</span>
-            </div>
-            <div>
-              <button class="primary" ${canCraft ? '' : 'disabled'} onclick="fuseItems('${r.id}')">
-                합성하기 (${r.goldCost}G)
-              </button>
-            </div>
+            <div><b style="color:var(--gold-bright);font-size:15px;">${r.name}</b> <span class="tag" style="color:#d8b4fe;">${r.desc}</span></div>
+            <div><button class="primary" ${canCraft ? '' : 'disabled'} onclick="fuseItems('${r.id}')">합성하기 (${r.goldCost}G)</button></div>
           </div>
           <div class="fuse-mat-list">${matHtml}</div>
         </div>
       `;
     });
+  }
+
+  // === 5. 기능 도구 합성 탭 ===
+  else if(currentBlacksmithTab === 'tool_fuse'){
+    html += `<p class="flavor" style="margin-bottom:12px;">모험에 큰 도움이 되는 나침반, 곡괭이, 돋보기, 낚싯대 등 특수 기능 도구를 제작합니다.</p>`;
+    TOOL_RECIPES.forEach(t => {
+      let canCraft = player.gold >= t.goldCost;
+      const matHtml = t.materials.map(m => {
+        const ownedCount = player.inventory[m.name] || 0;
+        const has = ownedCount >= m.count;
+        if(!has) canCraft = false;
+        return `<span class="mat-badge ${has ? 'ok' : 'no'}">${m.name} (${ownedCount}/${m.count})</span>`;
+      }).join(' ');
+
+      html += `
+        <div class="fuse-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div><b style="color:var(--gold-bright);font-size:15px;">${t.name}</b> <div class="desc" style="font-size:12px;color:var(--parchment);">${t.desc}</div></div>
+            <div><button class="primary" ${canCraft ? '' : 'disabled'} onclick="fuseTool('${t.id}')">도구 제작 (${t.goldCost}G)</button></div>
+          </div>
+          <div class="fuse-mat-list" style="margin-top:6px;">${matHtml}</div>
+        </div>
+      `;
+    });
+  }
+
+  // === 6. 내구도 수리 탭 ===
+  else if(currentBlacksmithTab === 'repair'){
+    html += `
+      <div class="enhance-board">
+        <h4 style="margin:0 0 8px 0;color:var(--gold-bright);">🔧 장비 종합 정비소</h4>
+        <p class="flavor">전투를 거듭할수록 무기와 방어구의 내구도가 깎이며, 내구도가 0이 되면 공격력과 방어력이 50%로 격감합니다!</p>
+        <div style="background:var(--bg-deep);padding:12px;border-radius:6px;border:1px solid var(--line);margin:12px 0;font-size:13px;line-height:1.7;">
+          🗡️ 무기 내구도: <b style="color:${(player.weaponDur||100)<=20?'#ef4444':'#a3e635'};">${player.weaponDur !== undefined ? player.weaponDur : 100}%</b><br>
+          🪖 투구 내구도: <b>${player.armorDurs ? player.armorDurs.helmet : 100}%</b><br>
+          🥋 갑옷 내구도: <b>${player.armorDurs ? player.armorDurs.chest : 100}%</b><br>
+          👢 신발 내구도: <b>${player.armorDurs ? player.armorDurs.boots : 100}%</b><br>
+          🛡️ 방패 내구도: <b>${player.armorDurs ? player.armorDurs.shield : 100}%</b>
+        </div>
+        <button class="primary wide" onclick="repairAllEquipment()" style="padding:14px;font-size:15px;">
+          🛠️ 모든 장비 100% 완전 수리 (비용: 80G)
+        </button>
+      </div>
+    `;
+  }
+
+    const baseJob = Object.keys(JOB_EVOLUTIONS).find(k => (player.job && player.job.includes(k))) || '검사';
+  const evo = JOB_EVOLUTIONS[baseJob];
+  if(evo){
+    html += `
+      <div style="margin-top:20px;border-top:2px dashed var(--gold);padding-top:16px;">
+        <h4 style="color:var(--gold-bright);margin:0 0 8px 0;">⚡ 2차 및 3차 각성 전직소</h4>
+        <p class="flavor">현재 계열: <b>[${baseJob}]</b> 계열 | 레벨에 도달하면 상위 직업으로 각성하여 폭발적인 스탯을 획득합니다.</p>
+        
+        <div class="shop-item" style="margin-bottom:8px;">
+          <div class="info">
+            <b style="color:#38bdf8;">🔥 2차 전직: ${evo.tier2.name}</b> <span class="tag">Lv.${evo.tier2.reqLevel}+ 필요</span>
+            <div class="desc">${evo.tier2.desc} (공격력 +${evo.tier2.atkBonus}, HP +${evo.tier2.hpBonus})</div>
+          </div>
+          <div>
+            <button class="primary" ${(player.level>=evo.tier2.reqLevel && (player.jobTier||1) < 2) ? '' : 'disabled'} onclick="evolveJob(2, '${evo.tier2.name}')">
+              ${(player.jobTier||1) >= 2 ? '전직 완료' : '2차 전직하기'}
+            </button>
+          </div>
+        </div>
+
+        <div class="shop-item">
+          <div class="info">
+            <b style="color:#f59e0b;">👑 3차 각성: ${evo.tier3.name}</b> <span class="tag">Lv.${evo.tier3.reqLevel}+ 필요</span>
+            <div class="desc">${evo.tier3.desc} (공격력 +${evo.tier3.atkBonus}, HP +${evo.tier3.hpBonus})</div>
+          </div>
+          <div>
+            <button class="primary" ${(player.level>=evo.tier3.reqLevel && (player.jobTier||1) < 3) ? '' : 'disabled'} onclick="evolveJob(3, '${evo.tier3.name}')">
+              ${(player.jobTier||1) >= 3 ? '각성 완료' : '3차 각성하기'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
   html += `<div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>`;
@@ -1810,26 +4492,35 @@ function enhanceWeapon(){
 
   player.gold -= cost;
 
-  // 성공 확률: 강화 성공할수록 점차 감소
   const successRates = [95, 85, 75, 65, 55, 45, 38, 30, 24, 18, 14, 10, 7, 5, 3];
-  const rate = successRates[enh] !== undefined ? successRates[enh] : 3;
+  let rate = successRates[enh] !== undefined ? successRates[enh] : 3;
+
+  if(player.inventory['행운의 황금 부적'] > 0){
+    player.inventory['행운의 황금 부적']--;
+    rate += 20;
+    toast('행운의 황금 부적 효과로 성공 확률 +20% 증가!');
+  }
 
   const roll = rand(1, 100);
 
   if(roll <= rate){
-    // 강화 성공
     player.weaponEnhance = enh + 1;
     toast(`🎉 [강화 대성공!] ${w.name}이(가) +${player.weaponEnhance}강이 되었습니다!`);
     log(`✨ <b>[문어의 대장간]</b> 콰앙! 찰진 망치질로 <b>${w.name} +${player.weaponEnhance}</b> 강화에 성공했다! (공격력 대폭 상승)`);
   } else {
-    // 강화 실패 -> 깨질 확률 10%
     const isBreak = (enh >= 3) && (rand(1, 100) <= 10);
     if(isBreak){
-      const brokenName = `${w.name} +${enh}`;
-      player.weapon = 'wood';
-      player.weaponEnhance = 0;
-      toast(`💥 [무기 파괴!] ${brokenName}이(가) 산산조각 났습니다...`);
-      log(`💥 <b>[문어의 대장간 억까!]</b> 콰아앙!! 문어의 여덟 다리가 꼬이며 <b>${brokenName}이(가) 산산조각 깨져 파괴되었습니다!</b> (기본 나무검으로 교체)`);
+      if(player.inventory['장비 파괴 방지권'] > 0){
+        player.inventory['장비 파괴 방지권']--;
+        toast('🛡️ [파괴 방지 발동!] 장비 파괴 방지권이 소모되어 무기가 파괴되지 않았습니다!');
+        log('🛡️ <b>[대장간 보호]</b> 장비 파괴 방지권의 신비한 빛이 무기의 파괴를 막아냈다!');
+      } else {
+        const brokenName = `${w.name} +${enh}`;
+        player.weapon = 'wood';
+        player.weaponEnhance = 0;
+        toast(`💥 [무기 파괴!] ${brokenName}이(가) 산산조각 났습니다...`);
+        log(`💥 <b>[문어의 대장간 억까!]</b> 콰아앙!! 문어의 여덟 다리가 꼬이며 <b>${brokenName}이(가) 산산조각 깨져 파괴되었습니다!</b> (기본 나무검으로 교체)`);
+      }
     } else {
       if(enh >= 5){
         player.weaponEnhance = Math.max(0, enh - 1);
@@ -1919,22 +4610,32 @@ function fuseItems(recipeId){
 
 
 function renderTown(){
+  ensurePlayerExtendedData();
   const area = $('content-area');
   let html = `
     <h3 style="margin-top:0;color:var(--gold-bright);">마을 광장 <span class="tag">직업: ${player.job||'초보자'}</span></h3>
     <div class="btn-grid">
        <button class="wide primary" onclick="renderAreaSelect()">⚔️ 사냥터로 이동</button>
        <button class="wide primary" onclick="renderBlacksmith()" style="grid-column: span 2; background: linear-gradient(180deg, #441d63, #251038); border-color: var(--gold-bright); color: #fef08a;">
-         🐙 문어의 신비한 대장간 (무기 강화 · 무기 합성 · 잡화 합성)
+         🐙 문어의 신비한 대장간 (무기/방어구 강화 · 무기/잡화/도구 합성 · 수리)
        </button>
-       <button class="wide primary" onclick="renderHoneyGarden()">🍯 비밀의 꿀동산 (꿀 채집)</button>
+       <button class="wide primary" onclick="renderEquipment()">🛡️ 모험가 장비실 (방어구 관리)</button>
+       <button class="wide primary" onclick="renderInventoryBag()">🎒 모험 가방 (소지품 보관함)</button>
+       <button class="wide primary" onclick="renderRaids()">🏰 레이드 성채 (일간·주간·월간·길드)</button>
+       <button class="wide primary" onclick="renderDungeons()">🗝️ 고대의 던전 (강화·고립·히든)</button>
+       <button class="wide" onclick="renderRunes()">🔮 신비의 룬 제단 (룬 장착·합성)</button>
+       <button class="wide" onclick="renderGuild()">🏛️ 모험가 길드 본부 (길드 버프)</button>
+       <button class="wide" onclick="renderColosseumPK()">⚔️ 영웅의 콜로세움 (1:1 PK)</button>
+       <button class="wide" onclick="renderDiamondShop()">💎 프리미엄 다이아 상점</button>
+       <button class="wide" onclick="renderFriends()">👥 친선 모험가 명부 (친구 관리)</button>
+       <button class="wide" onclick="renderHoneyGarden()">🍯 비밀의 꿀동산 (꿀 채집)</button>
        <button class="wide" onclick="renderWorldMap()">🗺️ 세계 지도 (월드 맵)</button>
-      <button class="wide" onclick="renderJobAcademy()">🎓 전직소 (직업 마스터)</button>
+      <button class="wide" onclick="renderJobAcademy()">🎓 전직소 (1차·2차·3차 각성 전직)</button>
       <button class="wide" onclick="renderWeaponShop()">🗡️ 백투명강아지 (무기 상점)</button>
-      <button class="wide" onclick="renderItemShop()">🧪 백디몬 (잡화 상점)</button>
+      <button class="wide" onclick="renderItemShop()">🧪 백디몬 (잡화 상점 · 로열젤리 1000G 매입)</button>
       <button class="wide" onclick="renderQuests()">📜 퀘스트 게시판</button>
       <button class="wide" onclick="renderLeaderboard()">🏆 명예의 전당</button>
-      <button class="wide" onclick="renderPartyHub()">🛡️ 모험자 파티 허브 (멀티)</button>
+      <button class="wide" onclick="renderPartyHub()">🛡️ 모험자 파티 허브 (온라인 4인 멀티)</button>
       <button class="wide" onclick="restAtInn()" style="position:relative;z-index:5;cursor:pointer;">🔥 여관에서 휴식 (무료)</button>
       <button class="wide danger" onclick="logoutGame()" style="grid-column: span 2;">🚪 로그아웃 (관문으로 돌아가기)</button>
     </div>
@@ -2200,45 +4901,59 @@ function exploreArea(areaId){
     renderAreaSelect();
     return;
   }
-  
-  let monsterId = area ? area.monsters[rand(0,area.monsters.length-1)] : 'slime';
 
-  // [할로윈 5일 한정 몬스터 스폰 로직]
-  if (isHalloweenEventActive()) {
-    if (areaId === 'halloween_forest') {
-      const halloweenPool = ['pumpkin_jack', 'witch_cat', 'spooky_ghost', 'vampire_bat', 'candy_mimic'];
-      monsterId = halloweenPool[rand(0, halloweenPool.length - 1)];
-    } else if (areaId === 'halloween_castle') {
-      const castlePool = ['haunted_armor', 'candy_mimic', 'reaper_phantom', 'pumpkin_king'];
-      monsterId = castlePool[rand(0, castlePool.length - 1)];
-    } else if (Math.random() < 0.25) {
-      // 일반 사냥터에서도 25% 확률로 할로윈 몬스터 깜짝 난입!
-      const wildPool = ['pumpkin_jack', 'witch_cat', 'spooky_ghost', 'candy_mimic'];
-      monsterId = wildPool[rand(0, wildPool.length - 1)];
-      log('🎃 <b style="color:#ffaa33;">차원의 틈에서 할로윈 몬스터가 튀어나왔습니다!</b>');
-    }
+  const roll = Math.random();
+  // 1. 35% 확률: 돌발 모험 이벤트 (기습 습격, 덫/함정, 신비한 모험 조우)
+  if(roll < 0.35 && typeof renderAdventureEvent === 'function'){
+    renderAdventureEvent(areaId);
+    return;
   }
 
-  startBattle(monsterId);
+  // 2. 15% 확률: 사냥터 갈림길 퀴즈 미니게임
+  if(roll < 0.50 && typeof renderMiniGamePath === 'function'){
+    renderMiniGamePath(rand(0, MAP_MINIGAMES.length - 1));
+    return;
+  }
+
+  // 3. 50% 확률: 일반 사냥터 몬스터 전투로 전진
+  proceedToMonsterBattle(areaId);
 }
 
 function scaleMonster(monsterId){
-  const def = MONSTERS[monsterId];
-  const lvl = Math.max(1, player.level);
-  const hp = Math.round((22 + lvl*9) * def.tier);
-  const atk = Math.round((4 + lvl*1.9) * def.atier);
-  const exp = Math.round((9 + lvl*3.2) * def.tier * (def.boss?1.6:1));
-  const gold = Math.round((5 + lvl*2.1) * def.tier * (def.boss?1.6:1));
+  const def = MONSTERS[monsterId] || { tier:1, atier:1, name:'괴물', emoji:'👾', dropName:'괴물의 뼈', dropVal:10, dodge:0 };
+  const lvl = Math.max(1, (player ? player.level : 1));
+  let hp = Math.round((22 + lvl*9) * def.tier);
+  let atk = Math.round((4 + lvl*1.9) * def.atier);
+  let exp = Math.round((9 + lvl*3.2) * def.tier * (def.boss?1.6:1));
+  let gold = Math.round((5 + lvl*2.1) * def.tier * (def.boss?1.6:1));
+
+  // 15% 확률로 엘리트 몬스터 출현! (황금빛 오라, 체력 2.5배, 공격력 1.5배, 다이아 드롭)
+  const isElite = !def.boss && Math.random() < 0.15;
+  let name = def.name;
+  let diaReward = 0;
+  if(isElite){
+    const elitePrefixes = ['[황금빛]', '[포악한]', '[고대의]', '[각성한]'];
+    const prefix = elitePrefixes[rand(0, elitePrefixes.length - 1)];
+    name = `${prefix} ${def.name} 👑`;
+    hp = Math.round(hp * 2.5);
+    atk = Math.round(atk * 1.5);
+    exp = Math.round(exp * 3.0);
+    gold = Math.round(gold * 3.5);
+    diaReward = rand(1, 3);
+  }
+
   return {
-    id:monsterId, name:def.name, emoji:def.emoji,
-    hp, maxHp:hp, atk, expReward:exp, goldReward:gold,
+    id:monsterId, name:name, emoji:def.emoji,
+    hp, maxHp:hp, atk, expReward:exp, goldReward:gold, diaReward:diaReward,
     dropName:def.dropName, dropVal:def.dropVal,
     dodge:def.dodge||0, thief:def.thief||false, boss:def.boss||false,
+    isElite:isElite
   };
 }
 
 function startBattle(monsterId){
   battle = { enemy: scaleMonster(monsterId), playerMiss:false, fled:false };
+  if(typeof assignBattleHazard === 'function') assignBattleHazard(currentAreaId);
   clearLog();
   log(`<b>${battle.enemy.emoji} ${battle.enemy.name}</b>이(가) 나타났다!`);
   renderBattle();
@@ -2247,13 +4962,37 @@ function startBattle(monsterId){
 function renderBattle(){
   const e = battle.enemy;
   const area = $('content-area');
+  const h = battle.hazard;
+
+  let hazardHtml = '';
+  if(h){
+    hazardHtml = `
+      <div class="battle-hazard-banner">
+        <div class="battle-hazard-title">
+          <span>${h.name}</span>
+          <span class="tag" style="background:#ef4444;color:#fff;">전장 방해요소</span>
+        </div>
+        <div class="battle-hazard-desc">${h.desc}</div>
+        ${(!h.usedAction && h.actionBtn) ? `
+          <button class="hazard-action-btn" onclick="triggerBattleHazardAction()">
+            ${h.actionBtn}
+          </button>
+        ` : ''}
+      </div>
+    `;
+  }
+
   area.innerHTML = `
-    <div class="enemy-card">
+    ${hazardHtml}
+    <div class="enemy-card ${e.isElite?'elite':''}">
       <div class="enemy-emoji">${e.emoji}</div>
-      <div class="enemy-name">${e.name} ${e.boss?'<span class="tag">BOSS</span>':''}</div>
+      <div class="enemy-name">
+        ${e.name} ${e.boss?'<span class="tag">BOSS</span>':''}
+        ${e.isRealPvP?'<span class="tag" style="background:#f43f5e;color:#fff;">1:1 PvP</span>':''}
+      </div>
       <div class="mini-bar-wrap">
         <div class="mini-label"><span>HP</span><span>${e.hp}/${e.maxHp}</span></div>
-        <div class="bar-bg"><div class="bar-fill bar-hp" style="width:${e.hp/e.maxHp*100}%;"></div></div>
+        <div class="bar-bg"><div class="bar-fill bar-hp" style="width:${(e.hp/e.maxHp)*100}%;"></div></div>
       </div>
     </div>
     <div class="btn-grid">
@@ -2265,198 +5004,7 @@ function renderBattle(){
   `;
 }
 
-function enemyTurn(){
-  const e = battle.enemy;
-  if(e.hp<=0 || battle.fled) return;
-  let dmg = rand(Math.round(e.atk*0.8), Math.round(e.atk*1.2));
-  if(e.thief && Math.random()<0.3){
-    const stolen = Math.min(player.gold, rand(5,20));
-    player.gold -= stolen;
-    log(`${e.emoji} ${e.name}이(가) 골드 ${stolen}을 훔쳐 달아나려 한다!`);
-  }
-  player.hp = Math.max(0, player.hp-dmg);
-  log(`${e.emoji} ${e.name}의 반격! ${dmg}의 피해를 입었다.`);
-  if(player.hp<=0){
-    onPlayerDown();
-  }
-}
 
-function battleAttack(){
-  const e = battle.enemy;
-  let hitChance = 1 - (e.dodge||0) - (battle.playerMiss?0.35:0);
-  if(player.job === '사냥꾼') hitChance += 0.15; // 사냥꾼 명중 보정
-  battle.playerMiss = false;
-
-  if(Math.random() > hitChance){
-    log(`${e.emoji}${e.name}의 몸이 흐릿하게 흔들리며 공격이 빗나갔다!`);
-    postPlayerAction();
-    return;
-  }
-
-  const attacksCount = player.job === '환장자' ? 2 : 1; // 환장자 2연타
-  for(let i=0; i<attacksCount; i++){
-    let baseDmg = rand(Math.round(totalAtk()*0.85), Math.round(totalAtk()*1.15));
-    if(player.job === '전사') baseDmg = Math.round(baseDmg * 1.15); // 전사 공격력 배율
-    
-    let isCrit = player.job === '검사' && Math.random() < 0.3; // 검사 30% 크리티컬
-    if(isCrit) baseDmg = Math.round(baseDmg * 2.2);
-
-    if(player.job === '환장자'){
-      const hpRatio = player.hp / player.maxHp;
-      if(hpRatio < 0.3) baseDmg = Math.round(baseDmg * (1 + (0.3 - hpRatio)*8)); // 환장자 버서커 모드
-    }
-
-    e.hp = Math.max(0, e.hp-baseDmg);
-    if(isCrit){
-      log(`💥 <b>[크리티컬!]</b> 검사의 예리한 일격! <b>${baseDmg}</b>의 치명적 피해!`);
-    } else {
-      log(`<b>${player.nickname}</b>의 공격${attacksCount>1?' ('+(i+1)+'타)':''}! ${baseDmg}의 피해.`);
-    }
-
-    if(player.job === '마검사'){
-      player.mp = Math.min(player.maxMp, player.mp + 5);
-      const magicDmg = Math.round(baseDmg * 0.3);
-      e.hp = Math.max(0, e.hp - magicDmg);
-      log(`✨ 마력검 발동! 추가 마법 피해 ${magicDmg} 및 MP +5 충전.`);
-    }
-
-    if(player.job === '천사'){
-      player.hp = Math.min(player.maxHp, player.hp + 25);
-      log(`👼 성스러운 은총! HP +25 치유.`);
-    }
-
-    if(player.job === '흑마법사'){
-      const healAmt = Math.round(baseDmg * 0.35);
-      player.hp = Math.min(player.maxHp, player.hp + healAmt);
-      log(`🧛 흡혈 귀기! HP +${healAmt} 흡수.`);
-    }
-
-    if(e.hp <= 0) break;
-  }
-  postPlayerAction();
-}
-
-function battleSkill(){
-  const skillKey = player.equippedSkill || 'slash';
-  const skillDef = (typeof SKILLS !== 'undefined' && SKILLS[skillKey]) ? SKILLS[skillKey] : { name:'필살기', mp:15, mult:1.8 };
-  const mpCost = skillDef.mp || 15;
-
-  if(player.mp < mpCost){ toast('MP가 부족하다.'); return; }
-  const e = battle.enemy;
-  player.mp -= mpCost;
-
-  let hitChance = 1 - (e.dodge||0)*0.6;
-  if(player.job === '사냥꾼') hitChance = 1.0;
-
-  if(Math.random() > hitChance){
-    log(`[${skillDef.name}] 시전했으나 ${e.name}이(가) 회피했다!`);
-  } else {
-    let dmg = rand(Math.round(totalAtk() * (skillDef.mult||1.8) * 0.9), Math.round(totalAtk() * (skillDef.mult||1.8) * 1.1));
-    if(player.job === '마법사' && skillKey === 'fireball') dmg = Math.round(dmg * 1.8);
-
-    e.hp = Math.max(0, e.hp - dmg);
-    log(`✨ <b>[스킬 발동: ${skillDef.name}]</b> ${dmg}의 강력한 피해를 입혔다!`);
-
-    if(skillDef.heal){
-      const healVal = skillDef.heal;
-      player.hp = Math.min(player.maxHp, player.hp + healVal);
-      log(`💖 치유의 빛으로 HP +${healVal} 회복!`);
-    }
-
-    if(player.job === '흑마법사'){
-      const healAmt = Math.round(dmg * 0.35);
-      player.hp = Math.min(player.maxHp, player.hp + healAmt);
-      log(`🧛 흑마법사 흡혈로 HP +${healAmt} 회복!`);
-    }
-  }
-  postPlayerAction();
-}
-
-function battleItem(){
-  const owned = Object.keys(player.inventory).filter(id=>{
-    const def = ITEMS_SHOP.find(i=>i.id===id);
-    return def && player.inventory[id]>0;
-  });
-  if(owned.length===0){ toast('사용할 소비 아이템이 없다. 백디몬에게 구매하자.'); return; }
-  const area = $('content-area');
-  let html = `<div class="enemy-card"><div class="enemy-emoji">${battle.enemy.emoji}</div><div class="enemy-name">${battle.enemy.name}</div></div>`;
-  html += `<div class="btn-grid cols1">`;
-  owned.forEach(id=>{
-    const def = ITEMS_SHOP.find(i=>i.id===id);
-    html += `<button class="wide" onclick="useItemInBattle('${id}')">${def.name} <span class="tag">보유 ${player.inventory[id]}개</span></button>`;
-  });
-  html += `<button onclick="renderBattle()">← 취소</button></div>`;
-  area.innerHTML = html;
-}
-
-function useItemInBattle(id){
-  const def = ITEMS_SHOP.find(i=>i.id===id);
-  player.inventory[id]--;
-  if(def.type==='hp'){
-    player.hp = Math.min(player.maxHp, player.hp+def.value);
-    log(`${def.name}을(를) 사용했다. HP가 ${def.value} 회복되었다.`);
-    postPlayerAction();
-  } else if(def.type==='mp'){
-    player.mp = Math.min(player.maxMp, player.mp+def.value);
-    log(`${def.name}을(를) 사용했다. MP가 ${def.value} 회복되었다.`);
-    postPlayerAction();
-  } else if(def.type==='flee'){
-    log(`${def.name}이(가) 자욱하게 퍼진다! 안전하게 도주했다.`);
-    battle.fled = true;
-    refreshSidebar();
-    saveGame();
-    setTimeout(()=>{ renderAreaSelect(); }, 120);
-  }
-}
-
-function battleFlee(){
-  if(player.job === '엄마'){
-    toast('어머니는 자식(몬스터) 앞에서 등을 보이지 않습니다!');
-    log('🧹 <b>[엄마 특성]</b> 도주할 수 없습니다! 등을 보이지 마라!');
-    return;
-  }
-  const chance = player.job === '도적' ? 1.0 : (battle.enemy.boss ? 0.35 : 0.7);
-  if(Math.random() < chance){
-    log('무사히 도주에 성공했다.' + (player.job==='도적'?' (도적 100% 은신 도주)':''));
-    battle.fled = true;
-    renderAreaSelect();
-  } else {
-    log('도주에 실패했다!');
-    enemyTurn();
-    if(player.hp>0) renderBattle();
-  }
-  refreshSidebar();
-}
-
-function enemyTurn(){
-  const e = battle.enemy;
-  if(e.hp<=0 || battle.fled) return;
-
-  // 환상자 환영 회피
-  if(player.job === '환상자' && Math.random() < 0.2){
-    log(`🌫️ <b>[환상자 특성]</b> 실체 없는 환영의 몸으로 ${e.name}의 공격을 완전히 흘려보냈다! (피해 0)`);
-    return;
-  }
-
-  let dmg = rand(Math.round(e.atk*0.8), Math.round(e.atk*1.2));
-  if(player.job === '전사' && Math.random() < 0.3){
-    dmg = Math.round(dmg * 0.5);
-    log(`🛡️ <b>[전사 방패 방어]</b> ${e.name}의 공격을 단단하게 막아내어 피해가 반감되었다! (-${dmg} HP)`);
-    player.hp = Math.max(0, player.hp-dmg);
-  } else {
-    log(`${e.emoji}${e.name}의 반격! ${dmg}의 피해를 입었다.`);
-    player.hp = Math.max(0, player.hp-dmg);
-  }
-
-  if(e.thief && Math.random()<0.3){
-    const stolen = Math.min(player.gold, rand(5,20));
-    player.gold -= stolen;
-    log(`💸 ${e.name}이(가) 주머니에서 골드 ${stolen}을 훔쳐갔다!`);
-  }
-  if(player.hp<=0){
-    onPlayerDown();
-  }
-}
 
 function postPlayerAction(){
   refreshSidebar();
@@ -2476,14 +5024,68 @@ function postPlayerAction(){
 
 function onEnemyDefeated(){
   const e = battle.enemy;
-  log(`💀 ${e.name}을(를) 쓰러뜨렸다! EXP +${e.expReward}, 골드 +${e.goldReward}`);
-  player.exp += e.expReward;
-  player.gold += e.goldReward;
+  let expGain = e.expReward;
+  let goldGain = e.goldReward;
+  let diaGain = e.diaReward || 0;
+
+  if(player.guild){
+    expGain = Math.round(expGain * 1.15);
+    goldGain = Math.round(goldGain * 1.15);
+  }
+  if(player.runes && player.runes.fortune && RUNES[player.runes.fortune]){
+    goldGain = Math.round(goldGain * (1 + (RUNES[player.runes.fortune].goldBonus || 0)));
+  }
+
+  if(e.id === 'dragon' || e.name.includes('투명드래곤') || e.name.includes('투명 드래곤')){
+    player.activeBuffs = player.activeBuffs || {};
+    player.activeBuffs.transparent_dragon = 25;
+    log('🐉✨ <b>[투명 드래곤의 축복!]</b> 전설의 투명 드래곤을 토벌하여 신비로운 영체 가호를 받았습니다! (회피율 +25%, 공격력 +20%, 치명타율 +15%)');
+    toast('🐉 투명 드래곤의 축복 가호 획득!');
+  }
+
+  if(dungeonState){
+    if(dungeonState.floor < dungeonState.maxFloor){
+      dungeonState.floor++;
+      log(`⚔️ <b>[던전 돌파]</b> ${dungeonState.floor - 1}층의 적을 쓰러뜨리고 <b>${dungeonState.floor}층</b>으로 내려갑니다!`);
+      setTimeout(()=>{ spawnDungeonFloor(); }, 400);
+      return;
+    } else {
+      log(`🏆 <b>[던전 완전 정복!]</b> <b>${dungeonState.dungeon.name}</b>의 최심부 보스를 처치하고 던전을 완전 제패했습니다!`);
+      diaGain += 10;
+      goldGain += 1000;
+      expGain += 1500;
+      const frameEl = document.querySelector('.frame');
+      if(frameEl) frameEl.classList.remove('isolated-dungeon-frame');
+      dungeonState = null;
+    }
+  }
+
+  player.exp += expGain;
+  player.gold += goldGain;
+  if(diaGain > 0){
+    player.diamond = (player.diamond || 0) + diaGain;
+    toast(`💎 다이아몬드 +${diaGain}개 획득!`);
+  }
   player.kills[e.id] = (player.kills[e.id]||0)+1;
+
+  const remainingExp = Math.max(0, player.expNeed - player.exp);
+  log(`💀 <b>[승리!] ${e.name}</b>을(를) 격파했습니다!`);
+  log(`📊 <b>[획득 보상]</b> 획득 EXP: <b>+${expGain}</b> (다음 레벨까지: <b>${remainingExp}</b> EXP) | 획득 골드: <b>+${goldGain}G</b> ${diaGain>0 ? `| 💎 다이아: <b>+${diaGain}</b>`:''}`);
+
   if(Math.random()<0.5){
     player.inventory[e.dropName] = (player.inventory[e.dropName]||0)+1;
-    log(`전리품 획득: ${e.dropName} x1 (백디몬에게 팔 수 있다)`);
+    log(`🎁 전리품 획득: <b>${e.dropName}</b> x1 (백디몬에게 판매 가능)`);
   }
+
+  if(e.isElite && Math.random() < 0.45){
+    const randomRunePool = ['atk_1', 'def_1', 'mag_1', 'luck_1'];
+    const droppedRune = randomRunePool[rand(0, randomRunePool.length - 1)];
+    player.runeInventory = player.runeInventory || [];
+    player.runeInventory.push(droppedRune);
+    log(`🔮 <b>[엘리트 전리품]</b> 엘리트 몬스터가 룬 <b>[${RUNES[droppedRune].name}]</b>을(를) 떨어뜨렸습니다!`);
+    toast(`룬 [${RUNES[droppedRune].name}] 획득!`);
+  }
+
   checkLevelUp();
   checkQuestAuto();
   refreshSidebar();
@@ -2500,7 +5102,7 @@ function onEnemyDefeated(){
     const area = AREAS.find(a=>a.id===currentAreaId) || AREAS[0];
     const monsterId = area.monsters[rand(0,area.monsters.length-1)];
     startBattle(monsterId);
-  }, 200);
+  }, 250);
 }
 
 function checkLevelUp(){
@@ -2574,6 +5176,41 @@ function renderInventoryBag(){
     });
   }
 
+    const baseJob = Object.keys(JOB_EVOLUTIONS).find(k => (player.job && player.job.includes(k))) || '검사';
+  const evo = JOB_EVOLUTIONS[baseJob];
+  if(evo){
+    html += `
+      <div style="margin-top:20px;border-top:2px dashed var(--gold);padding-top:16px;">
+        <h4 style="color:var(--gold-bright);margin:0 0 8px 0;">⚡ 2차 및 3차 각성 전직소</h4>
+        <p class="flavor">현재 계열: <b>[${baseJob}]</b> 계열 | 레벨에 도달하면 상위 직업으로 각성하여 폭발적인 스탯을 획득합니다.</p>
+        
+        <div class="shop-item" style="margin-bottom:8px;">
+          <div class="info">
+            <b style="color:#38bdf8;">🔥 2차 전직: ${evo.tier2.name}</b> <span class="tag">Lv.${evo.tier2.reqLevel}+ 필요</span>
+            <div class="desc">${evo.tier2.desc} (공격력 +${evo.tier2.atkBonus}, HP +${evo.tier2.hpBonus})</div>
+          </div>
+          <div>
+            <button class="primary" ${(player.level>=evo.tier2.reqLevel && (player.jobTier||1) < 2) ? '' : 'disabled'} onclick="evolveJob(2, '${evo.tier2.name}')">
+              ${(player.jobTier||1) >= 2 ? '전직 완료' : '2차 전직하기'}
+            </button>
+          </div>
+        </div>
+
+        <div class="shop-item">
+          <div class="info">
+            <b style="color:#f59e0b;">👑 3차 각성: ${evo.tier3.name}</b> <span class="tag">Lv.${evo.tier3.reqLevel}+ 필요</span>
+            <div class="desc">${evo.tier3.desc} (공격력 +${evo.tier3.atkBonus}, HP +${evo.tier3.hpBonus})</div>
+          </div>
+          <div>
+            <button class="primary" ${(player.level>=evo.tier3.reqLevel && (player.jobTier||1) < 3) ? '' : 'disabled'} onclick="evolveJob(3, '${evo.tier3.name}')">
+              ${(player.jobTier||1) >= 3 ? '각성 완료' : '3차 각성하기'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
   html += `<div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>`;
   area.innerHTML = html;
 }
@@ -2633,21 +5270,26 @@ function useItemFromBag(itemName){
    비밀의 꿀동산 & 꿀 시스템
    ========================================================= */
 function renderHoneyGarden(){
+  ensurePlayerExtendedData();
   const area = $('content-area');
   const wildHoneyCount = player.inventory['야생 꿀'] || 0;
   const royalHoneyCount = player.inventory['로열 젤리'] || 0;
+  const attempts = player.royalJellyAttempts || 0;
+  const royalCost = 100 + (attempts * 50);
 
   area.innerHTML = `
     <h3 style="margin-top:0;color:var(--gold-bright);">🍯 비밀의 꿀동산</h3>
     <p class="flavor">달콤하고 끈적한 마력의 꿀이 흐르는 신비로운 숲입니다. 꿀을 채집하여 체력을 회복하거나 백디몬에게 비싸게 팔 수 있습니다!</p>
     
     <div style="background:var(--bg-deep);border:1px solid var(--gold);padding:12px;border-radius:4px;margin-bottom:14px;font-size:13.5px;color:var(--parchment);">
-      보유 중인 꿀: <b>야생 꿀 ${wildHoneyCount}개</b> | <b>로열 젤리 ${royalHoneyCount}개</b>
+      보유 중인 꿀: <b>야생 꿀 ${wildHoneyCount}개</b> | <b>로열 젤리 ${royalHoneyCount}개</b><br>
+      👑 로열 젤리 채집 누적 시도: <b>${attempts}회</b> | 다음 시도 비용: <b style="color:#f59e0b;">${royalCost}G</b><br>
+      성공 확률: <b style="color:#38bdf8;">20% (너프됨)</b> | ⚠️ 주의: 실패 시 35% 확률로 <b>여왕벌 독침 1,000 피해!</b>
     </div>
 
     <div class="btn-grid">
-      <button class="primary" onclick="gatherHoney('wild')">🍯 야생 꿀 채집 (비용: 10G)</button>
-      <button class="primary" onclick="gatherHoney('royal')">👑 로열 젤리 채집 도전 (비용: 100G)</button>
+      <button class="primary" onclick="gatherHoneyUpgraded('wild')">🍯 야생 꿀 채집 (비용: 10G)</button>
+      <button class="primary" onclick="gatherHoneyUpgraded('royal')">👑 로열 젤리 도전 (${royalCost}G)</button>
       <button onclick="consumeHoney('wild')" ${wildHoneyCount>0?'':'disabled'}>🥄 야생 꿀 먹기 (HP/MP 회복)</button>
       <button onclick="consumeHoney('royal')" ${royalHoneyCount>0?'':'disabled'}>👑 로열 젤리 먹기 (대박 버프)</button>
     </div>
@@ -2742,6 +5384,10 @@ function claimQuest(id){
   player.questClaimed[id] = true;
   player.exp += q.rewardExp;
   player.gold += q.rewardGold;
+  if(q.rewardDia){
+    player.diamond = (player.diamond || 0) + q.rewardDia;
+    toast(`💎 다이아몬드 +${q.rewardDia}개 획득!`);
+  }
   log(`📜 퀘스트 완료: <b>${q.name}</b> — EXP +${q.rewardExp}, 골드 +${q.rewardGold}`);
   checkLevelUp();
   refreshSidebar();
@@ -2779,8 +5425,7 @@ function buyWeapon(id){
   const price = Math.round(w.price*(1+player.shopPenalty));
   if(player.gold < price){ toast('골드가 부족하다.'); return; }
   player.gold -= price;
-  player.weapon = id;
-  player.shopPenalty = 0;
+  changeWeaponWithReset(id); player.shopPenalty = 0;
   log(`🗡️ <b>${w.name}</b>을(를) 구매하여 장착했다.`);
   const evMsg = maybeUnfairEvent('shop');
   if(evMsg) log(evMsg);
@@ -2804,6 +5449,19 @@ function renderItemShop(){
       <button onclick="buyItem('${it.id}')">구매</button>
     </div>`;
   });
+    const royalCount = player.inventory['로열 젤리'] || 0;
+  if(royalCount > 0){
+    html += `
+      <div style="background:rgba(201,162,39,0.15);border:1px solid var(--gold);padding:10px 14px;border-radius:6px;margin:10px 0;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <b style="color:var(--gold-bright);">👑 로열 젤리 전량 매입 특별 코너</b>
+          <div style="font-size:12px;color:var(--parchment);">보유: ${royalCount}개 · 개당 <b style="color:#a3e635;">1,000G</b> (총 ${royalCount * 1000}G)</div>
+        </div>
+        <button class="primary" onclick="sellAllRoyalJelly()">💰 전량 판매 (${royalCount * 1000}G)</button>
+      </div>
+    `;
+  }
+
   const junk = Object.keys(player.inventory).filter(k=>!ITEMS_SHOP.find(i=>i.id===k) && player.inventory[k]>0);
   html += `<h4 style="color:var(--parchment);margin:14px 0 6px;">판매 (전리품)</h4>`;
   if(junk.length===0){
@@ -3019,7 +5677,42 @@ async function renderPartyHub(){
       });
     }
 
-    html += `<div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>`;
+      const baseJob = Object.keys(JOB_EVOLUTIONS).find(k => (player.job && player.job.includes(k))) || '검사';
+  const evo = JOB_EVOLUTIONS[baseJob];
+  if(evo){
+    html += `
+      <div style="margin-top:20px;border-top:2px dashed var(--gold);padding-top:16px;">
+        <h4 style="color:var(--gold-bright);margin:0 0 8px 0;">⚡ 2차 및 3차 각성 전직소</h4>
+        <p class="flavor">현재 계열: <b>[${baseJob}]</b> 계열 | 레벨에 도달하면 상위 직업으로 각성하여 폭발적인 스탯을 획득합니다.</p>
+        
+        <div class="shop-item" style="margin-bottom:8px;">
+          <div class="info">
+            <b style="color:#38bdf8;">🔥 2차 전직: ${evo.tier2.name}</b> <span class="tag">Lv.${evo.tier2.reqLevel}+ 필요</span>
+            <div class="desc">${evo.tier2.desc} (공격력 +${evo.tier2.atkBonus}, HP +${evo.tier2.hpBonus})</div>
+          </div>
+          <div>
+            <button class="primary" ${(player.level>=evo.tier2.reqLevel && (player.jobTier||1) < 2) ? '' : 'disabled'} onclick="evolveJob(2, '${evo.tier2.name}')">
+              ${(player.jobTier||1) >= 2 ? '전직 완료' : '2차 전직하기'}
+            </button>
+          </div>
+        </div>
+
+        <div class="shop-item">
+          <div class="info">
+            <b style="color:#f59e0b;">👑 3차 각성: ${evo.tier3.name}</b> <span class="tag">Lv.${evo.tier3.reqLevel}+ 필요</span>
+            <div class="desc">${evo.tier3.desc} (공격력 +${evo.tier3.atkBonus}, HP +${evo.tier3.hpBonus})</div>
+          </div>
+          <div>
+            <button class="primary" ${(player.level>=evo.tier3.reqLevel && (player.jobTier||1) < 3) ? '' : 'disabled'} onclick="evolveJob(3, '${evo.tier3.name}')">
+              ${(player.jobTier||1) >= 3 ? '각성 완료' : '3차 각성하기'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  html += `<div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>`;
     area.innerHTML = html;
   }catch(e){
     area.innerHTML = `<h3 style="margin-top:0;color:var(--gold-bright);">🌐 온라인 멀티플레이어 허브</h3><p class="flavor">데이터를 불러오는 중 문제가 발생했습니다.</p><div class="back-row"><button onclick="renderTown()">← 마을로</button></div>`;
@@ -3052,6 +5745,10 @@ async function joinParty(partyId){
   try{
     const partyData = await safeGet('party:'+partyId);
     if(partyData){
+      if(partyData.members.length >= 4 && !partyData.members.includes(player.nickname)){
+        toast('파티 정원이 가득 찼습니다! (최대 4명 제한)');
+        return;
+      }
       if(!partyData.members.includes(player.nickname)){
         partyData.members.push(player.nickname);
         await safeSet('party:'+partyId, partyData);
@@ -3218,6 +5915,41 @@ function renderJobAcademy(){
       `;
     });
   });
+
+    const baseJob = Object.keys(JOB_EVOLUTIONS).find(k => (player.job && player.job.includes(k))) || '검사';
+  const evo = JOB_EVOLUTIONS[baseJob];
+  if(evo){
+    html += `
+      <div style="margin-top:20px;border-top:2px dashed var(--gold);padding-top:16px;">
+        <h4 style="color:var(--gold-bright);margin:0 0 8px 0;">⚡ 2차 및 3차 각성 전직소</h4>
+        <p class="flavor">현재 계열: <b>[${baseJob}]</b> 계열 | 레벨에 도달하면 상위 직업으로 각성하여 폭발적인 스탯을 획득합니다.</p>
+        
+        <div class="shop-item" style="margin-bottom:8px;">
+          <div class="info">
+            <b style="color:#38bdf8;">🔥 2차 전직: ${evo.tier2.name}</b> <span class="tag">Lv.${evo.tier2.reqLevel}+ 필요</span>
+            <div class="desc">${evo.tier2.desc} (공격력 +${evo.tier2.atkBonus}, HP +${evo.tier2.hpBonus})</div>
+          </div>
+          <div>
+            <button class="primary" ${(player.level>=evo.tier2.reqLevel && (player.jobTier||1) < 2) ? '' : 'disabled'} onclick="evolveJob(2, '${evo.tier2.name}')">
+              ${(player.jobTier||1) >= 2 ? '전직 완료' : '2차 전직하기'}
+            </button>
+          </div>
+        </div>
+
+        <div class="shop-item">
+          <div class="info">
+            <b style="color:#f59e0b;">👑 3차 각성: ${evo.tier3.name}</b> <span class="tag">Lv.${evo.tier3.reqLevel}+ 필요</span>
+            <div class="desc">${evo.tier3.desc} (공격력 +${evo.tier3.atkBonus}, HP +${evo.tier3.hpBonus})</div>
+          </div>
+          <div>
+            <button class="primary" ${(player.level>=evo.tier3.reqLevel && (player.jobTier||1) < 3) ? '' : 'disabled'} onclick="evolveJob(3, '${evo.tier3.name}')">
+              ${(player.jobTier||1) >= 3 ? '각성 완료' : '3차 각성하기'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
 
   html += `<div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>`;
   area.innerHTML = html;
