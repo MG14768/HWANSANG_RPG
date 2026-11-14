@@ -25,7 +25,7 @@
   html,body{margin:0;padding:0;}
   /* ========================================================
      [테마 스타일 정의]
-     - 기본 배경(theme-default) / 할로윈 테마(theme-halloween)
+     - 기본 배경(theme-default) / 크리스마스 테마(theme-christmas)
      - 사용자가 "기본배경으로 바꿔줘"라고 요청하면 언제든지
        기본 배경으로 전환/복원할 수 있도록 분리 설계되었습니다.
      ======================================================== */
@@ -45,133 +45,118 @@
       radial-gradient(circle at 85% 80%, rgba(139,42,58,0.14), transparent 45%),
       var(--bg-deep) !important;
   }
-  body.theme-default .halloween-decor {
+  body.theme-default .christmas-decor {
     display: none !important;
   }
 
-  /* 2. 할로윈 테마 배경 (Halloween Theme - 현재 기본 활성화됨) */
-  body.theme-halloween {
-    background-color: #0c0613 !important;
+  /* 2. 크리스마스 테마 배경 (Christmas Theme - 2개월 한정 기본 활성화) */
+  body.theme-christmas {
+    background-color: #071526 !important;
     background-image:
-      radial-gradient(circle at 82% 12%, rgba(255, 170, 51, 0.22) 0%, rgba(255, 117, 24, 0.08) 30%, transparent 60%),
-      radial-gradient(circle at 18% 22%, rgba(147, 51, 234, 0.18) 0%, transparent 45%),
-      radial-gradient(circle at 50% 95%, rgba(234, 88, 12, 0.16) 0%, transparent 50%),
-      radial-gradient(circle at 8% 85%, rgba(126, 34, 206, 0.14) 0%, transparent 45%),
-      linear-gradient(180deg, #11061c 0%, #07030c 100%) !important;
+      radial-gradient(circle at 85% 15%, rgba(239, 68, 68, 0.22) 0%, rgba(220, 38, 38, 0.08) 35%, transparent 60%),
+      radial-gradient(circle at 15% 25%, rgba(34, 197, 94, 0.22) 0%, transparent 45%),
+      radial-gradient(circle at 50% 90%, rgba(56, 189, 248, 0.18) 0%, transparent 55%),
+      radial-gradient(circle at 8% 80%, rgba(234, 179, 8, 0.16) 0%, transparent 45%),
+      linear-gradient(180deg, #091a30 0%, #040c17 100%) !important;
     background-attachment: fixed !important;
   }
-  body.theme-halloween .frame {
-    box-shadow: 0 0 0 1px rgba(255, 140, 0, 0.25), 0 0 30px rgba(234, 88, 12, 0.16), 0 18px 40px rgba(0,0,0,0.65);
-    border-color: #552b70;
+  body.theme-christmas .frame {
+    box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.3), 0 0 30px rgba(239, 68, 68, 0.22), 0 18px 40px rgba(0,0,0,0.7);
+    border-color: #1e3a5f;
   }
-  body.theme-halloween .frame::before,
-  body.theme-halloween .frame::after {
-    border-color: #ff9800;
+  body.theme-christmas .frame::before,
+  body.theme-christmas .frame::after {
+    border-color: #22c55e;
   }
-  body.theme-halloween .title-row h1 {
-    color: #ffaa33;
-    text-shadow: 0 0 20px rgba(255, 120, 0, 0.65), 0 0 35px rgba(200, 50, 0, 0.4);
+  body.theme-christmas .title-row h1 {
+    color: #ef4444;
+    text-shadow: 0 0 20px rgba(239, 68, 68, 0.7), 0 0 35px rgba(34, 197, 94, 0.5);
   }
-  body.theme-halloween .title-row .sub {
-    color: #d8b4fe;
+  body.theme-christmas .title-row .sub {
+    color: #bae6fd;
   }
 
-  /* 할로윈 배경 장식 효과 (보름달, 거미줄, 박쥐, 유령, 호박 등) */
-  .halloween-decor {
+  /* 크리스마스 배경 장식 효과 (트리, 산타, 눈사람, 눈꽃, 선물, 종 등) */
+  .christmas-decor {
     position: fixed;
     pointer-events: none;
     z-index: 0;
     user-select: none;
   }
-  .decor-moon {
+  .decor-tree {
     top: 20px;
     right: 32px;
-    font-size: 56px;
+    font-size: 54px;
+    opacity: 0.85;
+    filter: drop-shadow(0 0 18px rgba(34, 197, 94, 0.75));
+    animation: tree-glow 4s ease-in-out infinite alternate;
+  }
+  .decor-snow-tl { top: 0; left: 0; font-size: 50px; opacity: 0.4; line-height: 1; }
+  .decor-snow-tr { top: 0; right: 0; font-size: 50px; opacity: 0.4; line-height: 1; transform: scaleX(-1); }
+  .decor-santa {
+    top: 105px;
+    right: 16%;
+    font-size: 28px;
     opacity: 0.75;
-    filter: drop-shadow(0 0 20px rgba(255, 180, 50, 0.75));
-    animation: moon-glow 4s ease-in-out infinite alternate;
+    animation: santa-float 6s ease-in-out infinite;
   }
-  .decor-web-tl { top: 0; left: 0; font-size: 60px; opacity: 0.35; line-height: 1; }
-  .decor-web-tr { top: 0; right: 0; font-size: 60px; opacity: 0.35; line-height: 1; transform: scaleX(-1); }
-  .decor-bat-1 {
-    top: 110px;
-    right: 17%;
-    font-size: 26px;
-    opacity: 0.55;
-    animation: bat-fly 6s ease-in-out infinite;
+  .decor-snow-1 {
+    top: 160px;
+    left: 8%;
+    font-size: 24px;
+    opacity: 0.6;
+    animation: snow-fall 8s linear infinite;
   }
-  .decor-bat-2 {
-    top: 170px;
-    left: 10%;
-    font-size: 22px;
-    opacity: 0.45;
-    animation: bat-fly 8s ease-in-out infinite reverse;
+  .decor-snow-2 {
+    top: 260px;
+    right: 8%;
+    font-size: 20px;
+    opacity: 0.5;
+    animation: snow-fall 10s linear infinite 2s;
   }
-  .decor-ghost {
+  .decor-snowman {
     bottom: 80px;
     left: 4%;
-    font-size: 38px;
-    opacity: 0.45;
-    animation: ghost-float 5s ease-in-out infinite alternate;
+    font-size: 40px;
+    opacity: 0.75;
+    filter: drop-shadow(0 0 12px rgba(186, 230, 253, 0.6));
+    animation: snowman-bob 5s ease-in-out infinite alternate;
   }
-  .decor-pumpkin {
+  .decor-gift {
     bottom: 25px;
     right: 4%;
-    font-size: 42px;
-    opacity: 0.65;
-    filter: drop-shadow(0 0 14px rgba(255, 117, 24, 0.6));
-    animation: pumpkin-bob 4s ease-in-out infinite alternate;
+    font-size: 38px;
+    opacity: 0.8;
+    filter: drop-shadow(0 0 14px rgba(239, 68, 68, 0.6));
+    animation: gift-bounce 4s ease-in-out infinite alternate;
   }
 
-  @keyframes moon-glow {
-    0% { filter: drop-shadow(0 0 12px rgba(255, 180, 50, 0.4)); opacity: 0.6; }
-    100% { filter: drop-shadow(0 0 26px rgba(255, 120, 20, 0.85)); opacity: 0.9; }
+  @keyframes tree-glow {
+    0% { filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.5)); opacity: 0.7; }
+    100% { filter: drop-shadow(0 0 24px rgba(234, 179, 8, 0.9)); opacity: 0.95; }
   }
-  @keyframes ghost-float {
-    0% { transform: translateY(0) rotate(-4deg); }
-    100% { transform: translateY(-24px) rotate(4deg); }
+  @keyframes snowman-bob {
+    0% { transform: translateY(0) rotate(-3deg); }
+    100% { transform: translateY(-16px) rotate(3deg); }
   }
-  @keyframes bat-fly {
-    0% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(-32px, -18px) scale(1.1); }
-    100% { transform: translate(0, 0) scale(1); }
+  @keyframes santa-float {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(-28px, -14px); }
+    100% { transform: translate(0, 0); }
   }
-  @keyframes pumpkin-bob {
+  @keyframes snow-fall {
+    0% { transform: translateY(0); opacity: 0.7; }
+    100% { transform: translateY(200px); opacity: 0.1; }
+  }
+  @keyframes gift-bounce {
     0% { transform: translateY(0) scale(1); }
-    100% { transform: translateY(-9px) scale(1.06); }
+    100% { transform: translateY(-8px) scale(1.05); }
   }
 
-  /* 상단 테마 전환 바 */
-  .theme-switch-bar {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 8px;
-    position: relative;
-    z-index: 10;
-  }
-  .theme-toggle-btn {
-    background: rgba(24, 20, 37, 0.85);
-    border: 1px solid var(--line);
-    color: var(--dim);
-    font-size: 12.5px;
-    padding: 6px 14px;
-    border-radius: 20px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    transition: all .2s ease;
-    backdrop-filter: blur(5px);
-  }
-  .theme-toggle-btn:hover {
-    border-color: var(--gold);
-    color: var(--parchment);
-    transform: translateY(-1px);
-  }
-  body.theme-halloween .theme-toggle-btn {
-    border-color: rgba(255, 140, 0, 0.5);
-    color: #ffb74d;
-    background: rgba(28, 12, 42, 0.85);
+  body.theme-christmas .theme-toggle-btn {
+    border-color: rgba(34, 197, 94, 0.5);
+    color: #86efac;
+    background: rgba(13, 38, 66, 0.85);
   }
   h1,h2,h3,.display{
     font-family:'Black Han Sans', sans-serif;
@@ -330,25 +315,25 @@
   @keyframes fadein{ from{opacity:0; transform:translate(-50%,-8px);} to{opacity:1; transform:translate(-50%,0);} }
 
   /* ========================================================
-     [할로윈 5일 한정 이벤트 실시간 타이머 UI]
+     [크리스마스 2개월 한정 대축제 이벤트 실시간 타이머 UI]
      ======================================================== */
-  .halloween-timer-banner {
-    background: linear-gradient(90deg, rgba(46, 16, 61, 0.95), rgba(64, 22, 22, 0.95));
-    border: 1px solid #ff7518;
+  .christmas-timer-banner {
+    background: linear-gradient(90deg, rgba(22, 64, 42, 0.95), rgba(70, 18, 28, 0.95));
+    border: 1px solid #22c55e;
     border-radius: 6px;
     padding: 10px 14px;
     margin-bottom: 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 0 14px rgba(255, 117, 24, 0.28);
+    box-shadow: 0 0 16px rgba(34, 197, 94, 0.3), 0 0 24px rgba(239, 68, 68, 0.2);
     position: relative;
     z-index: 5;
     transition: all .3s ease;
   }
-  .halloween-timer-banner.expired {
-    background: rgba(26, 21, 34, 0.9);
-    border-color: #554466;
+  .christmas-timer-banner.expired {
+    background: rgba(22, 28, 38, 0.9);
+    border-color: #3b5066;
     box-shadow: none;
     opacity: 0.85;
   }
@@ -358,13 +343,13 @@
     gap: 12px;
   }
   .timer-badge-icon {
-    font-size: 26px;
-    animation: pumpkin-bob 3s ease-in-out infinite alternate;
+    font-size: 28px;
+    animation: gift-bounce 3s ease-in-out infinite alternate;
   }
   .timer-title {
     font-size: 13.5px;
     font-weight: 700;
-    color: #ffaa33;
+    color: #4ade80;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -373,17 +358,17 @@
     font-size: 11px;
     padding: 2px 7px;
     border-radius: 3px;
-    background: #ff5722;
+    background: #ef4444;
     color: #fff;
     font-weight: normal;
   }
-  .halloween-timer-banner.expired .timer-title .status-tag {
+  .christmas-timer-banner.expired .timer-title .status-tag {
     background: #555;
     color: #ccc;
   }
   .timer-desc {
     font-size: 11.5px;
-    color: #d1b8eb;
+    color: #bae6fd;
     margin-top: 2px;
   }
   .timer-clock-box {
@@ -391,7 +376,7 @@
   }
   .timer-clock-label {
     font-size: 10.5px;
-    color: #ffa726;
+    color: #fbbf24;
     letter-spacing: 1px;
   }
   .timer-clock-display {
@@ -399,9 +384,9 @@
     font-size: 15px;
     font-weight: 700;
     color: #fff;
-    text-shadow: 0 0 8px rgba(255, 152, 0, 0.6);
+    text-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
   }
-  .halloween-timer-banner.expired .timer-clock-display {
+  .christmas-timer-banner.expired .timer-clock-display {
     color: #888;
     text-shadow: none;
   }
@@ -939,55 +924,206 @@
 }
 
 
+
+/* =========================================================
+   [스킬 시스템 & 스킬 합성 & PK 1:1 진검승부 스타일]
+   ========================================================= */
+
+.pk-arena-wrap {
+  background: linear-gradient(180deg, rgba(20, 14, 38, 0.95), rgba(35, 12, 22, 0.95));
+  border: 2px solid #e11d48;
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 0 20px rgba(225, 29, 72, 0.35);
+}
+
+.pk-fighters-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.pk-fighter-card {
+  background: rgba(15, 12, 28, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 10px;
+  transition: all .2s ease;
+}
+
+.pk-fighter-card.active-turn {
+  border-color: #38bdf8;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.45);
+  background: rgba(14, 32, 58, 0.9);
+}
+
+.pk-fighter-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #f8fafc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.pk-turn-banner {
+  text-align: center;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 13.5px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.pk-turn-banner.p1-turn {
+  background: linear-gradient(90deg, #1e3a8a, #0369a1);
+  color: #e0f2fe;
+  border: 1px solid #38bdf8;
+}
+
+.pk-turn-banner.p2-turn {
+  background: linear-gradient(90deg, #881337, #b91c1c);
+  color: #ffe4e6;
+  border: 1px solid #f43f5e;
+}
+
+.skill-tray-container {
+  background: rgba(18, 14, 32, 0.95);
+  border: 1px solid #8b5cf6;
+  border-radius: 6px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.skill-tray-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 8px;
+}
+
+.skill-action-card {
+  background: rgba(30, 24, 52, 0.85);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 5px;
+  padding: 8px 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: all .2s ease;
+  color: #f1f5f9;
+}
+
+.skill-action-card:hover:not(:disabled) {
+  border-color: #a855f7;
+  background: rgba(45, 34, 82, 0.95);
+  transform: translateY(-1px);
+}
+
+.skill-action-card:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.8);
+}
+
+.skill-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 3px;
+}
+
+.skill-card-mp {
+  font-size: 11px;
+  color: #38bdf8;
+  font-family: monospace;
+}
+
+.skill-card-desc {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.3;
+}
+
+/* 스킬 합성소 카드 */
+.skill-fuse-item {
+  background: rgba(22, 18, 38, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skill-fuse-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-bottom: 4px;
+}
+
+.skill-fuse-req {
+  font-size: 12px;
+  color: #cbd5e1;
+  margin-bottom: 3px;
+}
+
 </style>
   <!-- Firebase 실시간 멀티플레이어 라이브러리 (v9 compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
-<body class="theme-halloween">
-  <!-- 할로윈 배경 장식 (기본 배경 전환 시 자동으로 숨겨집니다) -->
-  <div class="halloween-decor decor-moon" title="할로윈 보름달">🌕</div>
-  <div class="halloween-decor decor-web-tl">🕸️</div>
-  <div class="halloween-decor decor-web-tr">🕸️</div>
-  <div class="halloween-decor decor-bat-1">🦇</div>
-  <div class="halloween-decor decor-bat-2">🦇</div>
-  <div class="halloween-decor decor-ghost">👻</div>
-  <div class="halloween-decor decor-pumpkin">🎃</div>
+<body class="theme-christmas">
+  <!-- 크리스마스 배경 장식 (기본 배경 전환 시 자동으로 숨겨집니다) -->
+  <div class="christmas-decor decor-tree" title="크리스마스 트리">🎄</div>
+  <div class="christmas-decor decor-snow-tl">❄️</div>
+  <div class="christmas-decor decor-snow-tr">❄️</div>
+  <div class="christmas-decor decor-santa">🎅</div>
+  <div class="christmas-decor decor-snow-1">❄️</div>
+  <div class="christmas-decor decor-snow-2">❄️</div>
+  <div class="christmas-decor decor-snowman">⛄</div>
+  <div class="christmas-decor decor-gift">🎁</div>
 <div id="app">
   <!-- 배경 테마 전환 토글 버튼 -->
   <div class="theme-switch-bar">
-    <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="기본 배경 / 할로윈 배경 전환">
-      <span id="theme-icon">🎃</span> <span id="theme-text">할로윈 테마 (클릭 시 기본배경)</span>
+    <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="기본 배경 / 크리스마스 배경 전환">
+      <span id="theme-icon">🎄</span> <span id="theme-text">크리스마스 테마 (클릭 시 기본배경)</span>
     </button>
   </div>
-    <!-- 할로윈 5일 한정 몬스터 출현 이벤트 실시간 카운트다운 배너 -->
-  <div id="halloween-timer-banner" class="halloween-timer-banner">
+    <!-- 크리스마스 2개월 한정 이벤트 실시간 카운트다운 배너 -->
+  <div id="christmas-timer-banner" class="christmas-timer-banner">
     <div class="timer-left-wrap">
-      <div class="timer-badge-icon">🎃</div>
+      <div class="timer-badge-icon">🎄</div>
       <div>
         <div class="timer-title">
-          할로윈 몬스터 출현 이벤트
-          <span class="status-tag" id="halloween-status-tag">진행 중</span>
+          크리스마스 대축제 & 겨울 눈꽃 이벤트
+          <span class="status-tag" id="christmas-status-tag">진행 중 (2개월간)</span>
         </div>
-        <div class="timer-desc" id="halloween-status-desc">5일간 특별 몬스터가 출현합니다! 타임 오버 시 출현이 종료됩니다.</div>
+        <div class="timer-desc" id="christmas-status-desc">2개월간 특별 몬스터와 산타가 출현합니다! 마을의 [크리스마스 사냥터]에서 선물을 획득하세요!</div>
       </div>
     </div>
     <div class="timer-clock-box">
       <div class="timer-clock-label">남은 시간 (실시간 감소)</div>
-      <div class="timer-clock-display" id="halloween-countdown-text">--일 --시간 --분 --초</div>
+      <div class="timer-clock-display" id="christmas-countdown-text">--일 --시간 --분 --초</div>
       <script>
         (function(){
           try {
-            var end = localStorage.getItem('halloween_event_end_time');
+            var end = localStorage.getItem('christmas_event_end_time');
             if(!end) {
-              end = (Date.now() + 5*24*60*60*1000).toString();
-              localStorage.setItem('halloween_event_end_time', end);
+              end = (Date.now() + 60*24*60*60*1000).toString();
+              localStorage.setItem('christmas_event_end_time', end);
             }
             var totalSec = Math.max(0, Math.floor((parseInt(end,10) - Date.now()) / 1000));
-            var el = document.getElementById('halloween-countdown-text');
+            var el = document.getElementById('christmas-countdown-text');
             if(el) {
               if(totalSec <= 0) {
-                el.textContent = '0일 00시간 00분 00초 (타임 오버)';
+                el.textContent = '0일 00시간 00분 00초 (이벤트 종료)';
               } else {
                 var d = Math.floor(totalSec / 86400);
                 var h = String(Math.floor((totalSec % 86400) / 3600)).padStart(2, '0');
@@ -1139,62 +1275,62 @@ function syncPlayerOnlineToFirebase() {
 }
 
 /* =========================================================
-   [테마 제어] 할로윈 테마 & 기본 테마 전환 시스템
+   [테마 제어] 크리스마스 테마 & 기본 테마 전환 시스템
    - 사용자가 "기본배경으로 바꿔줘"라고 요청하면 기본 테마로 즉각 변경됩니다.
    - 화면 상단 버튼 클릭으로도 자유롭게 전환 가능합니다.
    ========================================================= */
 function setTheme(theme) {
-  const isHalloween = (theme === 'halloween');
-  document.body.classList.toggle('theme-halloween', isHalloween);
-  document.body.classList.toggle('theme-default', !isHalloween);
+  const isChristmas = (theme === 'christmas');
+  document.body.classList.toggle('theme-christmas', isChristmas);
+  document.body.classList.toggle('theme-default', !isChristmas);
   localStorage.setItem('fantasy_rpg_theme', theme);
 
   const icon = document.getElementById('theme-icon');
   const text = document.getElementById('theme-text');
   if (icon && text) {
-    icon.textContent = isHalloween ? '🎃' : '🌙';
-    text.textContent = isHalloween ? '할로윈 테마 (클릭 시 기본배경)' : '기본 테마 (클릭 시 할로윈배경)';
+    icon.textContent = isChristmas ? '🎄' : '🌙';
+    text.textContent = isChristmas ? '크리스마스 테마 (클릭 시 기본배경)' : '기본 테마 (클릭 시 크리스마스배경)';
   }
 }
 
 function toggleTheme() {
-  const current = document.body.classList.contains('theme-halloween') ? 'halloween' : 'default';
-  setTheme(current === 'halloween' ? 'default' : 'halloween');
+  const current = document.body.classList.contains('theme-christmas') ? 'christmas' : 'default';
+  setTheme(current === 'christmas' ? 'default' : 'christmas');
 }
 
-// 초기 로드시 할로윈 테마 적용 (localStorage 설정이 있으면 존중)
+// 초기 로드시 크리스마스 테마 적용 (기본 활성화)
 (function initTheme() {
-  const savedTheme = localStorage.getItem('fantasy_rpg_theme') || 'halloween';
+  const savedTheme = localStorage.getItem('fantasy_rpg_theme') || 'christmas';
   setTheme(savedTheme);
 })();
 
 /* =========================================================
-   [할로윈 5일 한정 몬스터 스폰 & 실시간 카운트다운 타이머]
-   - 5일간 매초 초가 떨어지며 실시간 카운트다운 진행
-   - 타임 오버(0초)가 되면 할로윈 몬스터가 더 이상 출현하지 않음
+   [크리스마스 2개월 한정 몬스터 스폰 & 실시간 카운트다운 타이머]
+   - 2개월(60일)간 매초 초가 떨어지며 실시간 카운트다운 진행
+   - 타임 오버(0초)가 되면 크리스마스 몬스터가 더 이상 출현하지 않음
    ========================================================= */
-const HALLOWEEN_DURATION_MS = 5 * 24 * 60 * 60 * 1000; // 5일 (432,000,000 밀리초)
+const CHRISTMAS_DURATION_MS = 60 * 24 * 60 * 60 * 1000; // 60일 (2개월)
 
-function getHalloweenEndTime() {
-  let end = localStorage.getItem('halloween_event_end_time');
+function getChristmasEndTime() {
+  let end = localStorage.getItem('christmas_event_end_time');
   if (!end) {
-    end = (Date.now() + HALLOWEEN_DURATION_MS).toString();
-    localStorage.setItem('halloween_event_end_time', end);
+    end = (Date.now() + CHRISTMAS_DURATION_MS).toString();
+    localStorage.setItem('christmas_event_end_time', end);
   }
   return parseInt(end, 10);
 }
 
-function getHalloweenRemainingSeconds() {
-  const end = getHalloweenEndTime();
+function getChristmasRemainingSeconds() {
+  const end = getChristmasEndTime();
   return Math.max(0, Math.floor((end - Date.now()) / 1000));
 }
 
-function isHalloweenEventActive() {
-  return getHalloweenRemainingSeconds() > 0;
+function isChristmasEventActive() {
+  return getChristmasRemainingSeconds() > 0;
 }
 
-function formatHalloweenTime(totalSec) {
-  if (totalSec <= 0) return '0일 00시간 00분 00초 (타임 오버)';
+function formatChristmasTime(totalSec) {
+  if (totalSec <= 0) return '0일 00시간 00분 00초 (이벤트 종료)';
   const days = Math.floor(totalSec / 86400);
   const hours = Math.floor((totalSec % 86400) / 3600);
   const mins = Math.floor((totalSec % 3600) / 60);
@@ -1203,54 +1339,46 @@ function formatHalloweenTime(totalSec) {
   return `${days}일 ${pad(hours)}시간 ${pad(mins)}분 ${pad(secs)}초`;
 }
 
-function updateHalloweenCountdown() {
-  const sec = getHalloweenRemainingSeconds();
-  const banner = document.getElementById('halloween-timer-banner');
-  const countText = document.getElementById('halloween-countdown-text');
-  const statusTag = document.getElementById('halloween-status-tag');
-  const statusDesc = document.getElementById('halloween-status-desc');
+function updateChristmasCountdown() {
+  const sec = getChristmasRemainingSeconds();
+  const banner = document.getElementById('christmas-timer-banner');
+  const countText = document.getElementById('christmas-countdown-text');
+  const statusTag = document.getElementById('christmas-status-tag');
+  const statusDesc = document.getElementById('christmas-status-desc');
 
   if (countText) {
-    countText.textContent = formatHalloweenTime(sec);
+    countText.textContent = formatChristmasTime(sec);
   }
 
   if (sec > 0) {
     if (banner) banner.classList.remove('expired');
     if (statusTag) {
-      statusTag.textContent = '진행 중';
-      statusTag.style.background = '#ff5722';
+      statusTag.textContent = '진행 중 (2개월간)';
+      statusTag.style.background = '#ef4444';
     }
     if (statusDesc) {
-      statusDesc.textContent = '5일간 특별 몬스터가 출현합니다! 타임 오버 시 출현이 종료됩니다.';
+      statusDesc.textContent = '2개월간 특별 몬스터와 산타가 출현합니다! 마을의 [크리스마스 사냥터]에서 선물을 획득하세요!';
     }
   } else {
     if (banner) banner.classList.add('expired');
     if (statusTag) {
-      statusTag.textContent = '타임 오버 (종료)';
+      statusTag.textContent = '이벤트 종료';
       statusTag.style.background = '#555';
     }
     if (statusDesc) {
-      statusDesc.textContent = '이벤트 기간이 종료되어 할로윈 몬스터들이 더 이상 출현하지 않습니다.';
+      statusDesc.textContent = '이벤트 기간이 종료되어 크리스마스 몬스터들이 더 이상 출현하지 않습니다.';
     }
   }
 }
 
-// 1초마다 실시간으로 초가 떨어지며 갱신
-setInterval(updateHalloweenCountdown, 300); updateHalloweenCountdown();
-setTimeout(updateHalloweenCountdown, 50);
+setInterval(updateChristmasCountdown, 1000); updateChristmasCountdown();
+setTimeout(updateChristmasCountdown, 50);
 
-// 개발/테스트 편의 함수
-window.resetHalloweenTimer = function(days = 5) {
+window.resetChristmasTimer = function(days = 60) {
   const newEnd = Date.now() + (days * 86400 * 1000);
-  localStorage.setItem('halloween_event_end_time', newEnd.toString());
-  updateHalloweenCountdown();
-  console.log(`[할로윈 이벤트] 남은 시간을 ${days}일로 재설정했습니다.`);
-};
-window.setHalloweenTimerSeconds = function(seconds = 10) {
-  const newEnd = Date.now() + (seconds * 1000);
-  localStorage.setItem('halloween_event_end_time', newEnd.toString());
-  updateHalloweenCountdown();
-  console.log(`[할로윈 이벤트] 남은 시간을 ${seconds}초로 설정했습니다. (테스트용)`);
+  localStorage.setItem('christmas_event_end_time', newEnd.toString());
+  updateChristmasCountdown();
+  console.log(`[크리스마스 이벤트] 남은 시간을 ${days}일로 재설정했습니다.`);
 };
 
 /* =========================================================
@@ -1261,7 +1389,7 @@ const OPERATOR_NAME = "환상의 관리자"; // 게임 내 세계관 상 운영�
 const WEAPONS = [
   // === 문어의 대장간 합성 전용 무기 ===
   { id:'fused_alloy',        name:'단단한 합금 대검',   atk:34,  price:350,   reqLevel:4,  desc:'나무검과 단검을 융합해 단련한 묵직한 대검.' },
-  { id:'fused_wave_scythe',  name:'호박빛 파도 낫',   atk:68,  price:950,   reqLevel:9,  desc:'호수의 수기와 할로윈의 마력이 깃든 회전 낫.' },
+  { id:'fused_snow_wave_blade', name:'눈꽃 파도 블레이드', atk:72, price:980, reqLevel:9, desc:'호수의 수기와 성탄의 눈꽃 마력이 결합된 얼음 파도 검.' },
   { id:'fused_magic_blade',  name:'백은 마도검',       atk:92,  price:1700,  reqLevel:15, desc:'은빛 검신에 지팡이의 마도핵을 박아넣은 마도검.' },
   { id:'fused_moon_flame',   name:'달빛 흑염도',       atk:165, price:5400,  reqLevel:30, desc:'타오르는 흑염과 차가운 월광이 교차하는 이중 속성도.' },
   { id:'fused_dragon_abyss', name:'용린 심연도',      atk:260, price:16000, reqLevel:42, desc:'투명드래곤의 비늘과 심연의 카타나를 융합한 진·용살검.' },
@@ -1271,7 +1399,7 @@ const WEAPONS = [
   { id:'steel',          name:'강철검',            atk:18,  price:130,   reqLevel:3  },
   { id:'lake_trident',   name:'호수의 삼지창',     atk:26,  price:260,   reqLevel:4  },
   { id:'silver',         name:'은빛 장검',         atk:36,  price:420,   reqLevel:5  },
-  { id:'pumpkin_scythe', name:'할로윈 호박 낫',   atk:48,  price:750,   reqLevel:8  },
+  { id:'xmas_candy_sword', name:'크리스마스 캔디 소드', atk:52, price:750, reqLevel:8, desc:'달콤한 박하향이 맴도는 날카로운 성탄절 지팡이 사탕 검.' },
   { id:'staff',          name:'마법사의 지팡이',   atk:62,  price:1100,  reqLevel:12 },
   { id:'black',          name:'흑염의 대검',       atk:98,  price:2400,  reqLevel:20 },
   { id:'moonlight_blade',name:'월광의 마검',       atk:135, price:4500,  reqLevel:28 },
@@ -1283,7 +1411,7 @@ const WEAPONS = [
 const ITEMS_SHOP = [
   { id:'pot_small', name:'소형 체력 물약', type:'hp', value:40,  price:20, desc:'HP 40 회복' },
   { id:'pot_mid',   name:'중형 체력 물약', type:'hp', value:120, price:65, desc:'HP 120 회복' },
-  { id:'pot_mp',    name:'마나 물약',      type:'mp', value:30,  price:30, desc:'MP 30 회복' },
+  { id:'pot_mp',    name:'마나 물약',      type:'mp', value:30,  price:30, desc:'(※ 마나 하루 1회 완충 규칙 적용으로 사용 제한/상점 판매용)' },
   { id:'smoke',     name:'도주용 연막탄',  type:'flee', value:1, price:15, desc:'전투에서 100% 도주' },
 ];
 
@@ -1292,8 +1420,8 @@ const AREAS = [
   { id:'lake',             name:'호수',           reqLevel:3,  monsters:['frog','water_spirit','mud_turtle'] },
   { id:'cave',             name:'동굴',           reqLevel:5,  monsters:['goblin','skeleton'] },
   { id:'swamp',            name:'늪지',           reqLevel:8,  monsters:['snake','spider'] },
-  { id:'halloween_forest', name:'할로윈 유령 숲', reqLevel:1,  monsters:['pumpkin_jack','spooky_ghost','vampire_bat','witch_cat','candy_mimic'], isHalloween:true },
-  { id:'halloween_castle', name:'할로윈 악령 고성',reqLevel:10, monsters:['haunted_armor','candy_mimic','witch_cat','pumpkin_king','reaper_phantom'], isHalloween:true },
+  { id:'christmas_snow_village', name:'크리스마스 눈꽃 설원 마을', reqLevel:1, monsters:['snow_goblin','evil_snowman','rudolph_thief','gift_mimic'], isChristmas:true },
+  { id:'santa_toy_castle', name:'산타의 얼어붙은 장난감 성', reqLevel:10, monsters:['toy_soldier','gift_mimic','rudolph_thief','frost_reaper','corrupted_santa'], isChristmas:true },
   { id:'mount',            name:'산맥',           reqLevel:15, monsters:['bear','skeleton'] },
   { id:'volcano',          name:'화산 지대',       reqLevel:18, monsters:['fire_element','magma_golem'] },
   { id:'abyss',            name:'심연',           reqLevel:25, monsters:['dragon','sarian'] },
@@ -1307,15 +1435,14 @@ const MONSTERS = {
   water_spirit: { name:'물방울 정령',     emoji:'💧', tier:0.65, atier:0.55, dropName:'청아한 이슬',     dropVal:22 },
   mud_turtle:   { name:'진흙 거북이',     emoji:'🐢', tier:0.80, atier:0.50, dropName:'단단한 등껍질',   dropVal:28 },
 
-  // === [할로윈 한정 이벤트 몬스터 (신규 추가 포함)] ===
-  pumpkin_jack:   { name:'호박귀신 잭',     emoji:'🎃', tier:0.75, atier:0.7,  dropName:'할로윈 호박 사탕', dropVal:35, isHalloween:true },
-  witch_cat:      { name:'마녀의 검은 고양이', emoji:'🐈‍⬛', tier:0.88, atier:0.78, dropName:'저주받은 은방울', dropVal:42, dodge:0.25, isHalloween:true },
-  spooky_ghost:   { name:'장난꾸러기 유령', emoji:'👻', tier:1.05, atier:0.95, dropName:'원혼의 천조각',   dropVal:55, dodge:0.25, isHalloween:true },
-  candy_mimic:    { name:'사탕 상자 미믹', emoji:'🍬📦', tier:1.25, atier:1.15, dropName:'할로윈 무지개 사탕', dropVal:65, thief:true, isHalloween:true },
-  vampire_bat:    { name:'흡혈 박쥐떼',     emoji:'🦇', tier:1.35, atier:1.25, dropName:'박쥐 날개',       dropVal:85, thief:true, isHalloween:true },
-  haunted_armor:  { name:'빙의된 할로윈 갑옷', emoji:'🛡️', tier:1.55, atier:1.35, dropName:'원혼의 투구 파편', dropVal:95, isHalloween:true },
-  reaper_phantom: { name:'할로윈 사신',     emoji:'🧙‍♂️', tier:2.8,  atier:2.3,  dropName:'사신의 호박 랜턴', dropVal:450, boss:true, isHalloween:true },
-  pumpkin_king:   { name:'잭 오랜턴 킹',   emoji:'👑🎃', tier:3.2,  atier:2.4,  dropName:'호박 대왕의 왕관', dropVal:650, boss:true, isHalloween:true },
+  // === [크리스마스 2개월 한정 이벤트 몬스터] ===
+  snow_goblin:    { name:'눈마을 고블린',       emoji:'❄️👺', tier:0.75, atier:0.7,  dropName:'눈꽃 결정',         dropVal:35, isChristmas:true },
+  evil_snowman:   { name:'사악한 눈사람',       emoji:'⛄',   tier:0.95, atier:0.85, dropName:'단단한 눈뭉치',     dropVal:45, dodge:0.2, isChristmas:true },
+  rudolph_thief:  { name:'장난꾸러기 루돌프',   emoji:'🦌',   tier:1.25, atier:1.1,  dropName:'루돌프의 은방울',   dropVal:65, thief:true, isChristmas:true },
+  gift_mimic:     { name:'크리스마스 선물상자 미믹', emoji:'🎁📦', tier:1.45, atier:1.25, dropName:'크리스마스 막대사탕', dropVal:85, thief:true, isChristmas:true },
+  toy_soldier:    { name:'얼어붙은 호두까기 병정', emoji:'💂',   tier:1.65, atier:1.4,  dropName:'황금 태엽장치',     dropVal:110, isChristmas:true },
+  frost_reaper:   { name:'혹한의 서리 사신',     emoji:'❄️🧙‍♂️', tier:2.8,  atier:2.3,  dropName:'영원한 서리 보석',   dropVal:450, boss:true, isChristmas:true },
+  corrupted_santa:{ name:'타락한 크리스마스 산타', emoji:'👑🎅', tier:3.3,  atier:2.5,  dropName:'산타의 황금 선물보따리', dropVal:700, boss:true, isChristmas:true },
 
   // === [일반 필드 몬스터] ===
   slime:        { name:'슬라임',       emoji:'🟢', tier:0.4,  atier:0.32, dropName:'슬라임 젤리',   dropVal:8  },
@@ -1450,7 +1577,7 @@ const QUESTS = [
   { id:'q11', name:'고대 레이드 토벌', desc:'화염의 거수 베히모스를 1마리 토벌한다.', type:'kill', monster:'daily_behemoth', goal:1, rewardExp:1500, rewardGold:1200, rewardDia:5 },
   { id:'q12', name:'콜로세움의 패자', desc:'PK 결투장 챔피언을 1회 쓰러뜨린다.', type:'kill', monster:'pk_champion', goal:1, rewardExp:800, rewardGold:600, rewardDia:3 },
   { id:'q13', name:'호수의 수호령', desc:'호수 거북이를 4마리 처치한다.', type:'kill', monster:'lake_turtle', goal:4, rewardExp:350, rewardGold:280 },
-  { id:'q14', name:'할로윈 호박 사냥', desc:'호박머리 잭을 3마리 처치한다.', type:'kill', monster:'pumpkin_jack', goal:3, rewardExp:450, rewardGold:350 },
+  { id:'q14', name:'크리스마스 대소동', desc:'사악한 눈사람을 3마리 처치한다.', type:'kill', monster:'evil_snowman', goal:3, rewardExp:450, rewardGold:350, rewardDia:2 },
   { id:'q15', name:'각성의 경지', desc:'레벨 45에 도달하여 3차 각성을 준비한다.', type:'level', goal:45, rewardExp:0, rewardGold:3000, rewardDia:20 },
 ];
 
@@ -1669,8 +1796,33 @@ function showLoading(callback, customTip){
 }
 
 // --- 플레이어 기본 데이터 안전 확장 ---
+
+function getTodayDateString(){
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function checkDailyMpRefill(interactive = false){
+  if(!player) return false;
+  ensurePlayerExtendedData();
+  const today = getTodayDateString();
+  if(player.lastMpRefillDate !== today){
+    player.mp = player.maxMp;
+    player.lastMpRefillDate = today;
+    if(interactive){
+      toast('🔮 [일일 마나 완충] 오늘의 마나가 가득 채워졌습니다! (하루 1회)');
+      log(`🔮✨ <b>[일일 마나 충전 완료]</b> 새로운 날이 밝아 오늘의 마나가 100% 가득 채워졌습니다! <b>(${player.mp}/${player.maxMp} MP)</b><br>※ 필살기(한방컷) 비기에 쓰이는 마나는 하루에 딱 1번만 꽉 채워집니다. 소중히 사용하세요!`);
+    }
+    refreshSidebar();
+    saveGame();
+    return true;
+  }
+  return false;
+}
+
 function ensurePlayerExtendedData(){
   if(!player) return;
+  ensurePlayerSkills();
   player.diamond = player.diamond !== undefined ? player.diamond : 10; // 기본 다이아 10개
   player.weaponDur = player.weaponDur !== undefined ? player.weaponDur : 100;
   player.weaponMaxDur = player.weaponMaxDur || 100;
@@ -1692,6 +1844,14 @@ function ensurePlayerExtendedData(){
   player.royalJellyAttempts = player.royalJellyAttempts || 0;
   player.stats = player.stats || { pkWins:0, pkLosses:0, raidsCleared:0, dungeonsCleared:0 };
   player.activeBuffs = player.activeBuffs || {};
+  const todayStr = getTodayDateString();
+  if(player.lastMpRefillDate === undefined){
+    player.lastMpRefillDate = todayStr;
+    player.mp = player.maxMp;
+  } else if(player.lastMpRefillDate !== todayStr){
+    player.mp = player.maxMp;
+    player.lastMpRefillDate = todayStr;
+  }
 }
 
 // --- 총 방어력 계산 ---
@@ -2356,35 +2516,7 @@ function sendFriendGift(friendName){
 }
 
 // --- 7. 영웅의 콜로세움 (1:1 PK 결투장) ---
-function renderColosseumPK(){
-  ensurePlayerExtendedData();
-  const area = $('content-area');
-  
-  const opponents = [
-    { name:'검투사 바르카스', level: Math.max(1, player.level - 2), hp: player.maxHp * 0.9, atk: Math.round(totalAtk()*0.85) },
-    { name:'그림자 자객 렌',   level: player.level, hp: player.maxHp, atk: Math.round(totalAtk()*1.0) },
-    { name:'무패의 챔피언 아서', level: player.level + 3, hp: player.maxHp * 1.3, atk: Math.round(totalAtk()*1.2) }
-  ];
 
-  let oppHtml = opponents.map(op => `
-    <div class="shop-item">
-      <div class="info">
-        <b style="color:#f87171;">⚔️ ${op.name}</b> <span class="tag">Lv.${op.level}</span>
-        <div class="desc">HP: ${Math.round(op.hp)} | 예상 공격력: ${op.atk}</div>
-      </div>
-      <div>
-        <button class="danger" onclick="startPKDuel('${op.name}', ${op.level}, ${op.hp}, ${op.atk})">결투 신청</button>
-      </div>
-    </div>
-  `).join('');
-
-  area.innerHTML = `
-    <h3 style="margin-top:0;color:var(--gold-bright);">⚔️ 영웅의 콜로세움 (1:1 PK 결투장)</h3>
-    <p class="flavor">전적: <b>${player.stats.pkWins}승 ${player.stats.pkLosses}패</b> | 승리 시 명예와 다이아몬드(💎)를 획득합니다!</p>
-    <div class="btn-grid cols1">${oppHtml}</div>
-    <div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>
-  `;
-}
 
 function startPKDuel(name, lvl, hp, atk){
   showLoading(()=>{
@@ -3190,18 +3322,18 @@ function proceedToMonsterBattle(areaId){
   const area = AREAS.find(a=>a.id===areaId) || AREAS[0];
   let monsterId = area ? area.monsters[rand(0,area.monsters.length-1)] : 'slime';
 
-  // [할로윈 5일 한정 몬스터 스폰 로직]
-  if (isHalloweenEventActive()) {
-    if (areaId === 'halloween_forest') {
-      const halloweenPool = ['pumpkin_jack', 'witch_cat', 'spooky_ghost', 'vampire_bat', 'candy_mimic'];
-      monsterId = halloweenPool[rand(0, halloweenPool.length - 1)];
-    } else if (areaId === 'halloween_castle') {
-      const castlePool = ['haunted_armor', 'candy_mimic', 'reaper_phantom', 'pumpkin_king'];
+  // [크리스마스 2개월 한정 몬스터 스폰 로직]
+  if (isChristmasEventActive()) {
+    if (areaId === 'christmas_snow_village') {
+      const xmasPool = ['snow_goblin', 'evil_snowman', 'rudolph_thief', 'gift_mimic'];
+      monsterId = xmasPool[rand(0, xmasPool.length - 1)];
+    } else if (areaId === 'santa_toy_castle') {
+      const castlePool = ['toy_soldier', 'gift_mimic', 'rudolph_thief', 'frost_reaper', 'corrupted_santa'];
       monsterId = castlePool[rand(0, castlePool.length - 1)];
     } else if (Math.random() < 0.25) {
-      const wildPool = ['pumpkin_jack', 'witch_cat', 'spooky_ghost', 'candy_mimic'];
+      const wildPool = ['snow_goblin', 'evil_snowman', 'rudolph_thief', 'gift_mimic'];
       monsterId = wildPool[rand(0, wildPool.length - 1)];
-      log('🎃 <b style="color:#ffaa33;">차원의 틈에서 할로윈 몬스터가 튀어나왔습니다!</b>');
+      log('🎄 <b style="color:#4ade80;">하늘에서 눈보라와 함께 크리스마스 몬스터가 튀어나왔습니다!</b>');
     }
   }
 
@@ -3244,11 +3376,11 @@ const BATTLE_HAZARDS = {
     desc: '달아오른 지열 분출구에서 언제 폭발할지 모르는 화염 기둥이 치솟습니다!',
     actionBtn: '💨 [마그마 분출을 유도하여 적 태우기!]'
   },
-  trick_candy_bomb: {
-    id: 'trick_candy_bomb',
-    name: '🎃 할로윈 호박 폭탄 덫',
-    desc: '발을 헛디디면 폭발하는 장난감 호박 폭탄이 전장에 어지럽게 굴러다닙니다!',
-    actionBtn: '🎃 [호박 폭탄을 적에게 발로 차기!]'
+  xmas_gift_trap: {
+    id: 'xmas_gift_trap',
+    name: '🎁 크리스마스 눈폭탄 선물상자 덫',
+    desc: '발을 헛디디면 폭발하는 장난감 얼음 눈폭탄 선물상자가 전장에 놓여있습니다!',
+    actionBtn: '🎁 [눈폭탄 선물상자를 적에게 발로 차기!]'
   }
 };
 
@@ -3266,7 +3398,7 @@ function assignBattleHazard(areaId){
   else if(areaId === 'mine') hazardKey = 'falling_rocks';
   else if(areaId === 'graveyard' || areaId === 'lake') hazardKey = 'poison_swamp';
   else if(areaId === 'volcano') hazardKey = 'lava_vent';
-  else if(areaId && areaId.includes('halloween')) hazardKey = 'trick_candy_bomb';
+  else if(areaId && (areaId.includes('christmas') || areaId.includes('santa'))) hazardKey = 'xmas_gift_trap';
   else hazardKey = 'floor_spikes';
 
   battle.hazard = { ...BATTLE_HAZARDS[hazardKey], turnsActive: 0, usedAction: false };
@@ -3302,11 +3434,11 @@ function triggerBattleHazardAction(){
     e.hp = Math.max(0, e.hp - dmg);
     triggerCombatFX(true);
     log(`🌋 <b>[화염 유도!]</b> 마그마 분출구를 피해 몸을 날려 뿜어져 나오는 화염 기둥으로 <b>${e.name}</b>을(를) 덮쳤습니다! <b>(${dmg} 화염 피해!)</b>`);
-  } else if(h.id === 'trick_candy_bomb'){
-    const dmg = rand(55, 85);
+  } else if(h.id === 'xmas_gift_trap'){
+    const dmg = rand(60, 95);
     e.hp = Math.max(0, e.hp - dmg);
     triggerCombatFX(true);
-    log(`🎃 <b>[호박 폭탄 슛!]</b> 바닥의 호박 폭탄을 걷어차 <b>${e.name}</b>의 면상에서 폭발시켰습니다! <b>(${dmg} 피해!)</b>`);
+    log(`🎁 <b>[선물상자 슛!]</b> 바닥의 눈폭탄 선물상자를 걷어차 <b>${e.name}</b>의 면상에서 폭발시켰습니다! <b>(${dmg} 얼음 폭발 피해!)</b>`);
   }
 
   refreshSidebar();
@@ -3359,11 +3491,11 @@ function tickBattleHazard(){
       player.hp = Math.max(1, player.hp - dmg);
       triggerCombatFX(true);
       log(`🌋 <b>[마그마 분출!]</b> 바닥 틈새에서 치솟은 뜨거운 용암 증기에 화상을 입었습니다! <b>(-${dmg} HP)</b>`);
-    } else if(h.id === 'trick_candy_bomb'){
+    } else if(h.id === 'xmas_gift_trap'){
       const dmg = rand(25, 45);
       player.hp = Math.max(1, player.hp - dmg);
       triggerCombatFX(true);
-      log(`🎃 <b>[호박 폭탄 격발!]</b> 숨겨진 장난감 폭탄이 터져 파편 피해를 입었습니다! <b>(-${dmg} HP)</b>`);
+      log(`🎁 <b>[선물상자 폭발!]</b> 얼어붙은 눈폭탄이 터져 파편 피해를 입었습니다! <b>(-${dmg} HP)</b>`);
     }
     refreshSidebar();
   }
@@ -3566,6 +3698,787 @@ function startRealPlayerDuel(nick, job, level, hp, atk, def, weapon, rating){
   }, `콜로세움 함성 속에 [${job}] ${nick}님과 맞서는 중...`);
 }
 
+
+
+/* =========================================================
+   [환상RPG] 신규 스킬 시스템 & 스킬 합성 & PK 1:1 대전 엔진
+   - 공격 시 마나를 소모하여 스킬을 선택 시전
+   - 기본 스킬 습득 및 합성소에서 융합 스킬 제작
+   - PK 결투 시 양측 플레이어(예: mg vs 768) 모두 도구, 공격, 스킬 사용 권리 보장
+   ========================================================= */
+
+const SKILLS = {
+  // 기본 습득 스킬
+  slash: {
+    id: 'slash',
+    name: '연속 베기',
+    type: 'attack',
+    mp: 8,
+    mult: 1.6,
+    hits: 2,
+    desc: '신속하게 2회 연속 참격을 가합니다. (공격력 160% 2연타)',
+    icon: '🗡️',
+    price: 150,
+    reqLevel: 1
+  },
+  fireball: {
+    id: 'fireball',
+    name: '마법 화염구',
+    type: 'magic',
+    mp: 10,
+    mult: 1.9,
+    desc: '작열하는 마법 화염구를 발사합니다. (공격력 190% 마법 피해)',
+    icon: '🔥',
+    price: 250,
+    reqLevel: 3
+  },
+  shield_bash: {
+    id: 'shield_bash',
+    name: '방패 강타',
+    type: 'phys',
+    mp: 12,
+    mult: 1.7,
+    stun: true,
+    desc: '단단한 방패로 적의 머리를 가격하여 큰 피해를 주고 적 1턴 기절을 유도합니다.',
+    icon: '🛡️',
+    price: 350,
+    reqLevel: 5
+  },
+  snipe_shot: {
+    id: 'snipe_shot',
+    name: '정밀 저격',
+    type: 'phys',
+    mp: 12,
+    mult: 2.1,
+    critBonus: 0.45,
+    desc: '적의 급소를 노려 치명타 확률이 대폭 상승하는 관통 일격을 날립니다.',
+    icon: '🏹',
+    price: 450,
+    reqLevel: 7
+  },
+  shadow_strike: {
+    id: 'shadow_strike',
+    name: '그림자 암습',
+    type: 'phys',
+    mp: 14,
+    mult: 2.3,
+    noDodge: true,
+    desc: '그림자 속에서 불시에 튀어나와 적의 회피를 무시하고 찌릅니다.',
+    icon: '👥',
+    price: 600,
+    reqLevel: 10
+  },
+  holy_light: {
+    id: 'holy_light',
+    name: '성스러운 치유광선',
+    type: 'holy',
+    mp: 15,
+    mult: 1.6,
+    healPercent: 0.25,
+    desc: '빛의 기도로 적에게 피해를 입히고 자신의 최대 HP의 25%를 즉각 회복합니다.',
+    icon: '✨',
+    price: 800,
+    reqLevel: 12
+  },
+  blood_drain: {
+    id: 'blood_drain',
+    name: '흡혈 귀기',
+    type: 'dark',
+    mp: 16,
+    mult: 1.8,
+    drain: 0.5,
+    desc: '적의 생명력을 흡수하여 입힌 피해의 50%만큼 자신의 체력을 치유합니다.',
+    icon: '🧛',
+    price: 1000,
+    reqLevel: 15
+  },
+
+  // === [스킬 합성 전용 상위 융합 스킬] ===
+  fused_storm_bash: {
+    id: 'fused_storm_bash',
+    name: '진·검방 폭풍타',
+    type: 'fusion',
+    mp: 18,
+    mult: 2.6,
+    hits: 3,
+    desc: '[연속 베기 + 방패 강타 합성] 3연타 폭풍 참격 후 방패로 후려쳐 적을 제압합니다.',
+    icon: '🌪️',
+    isFusion: true
+  },
+  fused_phantom_bullet: {
+    id: 'fused_phantom_bullet',
+    name: '환영 암습 화염탄',
+    type: 'fusion',
+    mp: 20,
+    mult: 3.0,
+    noDodge: true,
+    desc: '[화염구 + 그림자 암습 합성] 절대 회피 불가능한 흑염의 유도 암습탄을 폭발시킵니다.',
+    icon: '🔮',
+    isFusion: true
+  },
+  fused_twilight_bind: {
+    id: 'fused_twilight_bind',
+    name: '황혼의 명도 흡혈참',
+    type: 'fusion',
+    mp: 22,
+    mult: 2.8,
+    drain: 0.7,
+    healPercent: 0.15,
+    desc: '[성스러운 치유광선 + 흡혈 귀기 합성] 빛과 어둠의 융합검으로 피해를 주고 70% 흡혈합니다.',
+    icon: '⚖️',
+    isFusion: true
+  },
+  fused_guided_snipe: {
+    id: 'fused_guided_snipe',
+    name: '초마도 멸살 저격',
+    type: 'fusion',
+    mp: 25,
+    mult: 3.5,
+    guaranteedCrit: true,
+    desc: '[정밀 저격 + 화염구 합성] 100% 확정 크리티컬 마법 관통 저격포를 발사합니다.',
+    icon: '🎯',
+    isFusion: true
+  },
+  fused_dimension_slash: {
+    id: 'fused_dimension_slash',
+    name: '궁극기: 차원 절단',
+    type: 'fusion',
+    mp: 30,
+    mult: 4.8,
+    hits: 4,
+    desc: '[진·검방 폭풍타 + 환영 암습탄 합성] 시공간을 가르는 4연속 궁극의 차원 참격.',
+    icon: '🌌',
+    isFusion: true
+  },
+
+  // 일격필살 비기
+  fatal_oneshot: {
+    id: 'fatal_oneshot',
+    name: '일격필살 비기 (한방컷)',
+    type: 'fatal',
+    mp: 15,
+    oneShot: true,
+    desc: '내재된 마력을 단번에 폭발시켜 적을 100% 한방에 즉사시킵니다.',
+    icon: '⚡'
+  }
+};
+
+const SKILL_FUSION_RECIPES = [
+  {
+    id: 'fused_storm_bash',
+    name: '🌪️ 진·검방 폭풍타',
+    reqSkills: ['slash', 'shield_bash'],
+    goldCost: 400,
+    desc: '연속 베기(MP 8) + 방패 강타(MP 12) 융합 -> 3연타 폭풍 참격 (MP 18, 2.6배 계수)'
+  },
+  {
+    id: 'fused_phantom_bullet',
+    name: '🔮 환영 암습 화염탄',
+    reqSkills: ['fireball', 'shadow_strike'],
+    goldCost: 650,
+    desc: '화염구(MP 10) + 그림자 암습(MP 14) 융합 -> 절대 회피 불가 극대 폭발 (MP 20, 3.0배 계수)'
+  },
+  {
+    id: 'fused_twilight_bind',
+    name: '⚖️ 황혼의 명도 흡혈참',
+    reqSkills: ['holy_light', 'blood_drain'],
+    goldCost: 900,
+    desc: '성스러운 치유광선 + 흡혈 귀기 융합 -> 피해량 70% 흡혈 + HP 15% 치유 (MP 22, 2.8배 계수)'
+  },
+  {
+    id: 'fused_guided_snipe',
+    name: '🎯 초마도 멸살 저격',
+    reqSkills: ['snipe_shot', 'fireball'],
+    goldCost: 1200,
+    desc: '정밀 저격 + 화염구 융합 -> 100% 확정 크리티컬 마법 관통포 (MP 25, 3.5배 계수)'
+  },
+  {
+    id: 'fused_dimension_slash',
+    name: '🌌 궁극기: 차원 절단',
+    reqSkills: ['fused_storm_bash', 'fused_phantom_bullet'],
+    goldCost: 3000,
+    desc: '진·검방 폭풍타 + 환영 암습탄 합성 -> 시공간을 가르는 4연타 궁극 참격 (MP 30, 4.8배 계수)'
+  }
+];
+
+// 플레이어 스킬 데이터 보장
+function ensurePlayerSkills(){
+  if(!player) return;
+  player.skills = player.skills || ['slash', 'fireball', 'fatal_oneshot'];
+  if(!player.skills.includes('slash')) player.skills.push('slash');
+  if(!player.skills.includes('fatal_oneshot')) player.skills.push('fatal_oneshot');
+}
+
+// 스킬 연구소 & 합성소 UI
+function renderSkillSynthesis(){
+  ensurePlayerExtendedData();
+  ensurePlayerSkills();
+  const area = $('content-area');
+
+  let html = `
+    <h3 style="margin-top:0;color:var(--gold-bright);">🔮 스킬 연구소 & 스킬 합성소</h3>
+    <p class="flavor">"마법과 무술의 극의를 융합하여 새로운 비기를 창조하는 공간입니다. 습득한 스킬을 합성하여 초월적인 융합 스킬을 탄생시키세요!"</p>
+
+    <div style="background:rgba(20,16,36,0.85);border:1px solid #7c3aed;border-radius:6px;padding:12px;margin-bottom:14px;">
+      <h4 style="margin:0 0 8px;color:#c084fc;">📜 내가 습득한 스킬 목록 (${player.skills.length}개 보유)</h4>
+      <div class="skill-tray-grid">
+  `;
+
+  player.skills.forEach(sid => {
+    const s = SKILLS[sid];
+    if(!s) return;
+    html += `
+      <div class="skill-action-card" style="cursor:default;">
+        <div class="skill-card-header">
+          <span>${s.icon} ${s.name}</span>
+          <span class="skill-card-mp">MP ${s.mp}</span>
+        </div>
+        <div class="skill-card-desc">${s.desc}</div>
+      </div>
+    `;
+  });
+
+  html += `
+      </div>
+    </div>
+
+    <div style="background:rgba(20,16,36,0.85);border:1px solid #e11d48;border-radius:6px;padding:12px;margin-bottom:14px;">
+      <h4 style="margin:0 0 10px;color:#f43f5e;">⚗️ 신규 스킬 합성 (스킬 융합 레시피)</h4>
+  `;
+
+  SKILL_FUSION_RECIPES.forEach(r => {
+    const alreadyHave = player.skills.includes(r.id);
+    const hasReq1 = player.skills.includes(r.reqSkills[0]);
+    const hasReq2 = player.skills.includes(r.reqSkills[1]);
+    const canFuse = hasReq1 && hasReq2 && player.gold >= r.goldCost && !alreadyHave;
+
+    const req1Name = (SKILLS[r.reqSkills[0]]||{}).name || r.reqSkills[0];
+    const req2Name = (SKILLS[r.reqSkills[1]]||{}).name || r.reqSkills[1];
+
+    html += `
+      <div class="skill-fuse-item">
+        <div>
+          <div class="skill-fuse-title">${r.name} ${alreadyHave ? '<span class="tag" style="background:#059669;color:#fff;">보유 중</span>' : ''}</div>
+          <div class="skill-fuse-req">
+            필요 스킬: 
+            <b style="color:${hasReq1?'#a3e635':'#ef4444'};">[${req1Name}]</b> + 
+            <b style="color:${hasReq2?'#a3e635':'#ef4444'};">[${req2Name}]</b>
+          </div>
+          <div class="skill-card-desc">${r.desc}</div>
+          <div style="font-size:12px;color:#fbbf24;margin-top:2px;">필요 골드: ${r.goldCost}G</div>
+        </div>
+        <div>
+          ${alreadyHave ? `<button disabled>합성 완료</button>` : `
+            <button class="primary" ${canFuse?'':'disabled'} onclick="fuseSkills('${r.id}')" style="background:linear-gradient(135deg,#7c3aed,#db2777);font-weight:bold;">
+              ✨ 스킬 융합하기
+            </button>
+          `}
+        </div>
+      </div>
+    `;
+  });
+
+  html += `
+    </div>
+
+    <div style="background:rgba(20,16,36,0.85);border:1px solid #38bdf8;border-radius:6px;padding:12px;margin-bottom:14px;">
+      <h4 style="margin:0 0 10px;color:#38bdf8;">📖 기초 스킬 전수 (골드로 습득)</h4>
+      <div class="skill-tray-grid">
+  `;
+
+  Object.values(SKILLS).filter(s => !s.isFusion && s.id !== 'fatal_oneshot').forEach(s => {
+    const owned = player.skills.includes(s.id);
+    const canBuy = player.level >= (s.reqLevel||1) && player.gold >= (s.price||100) && !owned;
+    html += `
+      <div class="skill-action-card">
+        <div class="skill-card-header">
+          <span>${s.icon} ${s.name}</span>
+          <span class="skill-card-mp">Lv.${s.reqLevel||1} | ${s.price}G</span>
+        </div>
+        <div class="skill-card-desc">${s.desc}</div>
+        <div style="margin-top:6px;text-align:right;">
+          ${owned ? '<span class="tag" style="background:#059669;color:#fff;">습득 완료</span>' : `
+            <button class="primary" ${canBuy?'':'disabled'} onclick="learnBaseSkill('${s.id}')" style="font-size:11px;padding:3px 8px;">
+              습득 (${s.price}G)
+            </button>
+          `}
+        </div>
+      </div>
+    `;
+  });
+
+  html += `
+      </div>
+    </div>
+    <div class="back-row" style="margin-top:16px;"><button onclick="renderTown()">← 마을로</button></div>
+  `;
+  area.innerHTML = html;
+}
+
+// 스킬 합성 실행
+function fuseSkills(recipeId){
+  ensurePlayerExtendedData();
+  ensurePlayerSkills();
+  const r = SKILL_FUSION_RECIPES.find(item => item.id === recipeId);
+  if(!r) return;
+
+  if(player.skills.includes(r.id)){
+    toast('이미 습득한 합성 스킬입니다!');
+    return;
+  }
+  if(!player.skills.includes(r.reqSkills[0]) || !player.skills.includes(r.reqSkills[1])){
+    toast('합성에 필요한 재료 스킬을 먼저 습득해야 합니다!');
+    return;
+  }
+  if(player.gold < r.goldCost){
+    toast('합성 연구 골드가 부족합니다!');
+    return;
+  }
+
+  player.gold -= r.goldCost;
+  player.skills.push(r.id);
+  toast(`🎉 [스킬 융합 대성공!] 새로운 비기 "${r.name}"을(를) 깨우쳤습니다!`);
+  log(`🔮✨ <b>[스킬 합성 성공]</b> 마법과 무술의 한계를 돌파하여 상위 융합 스킬 <b>[${r.name}]</b>을(를) 영구 습득했습니다!`);
+  refreshSidebar();
+  saveGame();
+  renderSkillSynthesis();
+}
+
+// 기초 스킬 골드로 습득
+function learnBaseSkill(skillId){
+  ensurePlayerExtendedData();
+  ensurePlayerSkills();
+  const s = SKILLS[skillId];
+  if(!s || player.skills.includes(skillId)) return;
+  if(player.level < (s.reqLevel||1)){
+    toast(`레벨 ${s.reqLevel} 이상만 습득할 수 있습니다.`);
+    return;
+  }
+  if(player.gold < s.price){
+    toast('골드가 부족합니다!');
+    return;
+  }
+
+  player.gold -= s.price;
+  player.skills.push(skillId);
+  toast(`[스킬 습득] "${s.name}" 전수 완료!`);
+  log(`📖 <b>[스킬 습득]</b> 골드 ${s.price}G를 지불하고 <b>[${s.name}]</b> 스킬을 전수받았습니다!`);
+  refreshSidebar();
+  saveGame();
+  renderSkillSynthesis();
+}
+
+
+// --- 전투 화면 스킬 메뉴 토글 ---
+function toggleBattleSkillMenu(){
+  const menu = $('battle-skill-menu');
+  if(!menu) return;
+  menu.style.display = (menu.style.display === 'none' || !menu.style.display) ? 'block' : 'none';
+}
+
+// --- 전투 중 스킬 시전 (마나 소모) ---
+function playerCastSkill(skillId){
+  ensurePlayerExtendedData();
+  ensurePlayerSkills();
+  const s = SKILLS[skillId];
+  if(!s){ toast('존재하지 않는 스킬입니다.'); return; }
+  const e = battle.enemy;
+
+  if(player.mp < s.mp){
+    toast(`MP가 부족합니다! (필요 MP: ${s.mp}, 현재 MP: ${player.mp})`);
+    log(`⚠️ <b>[마나 부족]</b> [${s.name}] 시전을 위한 마나가 부족합니다! (현재: ${player.mp}/${s.mp} MP)`);
+    return;
+  }
+
+  // 마나 차감
+  player.mp -= s.mp;
+
+  // 1. 일격필살 한방컷
+  if(s.oneShot){
+    triggerCombatFX(true);
+    const fatalDmg = Math.max(999999, e.hp);
+    e.hp = 0;
+    log(`💥⚡ <b>[일격필살 한방컷!!] ${player.nickname}</b>의 비기 <b>[${s.name}]</b>이(가) 번개처럼 작렬하여 <b>${e.name}</b>을(를) <b>한방에 즉사</b>시켰습니다!! (-${fatalDmg} 치명타)`);
+    toast(`💥⚡ [한방컷!!] ${e.name}을(를) 일격에 처치했습니다!`);
+    tickDurability();
+    postPlayerAction();
+    return;
+  }
+
+  // 2. 일반 및 융합 스킬 대미지 계산
+  const attacksCount = s.hits || 1;
+  let totalDmgDealt = 0;
+
+  for(let i=0; i<attacksCount; i++){
+    let baseDmg = rand(Math.round(totalAtk() * s.mult * 0.9), Math.round(totalAtk() * s.mult * 1.1));
+    let isCrit = Math.random() < ((s.critBonus || 0) + (getWeaponCritStats().rate || 0.08));
+    if(s.guaranteedCrit) isCrit = true;
+    if(isCrit) baseDmg = Math.round(baseDmg * 1.85);
+
+    if(e.def && e.isRealPvP){
+      baseDmg = Math.max(1, baseDmg - Math.round(e.def * 0.5));
+    }
+
+    e.hp = Math.max(0, e.hp - baseDmg);
+    totalDmgDealt += baseDmg;
+    triggerCombatFX(isCrit);
+
+    if(isCrit){
+      log(`💥 <b>[스킬 치명타!] [${s.name}]</b> 급소 관통! <b>${baseDmg}</b>의 강력한 피해!`);
+    } else {
+      log(`⚡ <b>[스킬 발동: ${s.name}]</b> ${player.nickname}의 일격${attacksCount>1?' ('+(i+1)+'타)':''}! <b>${baseDmg}</b> 피해.`);
+    }
+
+    if(e.hp <= 0) break;
+  }
+
+  // 치유 효과
+  if(s.healPercent){
+    const healAmt = Math.round(player.maxHp * s.healPercent);
+    player.hp = Math.min(player.maxHp, player.hp + healAmt);
+    log(`💖 <b>[스킬 치유]</b> 성스러운 축복으로 HP <b>+${healAmt}</b> 회복!`);
+  }
+
+  // 흡혈 효과
+  if(s.drain){
+    const drainAmt = Math.round(totalDmgDealt * s.drain);
+    player.hp = Math.min(player.maxHp, player.hp + drainAmt);
+    log(`🧛 <b>[스킬 흡혈]</b> 적의 생명력을 빨아들여 HP <b>+${drainAmt}</b> 흡수!`);
+  }
+
+  // 기절 효과
+  if(s.stun && Math.random() < 0.65){
+    battle.enemyStunned = true;
+    log(`💫 <b>[기절 효과] ${e.name}</b>이(가) 큰 충격으로 기절하여 다음 턴 행동을 상실합니다!`);
+    toast(`${e.name} 기절!`);
+  }
+
+  toast(`⚡ [${s.name}] 시전 완료! (-${s.mp} MP)`);
+  tickDurability();
+  postPlayerAction();
+}
+
+/* =========================================================
+   [PK 1:1 진검승부 엔진 (양측 모두 공격 & 도구 & 스킬 권리 보장)]
+   - 예: 내가 mg이고 상대가 768일 때
+   - mg: 공격, 스킬(마나 소모), 도구(물약 등)
+   - 768: 공격, 스킬(마나 소모), 도구(물약 등) 동등 권리 부여!
+   - 2인 직접 조작 모드 및 지능적 자율 행동 모드 완벽 지원
+   ========================================================= */
+
+// 진짜 플레이어 결투 돌입
+function startRealPlayerDuel(nick, job, level, hp, atk, def, weapon, rating){
+  ensurePlayerExtendedData();
+  ensurePlayerSkills();
+
+  showLoading(()=>{
+    const p1Skills = [...(player.skills || ['slash', 'fireball', 'fatal_oneshot'])];
+    const p2Skills = ['slash', 'fireball', 'shield_bash', 'fused_storm_bash'];
+    const p2Mp = Math.max(30, Math.round(hp * 0.35));
+
+    battle = {
+      isRealPvP: true,
+      turn: 'p1', // 'p1' (내 턴, 예: mg) 또는 'p2' (상대 턴, 예: 768)
+      p2ControlMode: 'direct', // 'direct' (2인 직접 조작) 또는 'auto' (상대 자율 행동)
+      p1: {
+        name: player.nickname,
+        job: player.job || '모험가',
+        level: player.level,
+        hp: player.hp,
+        maxHp: player.maxHp,
+        mp: player.mp,
+        maxMp: player.maxMp,
+        atk: totalAtk(),
+        def: totalDef(),
+        weapon: (weaponOf(player)||{}).name || '모험가의 검',
+        skills: p1Skills,
+        inventory: { ...(player.inventory || {}) }
+      },
+      p2: {
+        name: nick,
+        job: job || '전사',
+        level: level || 10,
+        hp: hp || 250,
+        maxHp: hp || 250,
+        mp: p2Mp,
+        maxMp: p2Mp,
+        atk: atk || 35,
+        def: def || 20,
+        weapon: weapon || '강철검',
+        skills: p2Skills,
+        inventory: {
+          '중형 체력 물약': 3,
+          '소형 체력 물약': 4,
+          '크리스마스 막대사탕': 2
+        }
+      },
+      enemy: { // 레거시 승리 처리용 어댑터
+        id: 'real_pvp_' + nick,
+        name: nick,
+        job: job,
+        level: level,
+        emoji: '🤺',
+        hp: hp,
+        maxHp: hp,
+        atk: atk,
+        def: def,
+        weapon: weapon,
+        rating: rating,
+        isPvP: true,
+        isRealPvP: true
+      },
+      playerMiss: false,
+      fled: false
+    };
+
+    clearLog();
+    log(`⚔️ <b>[1:1 콜로세움 PK 진검승부 개시!]</b>`);
+    log(`👑 <b>[플레이어 1: ${battle.p1.name}]</b> (Lv.${battle.p1.level} ${battle.p1.job}) VS ⚡ <b>[플레이어 2: ${battle.p2.name}]</b> (Lv.${battle.p2.level} ${battle.p2.job})`);
+    log(`⚖️ <b>[동등한 권리 규칙]</b> 두 플레이어 모두 공격, 스킬(마나 소모), 도구(물약)를 사용할 수 있습니다!`);
+    syncPvPStateToFirebase();
+    renderBattle();
+  }, `콜로세움 진검승부장에 입장하는 중... (${player.nickname} VS ${nick})`);
+}
+
+// Firebase 1:1 대전 상태 동기화
+function syncPvPStateToFirebase(){
+  if(!firebaseDb || !battle || !battle.isRealPvP) return;
+  try {
+    const roomKey = 'pvp_' + [battle.p1.name, battle.p2.name].sort().join('_').replace(/[.#$\[\]]/g, '_');
+    firebaseDb.ref('pvp_duels/' + roomKey).set({
+      p1: { name: battle.p1.name, hp: battle.p1.hp, mp: battle.p1.mp },
+      p2: { name: battle.p2.name, hp: battle.p2.hp, mp: battle.p2.mp },
+      turn: battle.turn,
+      time: Date.now()
+    });
+  } catch(e){}
+}
+
+// 상대방 조작 모드 토글 (2인 직접 조작 <-> 상대 자율 행동)
+function togglePvpControlMode(){
+  if(!battle || !battle.isRealPvP) return;
+  battle.p2ControlMode = (battle.p2ControlMode === 'direct') ? 'auto' : 'direct';
+  toast(`상대방 조작 모드: ${battle.p2ControlMode === 'direct' ? '🎮 2인 직접 조작' : '⚡ 상대 자율 행동'}`);
+  renderBattle();
+}
+
+// PK 액션 실행 (공격 / 스킬 / 도구)
+function pkExecuteAction(actorKey, actionType, arg){
+  if(!battle || !battle.isRealPvP) return;
+  const actor = battle[actorKey];
+  const targetKey = actorKey === 'p1' ? 'p2' : 'p1';
+  const target = battle[targetKey];
+
+  if(battle.turn !== actorKey){
+    toast(`${actor.name}님의 턴이 아닙니다!`);
+    return;
+  }
+
+  // 1. 일반 공격
+  if(actionType === 'attack'){
+    let dmg = rand(Math.round(actor.atk * 0.85), Math.round(actor.atk * 1.15));
+    dmg = Math.max(1, dmg - Math.round(target.def * 0.55));
+    target.hp = Math.max(0, target.hp - dmg);
+    triggerCombatFX(false);
+    log(`⚔️ <b>[${actor.name}의 턴]</b> [${actor.weapon}]으로 <b>${target.name}</b>님을 공격하여 <b>${dmg}</b> 데미지를 입혔습니다!`);
+  }
+
+  // 2. 스킬 시전 (마나 소모)
+  else if(actionType === 'skill'){
+    const s = SKILLS[arg];
+    if(!s) return;
+    if(actor.mp < s.mp){
+      toast(`[${actor.name}] 마나가 부족합니다! (필요: ${s.mp}, 보유: ${actor.mp})`);
+      log(`⚠️ <b>[마나 부족] ${actor.name}</b>님의 마나가 부족하여 [${s.name}] 시전에 실패했습니다!`);
+      return;
+    }
+
+    actor.mp -= s.mp;
+    triggerCombatFX(true);
+
+    if(s.oneShot){
+      const fatalDmg = Math.max(999999, target.hp);
+      target.hp = 0;
+      log(`💥⚡ <b>[${actor.name}의 일격필살 한방컷!!] [${s.name}]</b>으로 <b>${target.name}</b>님을 한방에 즉사시켰습니다!! (-${fatalDmg})`);
+    } else {
+      let dmg = rand(Math.round(actor.atk * s.mult * 0.9), Math.round(actor.atk * s.mult * 1.1));
+      dmg = Math.max(1, dmg - Math.round(target.def * 0.45));
+      target.hp = Math.max(0, target.hp - dmg);
+      log(`⚡ <b>[${actor.name}의 스킬 발동!]</b> 마나 ${s.mp} 소모 -> <b>[${s.name}]</b> 작렬! <b>${target.name}</b>님에게 <b>${dmg}</b> 피해!`);
+
+      if(s.healPercent){
+        const healAmt = Math.round(actor.maxHp * s.healPercent);
+        actor.hp = Math.min(actor.maxHp, actor.hp + healAmt);
+        log(`💖 <b>[${actor.name} 치유]</b> 성스러운 빛으로 HP +${healAmt} 회복!`);
+      }
+      if(s.drain){
+        const drainAmt = Math.round(dmg * s.drain);
+        actor.hp = Math.min(actor.maxHp, actor.hp + drainAmt);
+        log(`🧛 <b>[${actor.name} 흡혈]</b> 피해의 흡혈로 HP +${drainAmt} 회복!`);
+      }
+    }
+  }
+
+  // 3. 도구 사용 (소비 아이템)
+  else if(actionType === 'item'){
+    const itemId = arg;
+    if(!actor.inventory[itemId] || actor.inventory[itemId] <= 0){
+      toast(`${itemId} 아이템이 없습니다!`);
+      return;
+    }
+    actor.inventory[itemId]--;
+    let healAmt = 40;
+    if(itemId.includes('중형')) healAmt = 120;
+    else if(itemId.includes('막대사탕')) healAmt = 85;
+    else if(itemId.includes('소형')) healAmt = 40;
+
+    actor.hp = Math.min(actor.maxHp, actor.hp + healAmt);
+    log(`🎒 <b>[${actor.name}의 도구 사용]</b> 소지품 <b>[${itemId}]</b>을(를) 사용하여 HP <b>+${healAmt}</b> 회복! (남은 수량: ${actor.inventory[itemId]}개)`);
+    toast(`${actor.name} 도구 사용: HP +${healAmt}`);
+  }
+
+  // 플레이어 데이터 동기화
+  if(actorKey === 'p1') { player.hp = battle.p1.hp; player.mp = battle.p1.mp; }
+  else if(targetKey === 'p1') { player.hp = battle.p1.hp; player.mp = battle.p1.mp; }
+  battle.enemy.hp = battle.p2.hp;
+
+  refreshSidebar();
+  syncPvPStateToFirebase();
+
+  // 결투 종료 확인
+  if(target.hp <= 0){
+    if(targetKey === 'p2'){
+      log(`🏆 <b>[결투 완승!] ${actor.name}</b>님이 <b>${target.name}</b>님과의 1:1 진검승부에서 최종 승리했습니다!`);
+      onEnemyDefeated();
+    } else {
+      log(`💀 <b>[결투 패배] ${target.name}</b>님이 쓰러졌습니다... ${actor.name}님의 승리!`);
+      onPlayerDownWithItemDrop();
+    }
+    return;
+  }
+
+  // 턴 전환
+  battle.turn = targetKey;
+  renderBattle();
+
+  // 상대방이 자율 행동 모드이고 p2 턴인 경우 자동 실행
+  if(battle.turn === 'p2' && battle.p2ControlMode === 'auto'){
+    setTimeout(()=>{ pkExecuteOpponentAutoAction(); }, 900);
+  }
+}
+
+// 상대방 자율 행동 (도구 / 스킬 / 공격 권리 지능적 행사)
+function pkExecuteOpponentAutoAction(){
+  if(!battle || !battle.isRealPvP || battle.turn !== 'p2') return;
+  const p2 = battle.p2;
+
+  // 1. 체력이 45% 이하이고 회복 도구가 있으면 도구 사용
+  const availableItems = Object.keys(p2.inventory).filter(k => p2.inventory[k] > 0);
+  if(p2.hp <= p2.maxHp * 0.45 && availableItems.length > 0){
+    const pickItem = availableItems[0];
+    pkExecuteAction('p2', 'item', pickItem);
+    return;
+  }
+
+  // 2. 마나가 충분하면 스킬 시전
+  const usableSkills = p2.skills.filter(sid => SKILLS[sid] && p2.mp >= SKILLS[sid].mp && !SKILLS[sid].oneShot);
+  if(usableSkills.length > 0 && Math.random() < 0.65){
+    // 가장 강력한 스킬 우선 사용
+    usableSkills.sort((a,b) => (SKILLS[b].mp - SKILLS[a].mp));
+    const chosenSkill = usableSkills[0];
+    pkExecuteAction('p2', 'skill', chosenSkill);
+    return;
+  }
+
+  // 3. 일반 공격
+  pkExecuteAction('p2', 'attack');
+}
+
+// 항복
+function pkSurrender(actorKey){
+  if(!battle || !battle.isRealPvP) return;
+  const actor = battle[actorKey];
+  const targetKey = actorKey === 'p1' ? 'p2' : 'p1';
+  const target = battle[targetKey];
+
+  log(`🏳️ <b>[항복] ${actor.name}</b>님이 백기를 들고 결투를 포기했습니다! <b>${target.name}</b>님의 승리!`);
+  toast(`${actor.name} 항복!`);
+
+  if(actorKey === 'p1'){
+    player.hp = Math.max(1, Math.round(player.maxHp * 0.3));
+    battle.fled = true;
+    refreshSidebar();
+    saveGame();
+    setTimeout(()=>{ renderTown(); }, 1200);
+  } else {
+    onEnemyDefeated();
+  }
+}
+
+// PK 스킬 메뉴 토글
+function togglePkSkillMenu(actorKey){
+  const el = $('pk-skill-drawer');
+  if(!el) return;
+  if(el.style.display === 'block' && el.getAttribute('data-actor') === actorKey){
+    el.style.display = 'none';
+    return;
+  }
+  el.setAttribute('data-actor', actorKey);
+  el.style.display = 'block';
+
+  const actor = battle[actorKey];
+  let html = `<h5 style="margin:0 0 8px;color:#c084fc;">⚡ ${actor.name}님의 스킬 목록 (마나 소모)</h5><div class="skill-tray-grid">`;
+  actor.skills.forEach(sid => {
+    const s = SKILLS[sid];
+    if(!s) return;
+    const canUse = actor.mp >= s.mp;
+    html += `
+      <button class="skill-action-card" ${canUse?'':'disabled'} onclick="pkExecuteAction('${actorKey}', 'skill', '${sid}')">
+        <div class="skill-card-header">
+          <span>${s.icon} ${s.name}</span>
+          <span class="skill-card-mp">MP ${s.mp}</span>
+        </div>
+        <div class="skill-card-desc">${s.desc}</div>
+      </button>
+    `;
+  });
+  html += `</div>`;
+  el.innerHTML = html;
+}
+
+// PK 도구 메뉴 토글
+function togglePkItemMenu(actorKey){
+  const el = $('pk-tool-drawer');
+  if(!el) return;
+  if(el.style.display === 'block' && el.getAttribute('data-actor') === actorKey){
+    el.style.display = 'none';
+    return;
+  }
+  el.setAttribute('data-actor', actorKey);
+  el.style.display = 'block';
+
+  const actor = battle[actorKey];
+  const items = Object.keys(actor.inventory).filter(k => actor.inventory[k] > 0);
+  let html = `<h5 style="margin:0 0 8px;color:#38bdf8;">🎒 ${actor.name}님의 소지품 도구 목록</h5><div class="skill-tray-grid">`;
+
+  if(items.length === 0){
+    html += `<p style="font-size:12px;color:#94a3b8;">사용 가능한 도구/물약이 없습니다.</p>`;
+  } else {
+    items.forEach(k => {
+      html += `
+        <button class="skill-action-card" onclick="pkExecuteAction('${actorKey}', 'item', '${k}')">
+          <div class="skill-card-header">
+            <span>📦 ${k}</span>
+            <span class="skill-card-mp">x${actor.inventory[k]}개</span>
+          </div>
+          <div class="skill-card-desc">체력 회복 도구로 사용합니다.</div>
+        </button>
+      `;
+    });
+  }
+  html += `</div>`;
+  el.innerHTML = html;
+}
 
 
 let battle = null; // 현재 전투 상태
@@ -4039,6 +4952,17 @@ function refreshSidebar(){
   $('s-hp-bar').style.width = (player.hp/player.maxHp*100)+'%';
   $('s-mp-num').textContent = `${player.mp}/${player.maxMp}`;
   $('s-mp-bar').style.width = (player.mp/player.maxMp*100)+'%';
+  const mpStatusEl = $('s-mp-status');
+  if(mpStatusEl){
+    const today = getTodayDateString();
+    if(player.lastMpRefillDate === today){
+      mpStatusEl.textContent = '오늘 완충 완료';
+      mpStatusEl.style.color = '#38bdf8';
+    } else {
+      mpStatusEl.textContent = '미충전 (자정 갱신)';
+      mpStatusEl.style.color = '#fbbf24';
+    }
+  }
   const curW = weaponOf(player);
   const curEnh = player.weaponEnhance || 0;
   $('s-weapon').textContent = curW.name + (curEnh > 0 ? ' +' + curEnh : '');
@@ -4062,121 +4986,30 @@ function enterTown(fresh){
 
 function restAtInn(){
   if(!player) return;
-  if(player.hp >= player.maxHp && player.mp >= player.maxMp){
-    toast('이미 체력과 마나가 가득 차 있습니다.');
-    log('이미 몸 상태가 온전하다.');
+  ensurePlayerExtendedData();
+  const today = getTodayDateString();
+  const needsRefill = (player.lastMpRefillDate !== today);
+  if(player.hp >= player.maxHp && !needsRefill){
+    toast('이미 체력이 가득 차 있습니다. (마나는 하루에 1번만 꽉 채워집니다!)');
+    log('🔥 이미 몸 상태가 온전하다. (※ 마나는 하루 1회 완충 규칙으로 인해 여관에서 회복되지 않습니다)');
     return;
   }
   player.hp = player.maxHp;
-  player.mp = player.maxMp;
-  log('🔥 여관 벽난로 앞에서 따뜻하게 휴식을 취했다. <b>HP와 MP가 완전히 회복되었습니다!</b>');
-  toast('HP와 MP가 완전히 회복되었습니다!');
+  if(needsRefill){
+    checkDailyMpRefill(true);
+  } else {
+    log('🔥 여관 벽난로 앞에서 따뜻하게 휴식을 취했다. <b>HP가 완전히 회복되었습니다!</b> (※ 마나는 하루에 1번만 꽉 채워집니다)');
+    toast('HP 완전 회복! (마나는 하루 1회 완충)');
+  }
   refreshSidebar();
   saveGame();
 }
 
-/* =========================================================
-   🐙 문어의 신비한 대장간 (무기 강화 · 무기 합성 · 잡화 합성)
-   ========================================================= */
-
-const WEAPON_FUSION_RECIPES = [
-  {
-    id: 'fused_alloy',
-    name: '단단한 합금 대검',
-    atk: 34,
-    reqLevel: 4,
-    materials: [{ id: 'wood', name: '낡은 나무검', count: 1 }, { id: 'iron_dagger', name: '사냥꾼의 단검', count: 1 }],
-    goldCost: 120,
-    desc: '낡은 나무검과 사냥꾼의 단검을 벼려 만든 강인한 합금 대검 (공격력 +34)'
-  },
-  {
-    id: 'fused_wave_scythe',
-    name: '호박빛 파도 낫',
-    atk: 68,
-    reqLevel: 9,
-    materials: [{ id: 'lake_trident', name: '호수의 삼지창', count: 1 }, { id: 'pumpkin_scythe', name: '할로윈 호박 낫', count: 1 }],
-    goldCost: 450,
-    desc: '호수의 삼지창과 할로윈 호박 낫이 융합된 마력의 파도 낫 (공격력 +68)'
-  },
-  {
-    id: 'fused_magic_blade',
-    name: '백은 마도검',
-    atk: 92,
-    reqLevel: 15,
-    materials: [{ id: 'silver', name: '은빛 장검', count: 1 }, { id: 'staff', name: '마법사의 지팡이', count: 1 }],
-    goldCost: 800,
-    desc: '은빛 장검에 마법사의 지팡이 마도핵을 결합한 하이브리드 검 (공격력 +92)'
-  },
-  {
-    id: 'fused_moon_flame',
-    name: '달빛 흑염도',
-    atk: 165,
-    reqLevel: 30,
-    materials: [{ id: 'black', name: '흑염의 대검', count: 1 }, { id: 'moonlight_blade', name: '월광의 마검', count: 1 }],
-    goldCost: 2800,
-    desc: '흑염의 대검과 월광의 마검이 합쳐져 뿜어내는 이중 속성 검 (공격력 +165)'
-  },
-  {
-    id: 'fused_dragon_abyss',
-    name: '용린 심연도',
-    atk: 260,
-    reqLevel: 42,
-    materials: [{ id: 'dragon', name: '용살자의 검', count: 1 }, { id: 'abyss_katana', name: '심연의 카타나', count: 1 }],
-    goldCost: 6500,
-    desc: '용살자의 검과 심연의 카타나가 만난 궁극의 용살 명검 (공격력 +260)'
-  },
-  {
-    id: 'fused_chaos_moune',
-    name: '진·어둠모운(신화)',
-    atk: 380,
-    reqLevel: 48,
-    materials: [{ id: 'moune', name: '어둠모운(망치)', count: 1 }, { id: 'abyss_katana', name: '심연의 카타나', count: 1 }, { id: 'pumpkin_scythe', name: '할로윈 호박 낫', count: 1 }],
-    goldCost: 16000,
-    desc: '어둠모운과 심연의 카타나, 호박 낫이 결합한 환상의 신화 무기 (공격력 +380)'
-  }
-];
-
-const ITEM_FUSION_RECIPES = [
-  {
-    id: '특제 대형 만병통치약',
-    name: '특제 대형 만병통치약',
-    desc: 'HP 250 및 MP 80 즉시 회복',
-    materials: [{ name: '소형 체력 물약', count: 2 }, { name: '마나 물약', count: 1 }, { name: '슬라임 젤리', count: 2 }],
-    goldCost: 35
-  },
-  {
-    id: '호수 정령의 생명수',
-    name: '호수 정령의 생명수',
-    desc: 'HP 380 및 MP 50 즉각 치유',
-    materials: [{ name: '중형 체력 물약', count: 1 }, { name: '청아한 이슬', count: 3 }, { name: '개구리 뒷다리', count: 2 }],
-    goldCost: 80
-  },
-  {
-    id: '할로윈 마녀의 불사 영약',
-    name: '할로윈 마녀의 불사 영약',
-    desc: 'HP 100% 완전 회복 + MP 100% 완전 회복',
-    materials: [{ name: '할로윈 호박 사탕', count: 2 }, { name: '저주받은 은방울', count: 1 }, { name: '원혼의 천조각', count: 1 }],
-    goldCost: 150
-  },
-  {
-    id: '맹독 폭발 연막탄',
-    name: '맹독 폭발 연막탄',
-    desc: '전투에서 100% 안전 도주 및 적에게 독 피해 120 부여',
-    materials: [{ name: '도주용 연막탄', count: 2 }, { name: '거미 독주머니', count: 2 }, { name: '독니', count: 2 }],
-    goldCost: 50
-  },
-  {
-    id: '문어의 황금빛 행운 부적',
-    name: '문어의 황금빛 행운 부적',
-    desc: '신비한 부적 (백디몬에게 800골드에 고가 매각 가능)',
-    materials: [{ name: '너구리 꼬리', count: 3 }, { name: '단단한 등껍질', count: 2 }, { name: '곰 발톱', count: 2 }],
-    goldCost: 120
-  }
-];
-
-let currentBlacksmithTab = 'enhance';
-
 function renderBlacksmith(tab){
+  if(currentBlacksmithTab === 'skill_fuse'){
+    renderSkillSynthesis();
+    return;
+  }
   ensurePlayerExtendedData();
   currentBlacksmithTab = tab || currentBlacksmithTab || 'enhance';
   const area = $('content-area');
@@ -4515,6 +5348,7 @@ function renderTown(){
        <button class="wide primary" onclick="renderBlacksmith()" style="grid-column: span 2; background: linear-gradient(180deg, #441d63, #251038); border-color: var(--gold-bright); color: #fef08a;">
          🐙 문어의 신비한 대장간 (무기/방어구 강화 · 무기/잡화/도구 합성 · 수리)
        </button>
+       <button class="wide primary" onclick="renderSkillSynthesis()" style="background:linear-gradient(135deg,#4c1d95,#1e1b4b);border-color:#a855f7;color:#f3e8ff;">🔮 스킬 연구소 & 합성소 (스킬 습득 · 합성)</button>
        <button class="wide primary" onclick="renderEquipment()">🛡️ 모험가 장비실 (방어구 관리)</button>
        <button class="wide primary" onclick="renderInventoryBag()">🎒 모험 가방 (소지품 보관함)</button>
        <button class="wide primary" onclick="renderRaids()">🏰 레이드 성채 (일간·주간·월간·길드)</button>
@@ -4747,36 +5581,36 @@ function renderAreaSelect(){
   const area = $('content-area');
   let html = `<h3 style="margin-top:0;color:var(--gold-bright);">사냥터 선택</h3>`;
 
-  // [할로윈 5일 한정 사냥터] 타임 오버 시 자동 종료
-  if (isHalloweenEventActive()) {
-    const sec = getHalloweenRemainingSeconds();
+  // [크리스마스 2개월 한정 사냥터]
+  if (isChristmasEventActive()) {
+    const sec = getChristmasRemainingSeconds();
     html += `
-      <div style="background:linear-gradient(90deg, #2f123a, #441717); border:1px solid #ff7518; border-radius:6px; padding:12px; margin-bottom:14px; box-shadow:0 0 12px rgba(255,117,24,0.3);">
+      <div style="background:linear-gradient(90deg, #133a25, #3b141d); border:1px solid #22c55e; border-radius:6px; padding:12px; margin-bottom:14px; box-shadow:0 0 14px rgba(34,197,94,0.35);">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-          <strong style="color:#ffaa33; font-size:14.5px;">🎃 [이벤트 한정] 할로윈 테마 사냥터</strong>
-          <span style="color:#ffe082; font-size:12px; font-weight:bold; font-family:monospace;">${formatHalloweenTime(sec)}</span>
+          <strong style="color:#4ade80; font-size:14.5px;">🎄 [2개월 한정] 크리스마스 눈꽃 사냥터</strong>
+          <span style="color:#fef08a; font-size:12px; font-weight:bold; font-family:monospace;">${formatChristmasTime(sec)}</span>
         </div>
-        <p style="margin:4px 0 10px 0; font-size:12px; color:#d8b4fe;">호박귀신, 검은고양이, 사탕미믹, 빙의된 갑옷, 잭오랜턴 킹이 서식합니다.</p>
+        <p style="margin:4px 0 10px 0; font-size:12px; color:#bae6fd;">눈마을 고블린, 사악한 눈사람, 루돌프, 선물상자 미믹, 타락한 산타가 서식합니다.</p>
         <div class="btn-grid" style="grid-template-columns:1fr 1fr; gap:8px;">
-          <button class="primary" onclick="exploreArea('halloween_forest')" style="background:linear-gradient(180deg,#732890,#411354); border-color:#ff9800; color:#ffe082; padding:10px;">
-            🎃 할로윈 유령 숲 (Lv.1+)
+          <button class="primary" onclick="exploreArea('christmas_snow_village')" style="background:linear-gradient(180deg,#15803d,#14532d); border-color:#22c55e; color:#bbf7d0; padding:10px;">
+            ❄️ 눈꽃 설원 마을 (Lv.1+)
           </button>
-          <button class="primary" onclick="exploreArea('halloween_castle')" style="background:linear-gradient(180deg,#8b1e2a,#4a1018); border-color:#ff5722; color:#ffccbc; padding:10px;">
-            🏰 할로윈 악령 고성 (Lv.10+)
+          <button class="primary" onclick="exploreArea('santa_toy_castle')" style="background:linear-gradient(180deg,#b91c1c,#7f1d1d); border-color:#ef4444; color:#fecaca; padding:10px;">
+            🏰 산타의 장난감 성 (Lv.10+)
           </button>
         </div>
       </div>
     `;
   } else {
     html += `
-      <div style="background:rgba(30,24,38,0.7); border:1px dashed #554466; border-radius:4px; padding:8px 12px; margin-bottom:12px; font-size:12px; color:#888;">
-        🎃 할로윈 이벤트가 종료되었습니다. (할로윈 사냥터 폐쇄)
+      <div style="background:rgba(22,28,38,0.7); border:1px dashed #3b5066; border-radius:4px; padding:8px 12px; margin-bottom:12px; font-size:12px; color:#888;">
+        🎄 크리스마스 이벤트가 종료되었습니다. (이벤트 사냥터 폐쇄)
       </div>
     `;
   }
 
   html += `<div class="btn-grid cols1">`;
-  AREAS.filter(a => !a.isHalloween).forEach(a=>{
+  AREAS.filter(a => !a.isChristmas).forEach(a=>{
     const locked = player.level < a.reqLevel;
     html += `<button class="wide" ${locked?'disabled':''} onclick="exploreArea('${a.id}')">
       ${a.id==='lake'?'🌊':'⚔️'} ${a.name} ${locked?`<span class="tag">Lv.${a.reqLevel} 필요</span>`:`<span class="tag">Lv.${a.reqLevel}+ 입장 가능</span>`}
@@ -4855,8 +5689,17 @@ function startBattle(monsterId){
 }
 
 function renderBattle(){
-  const e = battle.enemy;
   const area = $('content-area');
+  if(!battle) { renderTown(); return; }
+
+  // 1. 진짜 플레이어 1:1 PK 아레나 렌더링
+  if(battle.isRealPvP && battle.p1 && battle.p2){
+    renderPkBattle();
+    return;
+  }
+
+  // 2. 일반 사냥터 / 던전 / 레이드 몬스터 전투 렌더링
+  const e = battle.enemy;
   const h = battle.hazard;
 
   let hazardHtml = '';
@@ -4877,24 +5720,145 @@ function renderBattle(){
     `;
   }
 
+  ensurePlayerSkills();
+  let skillButtonsHtml = '';
+  player.skills.forEach(sid => {
+    const s = SKILLS[sid];
+    if(!s) return;
+    const canUse = player.mp >= s.mp;
+    skillButtonsHtml += `
+      <button class="skill-action-card" ${canUse ? '' : 'disabled'} onclick="playerCastSkill('${sid}')">
+        <div class="skill-card-header">
+          <span>${s.icon} ${s.name}</span>
+          <span class="skill-card-mp">MP ${s.mp}</span>
+        </div>
+        <div class="skill-card-desc">${s.desc}</div>
+      </button>
+    `;
+  });
+
   area.innerHTML = `
     ${hazardHtml}
     <div class="enemy-card ${e.isElite?'elite':''}">
       <div class="enemy-emoji">${e.emoji}</div>
       <div class="enemy-name">
         ${e.name} ${e.boss?'<span class="tag">BOSS</span>':''}
-        ${e.isRealPvP?'<span class="tag" style="background:#f43f5e;color:#fff;">1:1 PvP</span>':''}
       </div>
       <div class="mini-bar-wrap">
         <div class="mini-label"><span>HP</span><span>${e.hp}/${e.maxHp}</span></div>
-        <div class="bar-bg"><div class="bar-fill bar-hp" style="width:${(e.hp/e.maxHp)*100}%;"></div></div>
+        <div class="bar-bg"><div class="bar-fill bar-hp" style="width:${Math.max(0,(e.hp/e.maxHp)*100)}%;"></div></div>
       </div>
     </div>
     <div class="btn-grid">
-      <button class="primary" onclick="battleAttack()">⚔️ 공격</button>
-      <button onclick="battleSkill()">✨ 필살기 (MP 15)</button>
-      <button onclick="battleItem()">🎒 아이템 사용</button>
+      <button class="primary" onclick="battleAttack()">⚔️ 일반 공격</button>
+      <button onclick="toggleBattleSkillMenu()" style="background:linear-gradient(135deg, #7c3aed, #4f46e5); color:#fff; font-weight:bold;">⚡ 스킬 선택 공격 [마나 소모]</button>
+      <button onclick="battleItem()">🎒 아이템/도구 사용</button>
       <button class="danger" onclick="battleFlee()">🏃 도주</button>
+    </div>
+    <div id="battle-skill-menu" class="skill-tray-container" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-size:13px; font-weight:700; color:#c084fc;">⚡ 사용할 스킬 선택 (현재 MP: ${player.mp}/${player.maxMp})</span>
+        <button onclick="toggleBattleSkillMenu()" style="font-size:11px; padding:2px 8px;">닫기 ✕</button>
+      </div>
+      <div class="skill-tray-grid">
+        ${skillButtonsHtml}
+      </div>
+    </div>
+  `;
+}
+
+function renderPkBattle(){
+  const area = $('content-area');
+  const p1 = battle.p1;
+  const p2 = battle.p2;
+  const isP1Turn = (battle.turn === 'p1');
+
+  area.innerHTML = `
+    <div class="pk-arena-wrap">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h4 style="margin:0; color:#f43f5e; font-size:16px;">⚔️ 1:1 실시간 PK 아레나 진검승부</h4>
+        <span class="tag" style="background:#881337; color:#fecdd3;">공격 · 스킬 · 도구 동등 권리 적용</span>
+      </div>
+
+      <div class="pk-fighters-grid">
+        <!-- P1 (내 캐릭터, 예: mg) -->
+        <div class="pk-fighter-card ${isP1Turn ? 'active-turn' : ''}">
+          <div class="pk-fighter-name">
+            <span>👑 ${p1.name} <span class="tag">나</span></span>
+            <span class="tag" style="background:#1e3a8a; color:#bfdbfe;">Lv.${p1.level} ${p1.job}</span>
+          </div>
+          <div class="mini-bar-wrap" style="margin-bottom:6px;">
+            <div class="mini-label"><span>HP</span><span>${p1.hp}/${p1.maxHp}</span></div>
+            <div class="bar-bg"><div class="bar-fill bar-hp" style="width:${Math.max(0, (p1.hp/p1.maxHp)*100)}%;"></div></div>
+          </div>
+          <div class="mini-bar-wrap" style="margin-bottom:6px;">
+            <div class="mini-label"><span>MP</span><span>${p1.mp}/${p1.maxMp}</span></div>
+            <div class="bar-bg"><div class="bar-fill bar-mp" style="width:${Math.max(0, (p1.mp/p1.maxMp)*100)}%;"></div></div>
+          </div>
+          <div style="font-size:11.5px; color:#cbd5e1;">
+            🗡️ ${p1.weapon} | ⚔️ Atk ${p1.atk} | 🛡️ Def ${p1.def}
+          </div>
+        </div>
+
+        <!-- P2 (상대 캐릭터, 예: 768) -->
+        <div class="pk-fighter-card ${!isP1Turn ? 'active-turn' : ''}">
+          <div class="pk-fighter-name">
+            <span>⚡ ${p2.name} <span class="tag" style="background:#7f1d1d; color:#fecaca;">상대</span></span>
+            <span class="tag" style="background:#581c87; color:#f3e8ff;">Lv.${p2.level} ${p2.job}</span>
+          </div>
+          <div class="mini-bar-wrap" style="margin-bottom:6px;">
+            <div class="mini-label"><span>HP</span><span>${p2.hp}/${p2.maxHp}</span></div>
+            <div class="bar-bg"><div class="bar-fill bar-hp" style="width:${Math.max(0, (p2.hp/p2.maxHp)*100)}%;"></div></div>
+          </div>
+          <div class="mini-bar-wrap" style="margin-bottom:6px;">
+            <div class="mini-label"><span>MP</span><span>${p2.mp}/${p2.maxMp}</span></div>
+            <div class="bar-bg"><div class="bar-fill bar-mp" style="width:${Math.max(0, (p2.mp/p2.maxMp)*100)}%;"></div></div>
+          </div>
+          <div style="font-size:11.5px; color:#cbd5e1;">
+            🗡️ ${p2.weapon} | ⚔️ Atk ${p2.atk} | 🛡️ Def ${p2.def}
+          </div>
+        </div>
+      </div>
+
+      <!-- 턴 진행 바 & 모드 스위처 -->
+      <div class="pk-turn-banner ${isP1Turn ? 'p1-turn' : 'p2-turn'}">
+        ${isP1Turn ? `👉 [${p1.name} 님의 턴] 공격, 스킬, 도구 중 행동을 선택하세요!` : `👉 [${p2.name} 님의 턴] 상대방의 차례입니다!`}
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-size:12px; color:#94a3b8;">
+        <span>상대방 턴 조작 방식: <b style="color:#38bdf8;">${battle.p2ControlMode === 'direct' ? '🎮 2인 직접 조작 (1:1 턴 대전)' : '⚡ 상대 자율 행동 (도구/스킬 권리 행사)'}</b></span>
+        <button onclick="togglePvpControlMode()" style="padding:3px 8px; font-size:11px;">모드 전환</button>
+      </div>
+
+      <!-- 행동 버튼 영역 -->
+      ${isP1Turn ? `
+        <div class="btn-grid">
+          <button class="primary" onclick="pkExecuteAction('p1', 'attack')">⚔️ ${p1.name} 일반 공격</button>
+          <button onclick="togglePkSkillMenu('p1')" style="background:linear-gradient(135deg, #7c3aed, #4f46e5); color:#fff; font-weight:bold;">⚡ ${p1.name} 스킬 [마나 소모]</button>
+          <button onclick="togglePkItemMenu('p1')">🎒 ${p1.name} 도구/물약 사용</button>
+          <button class="danger" onclick="pkSurrender('p1')">🏳️ 항복</button>
+        </div>
+      ` : `
+        ${battle.p2ControlMode === 'direct' ? `
+          <div class="btn-grid">
+            <button class="primary" onclick="pkExecuteAction('p2', 'attack')" style="background:#dc2626; border-color:#f87171;">⚔️ ${p2.name} 일반 공격</button>
+            <button onclick="togglePkSkillMenu('p2')" style="background:linear-gradient(135deg,#b91c1c,#c2410c); color:#fff; font-weight:bold;">⚡ ${p2.name} 스킬 [마나 소모]</button>
+            <button onclick="togglePkItemMenu('p2')">🎒 ${p2.name} 도구/물약 사용</button>
+            <button class="danger" onclick="pkSurrender('p2')">🏳️ 항복</button>
+          </div>
+        ` : `
+          <div class="btn-grid cols1">
+            <button class="primary" onclick="pkExecuteOpponentAutoAction()" style="background:linear-gradient(135deg,#ef4444,#ea580c); font-weight:bold; padding:12px;">
+              ⚡ ${p2.name} 턴 진행 (도구/스킬/공격 권리 행사)
+            </button>
+          </div>
+        `}
+      `}
+
+      <!-- 스킬 서랍 -->
+      <div id="pk-skill-drawer" class="skill-tray-container" style="display:none; margin-top:10px;"></div>
+      <!-- 도구 서랍 -->
+      <div id="pk-tool-drawer" class="skill-tray-container" style="display:none; margin-top:10px;"></div>
     </div>
   `;
 }
@@ -5067,38 +6031,29 @@ function battleAttack(){
 }
 
 function battleSkill(){
-  const skillKey = player.equippedSkill || 'slash';
-  const skillDef = (typeof SKILLS !== 'undefined' && SKILLS[skillKey]) ? SKILLS[skillKey] : { name:'필살기', mp:15, mult:1.8 };
-  const mpCost = skillDef.mp || 15;
-
-  if(player.mp < mpCost){ toast('MP가 부족하다.'); return; }
+  ensurePlayerExtendedData();
   const e = battle.enemy;
+  const mpCost = 15;
+
+  if(player.mp < mpCost){
+    toast(`MP가 부족합니다! (필요 MP: ${mpCost}, 현재 MP: ${player.mp})`);
+    log(`⚠️ <b>[MP 부족]</b> 필살기(한방컷)를 시전할 마나가 부족합니다! (현재 MP: ${player.mp}/${mpCost})<br>※ 마나는 하루에 1번만 꽉 채워집니다.`);
+    return;
+  }
+
+  // MP 15 소모
   player.mp -= mpCost;
 
-  let hitChance = 1 - (e.dodge||0)*0.6;
-  if(player.job === '사냥꾼') hitChance = 1.0;
+  // 100% 즉사 일격필살 한방컷!!
+  triggerCombatFX(true);
+  const fatalDmg = Math.max(999999, e.hp);
+  e.hp = 0;
 
-  if(Math.random() > hitChance){
-    log(`[${skillDef.name}] 시전했으나 ${e.name}이(가) 회피했다!`);
-  } else {
-    let dmg = rand(Math.round(totalAtk() * (skillDef.mult||1.8) * 0.9), Math.round(totalAtk() * (skillDef.mult||1.8) * 1.1));
-    if(player.job === '마법사' && skillKey === 'fireball') dmg = Math.round(dmg * 1.8);
+  const skillName = (typeof SKILLS !== 'undefined' && player.equippedSkill && SKILLS[player.equippedSkill]) ? SKILLS[player.equippedSkill].name : '일격필살';
+  log(`💥⚡ <b>[일격필살 한방컷!!] ${player.nickname}</b>의 비기 <b>[${skillName}]</b>이(가) 번개처럼 작렬하여 <b>${e.name}</b>을(를) <b>한방에 즉사</b>시켰습니다!! (-${fatalDmg} 치명타)`);
+  toast(`💥⚡ [한방컷!!] ${e.name}을(를) 일격에 처치했습니다!`);
 
-    e.hp = Math.max(0, e.hp - dmg);
-    log(`✨ <b>[스킬 발동: ${skillDef.name}]</b> ${dmg}의 강력한 피해를 입혔다!`);
-
-    if(skillDef.heal){
-      const healVal = skillDef.heal;
-      player.hp = Math.min(player.maxHp, player.hp + healVal);
-      log(`💖 치유의 빛으로 HP +${healVal} 회복!`);
-    }
-
-    if(player.job === '흑마법사'){
-      const healAmt = Math.round(dmg * 0.35);
-      player.hp = Math.min(player.maxHp, player.hp + healAmt);
-      log(`🧛 흑마법사 흡혈로 HP +${healAmt} 회복!`);
-    }
-  }
+  tickDurability();
   postPlayerAction();
 }
 
@@ -5127,9 +6082,9 @@ function useItemInBattle(id){
     log(`${def.name}을(를) 사용했다. HP가 ${def.value} 회복되었다.`);
     postPlayerAction();
   } else if(def.type==='mp'){
-    player.mp = Math.min(player.maxMp, player.mp+def.value);
-    log(`${def.name}을(를) 사용했다. MP가 ${def.value} 회복되었다.`);
-    postPlayerAction();
+    toast('마나는 하루에 1번만 가득 채워집니다! (물약 사용 불가)');
+    log('⚠️ <b>[마나 규칙 안내]</b> 마나는 하루에 딱 1번만 꽉 채워지므로 마나 물약으로 충전할 수 없습니다. (잡화 상점에 판매 가능)');
+    return;
   } else if(def.type==='flee'){
     log(`${def.name}이(가) 자욱하게 퍼진다! 안전하게 도주했다.`);
     battle.fled = true;
@@ -5291,9 +6246,9 @@ function checkLevelUp(){
     player.maxMp += 6;
     player.baseAtk += 3;
     player.hp = player.maxHp;
-    player.mp = player.maxMp;
+    player.mp = Math.min(player.maxMp, player.mp + 6);
     leveled = true;
-    log(`🌟 <b>레벨 업!</b> 레벨 ${player.level}이(가) 되었다. (최대 HP/MP 증가, 완전 회복)`);
+    log(`🌟 <b>레벨 업!</b> 레벨 ${player.level}이(가) 되었다. (최대 HP/MP 증가, 공격력 +3) ※ 마나는 하루 1회 완충 규칙 유지, 완전 회복)`);
   }
   if(player.level>=50 && player.exp>=player.expNeed){
     player.exp = player.expNeed;
@@ -5342,7 +6297,7 @@ function renderInventoryBag(){
   } else {
     items.forEach(itemName => {
       const count = player.inventory[itemName];
-      const isConsumable = ['소형 체력 물약', '중형 체력 물약', '마나 물약', '도주용 연막탄', '야생 꿀', '로열 젤리', '할로윈 호박 사탕'].includes(itemName) || itemName.includes('물약') || itemName.includes('꿀') || itemName.includes('젤리') || itemName.includes('사탕');
+      const isConsumable = ['소형 체력 물약', '중형 체력 물약', '마나 물약', '도주용 연막탄', '야생 꿀', '로열 젤리', '크리스마스 막대사탕'].includes(itemName) || itemName.includes('물약') || itemName.includes('꿀') || itemName.includes('젤리') || itemName.includes('사탕');
       html += `<div class="shop-item">
         <div class="info"><b>${itemName}</b><div class="desc">보유 수량: ${count}개</div></div>
         <div>
@@ -5360,13 +6315,12 @@ function useItemFromBag(itemName){
   if(!player.inventory[itemName] || player.inventory[itemName] <= 0) return;
   const multiplier = player.job === '요리사' ? 2.5 : 1.0;
   
-  if(itemName === '할로윈 호박 사탕' || itemName.includes('호박 사탕')){
+  if(itemName === '크리스마스 막대사탕' || itemName.includes('막대사탕')){
     player.inventory[itemName]--;
-    const healVal = Math.round(75 * multiplier);
+    const healVal = Math.round(85 * multiplier);
     player.hp = Math.min(player.maxHp, player.hp + healVal);
-    player.mp = Math.min(player.maxMp, player.mp + 20);
-    toast('달콤한 호박 사탕 냠냠!');
-    log(`🍬 할로윈 호박 사탕을 맛있게 먹어 HP +${healVal}, MP +20 회복되었다!`);
+    toast('상쾌한 크리스마스 막대사탕 냠냠!');
+    log(`🍬 크리스마스 막대사탕을 맛있게 먹어 HP +${healVal} 회복되었다!`);
   } else if(itemName === '소형 체력 물약' || itemName.includes('소형 체력')){
     player.inventory[itemName]--;
     const healVal = Math.round(40 * multiplier);
@@ -5380,11 +6334,9 @@ function useItemFromBag(itemName){
     toast(`체력 ${healVal} 회복!`);
     log(`🧪 중형 체력 물약을 사용해 HP가 ${healVal} 회복되었다.${player.job==='요리사'?' (요리사 특성 2.5배)':''}`);
   } else if(itemName === '마나 물약'){
-    player.inventory[itemName]--;
-    const healVal = Math.round(30 * multiplier);
-    player.mp = Math.min(player.maxMp, player.mp + healVal);
-    toast(`마나 ${healVal} 회복!`);
-    log(`🧪 마나 물약을 사용해 MP가 ${healVal} 회복되었다.${player.job==='요리사'?' (요리사 특성 2.5배)':''}`);
+    toast('마나는 하루에 1번만 가득 채워집니다! (물약 사용 불가)');
+    log('⚠️ <b>[마나 규칙 안내]</b> 마나는 하루에 딱 1번만 꽉 채워지므로 마나 물약으로 충전할 수 없습니다. (잡화 상점에 판매 가능)');
+    return;
   } else if(itemName === '야생 꿀'){
     player.inventory[itemName]--;
     player.hp = Math.min(player.maxHp, player.hp + 60);
@@ -5397,7 +6349,7 @@ function useItemFromBag(itemName){
     player.mp = player.maxMp;
     player.baseAtk += 3;
     toast('로열 젤리 버프!');
-    log('👑 로열 젤리를 먹어 체력/마나가 완전히 회복되고 영구 공격력 +3 증가!');
+    log('👑 로열 젤리를 먹어 체력이 완전히 회복되고 영구 공격력 +3 증가! (마나는 하루 1회 완충 규칙 적용)');
   } else {
     toast('가방에서 직접 사용할 수 없는 아이템입니다. (상점에서 판매 가능)');
     return;
